@@ -1,0 +1,32 @@
+{
+  "name": "hermes-stackchan-bridge",
+  "version": "0.1.0",
+  "description": "Bridge server connecting M5Stack StackChan robot to GVC Hermes via OpenAI Realtime",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "dev": "tsx watch src/index.ts",
+    "lint": "eslint src/"
+  },
+  "dependencies": {
+    "ws": "^8.18.0",
+    "express": "^4.21.0",
+    "@anthropic-ai/sdk": "^0.30.0",
+    "libopus-wasm": "^0.1.0",
+    "dotenv": "^16.4.0",
+    "uuid": "^10.0.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.6.0",
+    "tsx": "^4.19.0",
+    "@types/node": "^22.0.0",
+    "@types/ws": "^8.5.0",
+    "@types/express": "^4.17.0",
+    "@types/uuid": "^10.0.0",
+    "eslint": "^9.0.0"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  }
+}
