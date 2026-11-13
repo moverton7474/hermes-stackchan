@@ -161,7 +161,60 @@ End of day (if enabled)        → reflection
 
 ---
 
-## Phase 5: Commercial Product (M5Stack Partnership) — FUTURE ⏳
+## Phase 5: Tutor Buddy (Kids Homework Helper) — FUTURE ⏳
+
+**Target:** Q2 2028
+**Dependency:** Phase 2 AMIE coaching engine proven
+
+### Vision
+**Tutor Buddy** is AMIE in kid-friendly form — a desk robot that helps children with homework, explains concepts in age-appropriate language, quizzes them on material, and builds study habits. It's the first AI tutor that sits on a kid's desk, watches them work, celebrates when they get answers right, and gently corrects mistakes with patience and encouragement.
+
+### Core Features
+- [ ] **Age-adaptive personality** — Adjusts vocabulary, tone, and complexity by grade level (K-12)
+- [ ] **Subject coaching** — Math, reading, science, history, language arts
+- [ ] **Homework help mode** — "Read me the problem" → explains step-by-step → checks understanding
+- [ ] **Quiz mode** — Generates practice questions from uploaded material, tracks accuracy
+- [ ] **Camera-based problem reading** — CamS3 reads printed/handwritten math problems and worksheets
+- [ ] **Show your work** — Guides kids through problem-solving steps, doesn't just give answers
+- [ ] **Celebration on correct answers** — Happy face + dance + "You got it!" encouragement
+- [ ] **Gentle correction** — Concerned face + "Let's try that again" with hints, never discouraging
+- [ ] **Study habit tracker** — Daily study streaks, time-on-task logging, weekly progress reports
+- [ ] **Reading companion** — Listens to kids read aloud, helps with pronunciation and comprehension
+- [ ] **Flashcard mode** — Voice-driven flashcard review with spaced repetition
+- [ ] **Parent dashboard** — Weekly email/SMS report on subjects studied, time spent, areas needing help
+- [ ] **Focus timer** — Pomodoro-style study sessions with break reminders and stretch prompts
+
+### Safety & Parental Controls
+- [ ] COPPA-compliant data handling (no persistent storage of child's voice/image)
+- [ ] Parent-set content boundaries (grade level, allowed subjects)
+- [ ] Study time limits (auto-shutdown after max session length)
+- [ ] No internet browsing or unfiltered content — all responses from curated knowledge base
+- [ ] Physical power button accessible to parents
+- [ ] Activity log viewable by parents only (PIN-protected)
+
+### Hardware
+- Same StackChan base unit as AMIE Coach
+- Optional CamS3 camera for worksheet reading (shared with Fitness module)
+- Kid-friendly enclosure option (rounded edges, bright colors, ruggedized)
+
+### Business Model
+| Item | Price |
+|------|-------|
+| Tutor Buddy Robot (hardware) | $199-249 one-time |
+| Tutor Buddy subscription (per child) | $9.99/mo |
+| Family plan (up to 4 kids) | $24.99/mo |
+| Subject pack add-ons (SAT prep, AP courses) | $4.99/mo each |
+
+### Market Opportunity
+- $12B+ K-12 edtech market
+- No physical AI tutor robot exists at consumer price point
+- Parents want screen-free learning tools
+- After-school tutoring costs $40-80/hour — Tutor Buddy is $0.33/day
+- Natural cross-sell from AMIE Coach (parent uses AMIE, child uses Tutor Buddy)
+
+---
+
+## Phase 6: Commercial Product (M5Stack Partnership) — FUTURE ⏳
 
 **Target:** 2028
 **Dependency:** Phases 2-4 proven with founding users
