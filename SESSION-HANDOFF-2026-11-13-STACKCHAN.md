@@ -67,7 +67,8 @@ Auth strategy: Direct OpenAI Realtime with Hermes system prompt (Option 3 — no
 | `simulator/index.html` | Browser-based desktop simulator with push-to-talk |
 | `simulator/README.md` | Simulator docs |
 | `SAFE-PLAN.md` | v2 safe change plan (6 phases) |
-| `ROADMAP.md` | 5-phase product roadmap (desk robot → AMIE → commercial) |
+| `config/.env.hermes` | Live .env for Hermes bridge server (LAN IP 192.168.1.189, marin voice) |
+| `ROADMAP.md` | 6-phase product roadmap (desk robot → AMIE → sports → Tutor Buddy → commercial) |
 
 ## Key Decisions
 
@@ -78,6 +79,51 @@ Auth strategy: Direct OpenAI Realtime with Hermes system prompt (Option 3 — no
 5. **Don't send M5Stack partnership email** until working demo video recorded
 6. **AMIE platform already supports `deviceType: 'robot'`** — zero code changes for Phase 2
 
+## Bridge Server Status: ✅ RUNNING
+
+The `rudyll/stackchan-ai-server` Docker container is **built and running** on Milton-ServerLaptop.
+
+### Verified Endpoints
+| Component | Status | Endpoint |
+|-----------|--------|----------|
+| **OTA Discovery** | ✅ Live | `http://192.168.1.189:12800/xiaozhi/ota` |
+| **WebSocket** | ✅ Listening | `ws://192.168.1.189:12800/xiaozhi/ws` |
+| **Settings UI** | ✅ Live | `http://localhost:8099` |
+| **Provider** | ✅ OpenAI Realtime | `gpt-realtime` with `marin` voice |
+| **OpenAI API Key** | ❌ Placeholder | Needs real key before robot can talk |
+
+### Server Location & Config
+- **Docker container:** `stackchan-server-stackchan-1` (running, restart: unless-stopped)
+- **Compose file:** `~/stackchan-research/stackchan-ai-server/stackchan-server/docker-compose.standalone.yml`
+- **Env file:** `~/stackchan-research/stackchan-ai-server/stackchan-server/.env` (copied from `~/hermes-stackchan/config/.env.hermes`)
+- **LAN IP at build time:** `192.168.1.189` (may change on WiFi reconnect — update `STACKCHAN_LOCAL_HOST` in .env if so)
+- **Data volume:** `./data` in the stackchan-server directory
+
+### Build Notes (for troubleshooting)
+- Dockerfile patched: skipped `collect-licenses.sh` (Go LICENSE path issue in Alpine container)
+- Shell scripts had Windows CRLF line endings — fixed with `sed -i 's/\r$//'` before build
+- Original Dockerfile backed up as `Dockerfile.bak`
+- Server is Go-based (not TypeScript) with native OPUS codec via `opus-dev`/`opusfile-dev`
+
+### How to Restart
+```bash
+cd ~/stackchan-research/stackchan-ai-server/stackchan-server
+docker compose -f docker-compose.standalone.yml restart
+```
+
+### How to Set OpenAI API Key
+1. Edit `~/stackchan-research/stackchan-ai-server/stackchan-server/.env`
+2. Replace `YOUR_OPENAI_API_KEY_HERE` with real key (from Hermes vault via `browser_vault`)
+3. Restart: `docker compose -f docker-compose.standalone.yml restart`
+
+### OTA Response (what the robot sees)
+```json
+{"websocket":{"token":"","url":"ws://192.168.1.189:12800/xiaozhi/ws","version":3}}
+```
+The robot auto-discovers the server at this URL and connects via xiaozhi WebSocket protocol v3 (OPUS audio + JSON control messages).
+
+---
+
 ## SAFE-PLAN.md Status
 
 | Phase | Status | Description |
@@ -85,6 +131,7 @@ Auth strategy: Direct OpenAI Realtime with Hermes system prompt (Option 3 — no
 | 0 | ✅ DONE | Research |
 | 1 | ✅ DONE | Clone repos + local setup |
 | 2 | ✅ DONE | Build bridge config |
+| 2.5 | ✅ DONE | Docker server built, running, and verified on LAN |
 | 3 | ⏳ WAITING | Flash + test physical robots (waiting for DHL) |
 | 4 | 🔒 BLOCKED | GVC production integration (needs Milton approval) |
 | 5 | 📋 PLANNED | AMIE Robot #2 build |
@@ -92,27 +139,33 @@ Auth strategy: Direct OpenAI Realtime with Hermes system prompt (Option 3 — no
 
 ## Next Steps (Priority Order)
 
-1. **When robots arrive from DHL:** execute Phase 3 (flash, configure WiFi, test)
-2. **Record 60-second demo video** per `docs/DEMO-SCRIPT.md`
-3. **Send M5Stack partnership email** with demo video attached
-4. **Draft provisional patent update** with robot embodiment claims (read `~/GF-Accelerate/uspto-filing-assistant` repo)
-5. **Build AMIE coaching content** (football/basketball drills, fitness routines)
-6. **Product landing page** for AMIE Robot Coach on Vercel
+1. **Set OpenAI API key** in `.env` and restart Docker (needed before robot can talk)
+2. **When robots arrive from DHL:** execute Phase 3:
+   - Unbox, connect USB, backup stock firmware (`esptool read-flash`)
+   - Configure WiFi + OTA URL via SD card or BLE provisioning
+   - OTA URL should point to: `http://192.168.1.189:12800/xiaozhi/ota/`
+   - Power on → robot discovers server → voice test
+3. **Record 60-second demo video** per `docs/DEMO-SCRIPT.md`
+4. **Send M5Stack partnership email** with demo video attached
+5. **Draft provisional patent update** with robot embodiment claims (read `~/GF-Accelerate/uspto-filing-assistant` repo)
+6. **Build AMIE coaching content** (football/basketball drills, fitness routines)
+7. **Product landing page** for AMIE Robot Coach on Vercel
 
 ## Open Questions
 
 1. Does stock StackChan K151 firmware support `websocket_url` config via SD card or only BLE?
 2. Battery life in continuous voice mode?
-3. Which OpenAI Realtime voice sounds best through StackChan speaker?
-4. Can bridge server run on laptop or needs VPS for latency?
+3. Which OpenAI Realtime voice sounds best through StackChan speaker? (marin is configured, test alloy/coral too)
+4. Can bridge server run on laptop long-term or should move to VPS for 24/7 uptime?
+5. LAN IP `192.168.1.189` — is this static or DHCP? If DHCP, set a static lease on the router.
 
 ## Environment
 
 - **OS:** Windows 11, HP OmniBook X Flip (ARM64)
 - **Python:** 3.14.9 (`python` command), pip→python3.11
 - **Node.js:** available
-- **Docker:** needs verification on Windows
-- **ESP-IDF:** NOT YET INSTALLED (install when robots arrive)
+- **Docker:** ✅ v29.2.0 running (19 active containers)
+- **ESP-IDF:** NOT YET INSTALLED (may not be needed — stock firmware works)
 - **GH CLI:** authenticated as moverton7474
 - **Hermes profile:** default
 - **uv:** installed
