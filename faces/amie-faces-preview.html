@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AMIE — StackChan Face Designs</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #0a0a1a; color: #fff; font-family: 'Segoe UI', system-ui, sans-serif; padding: 40px; }
+  h1 { text-align: center; color: #D4A843; font-size: 28px; margin-bottom: 8px; letter-spacing: 2px; }
+  .subtitle { text-align: center; color: #8899aa; font-size: 14px; margin-bottom: 32px; }
+  .grid { display: grid; grid-template-columns: repeat(3, 320px); gap: 24px; justify-content: center; margin-bottom: 24px; }
+  .face-card { position: relative; }
+  .face-label { text-align: center; color: #D4A843; font-size: 13px; font-weight: 600; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 1.5px; }
+  .face-container {
+    width: 320px; height: 240px; background: #0B1120; border-radius: 12px;
+    overflow: hidden; position: relative; border: 1px solid #1a2a40;
+  }
+  svg { width: 320px; height: 240px; }
+
+  @keyframes blink { 0%,92%,100% { transform: scaleY(1); } 96% { transform: scaleY(0.05); } }
+  @keyframes glow-pulse { 0%,100% { opacity: 0.3; } 50% { opacity: 0.7; } }
+  @keyframes sparkle { 0%,100% { opacity: 0; transform: scale(0.5); } 50% { opacity: 1; transform: scale(1.2); } }
+  @keyframes confetti-fall { 0% { transform: translateY(-20px) rotate(0deg); opacity: 1; } 100% { transform: translateY(30px) rotate(180deg); opacity: 0; } }
+  @keyframes heartbeat { 0%,100% { transform: scale(1); } 50% { transform: scale(1.1); } }
+  @keyframes subtle-float { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-2px); } }
+  @keyframes pray-glow { 0%,100% { opacity: 0.15; r: 70; } 50% { opacity: 0.3; r: 80; } }
+  @keyframes sweat-drop { 0%,60% { opacity: 0; transform: translateY(0); } 70% { opacity: 1; } 100% { opacity: 0; transform: translateY(15px); } }
+  @keyframes energy-pulse { 0%,100% { opacity: 0.4; } 50% { opacity: 0.9; } }
+
+  .blink { animation: blink 4s ease-in-out infinite; transform-origin: center; }
+  .glow { animation: glow-pulse 2s ease-in-out infinite; }
+  .sparkle-anim { animation: sparkle 1.2s ease-in-out infinite; }
+  .confetti { animation: confetti-fall 2s ease-in infinite; }
+  .heartbeat { animation: heartbeat 1.5s ease-in-out infinite; }
+  .float { animation: subtle-float 3s ease-in-out infinite; }
+  .pray-glow { animation: pray-glow 4s ease-in-out infinite; }
+  .sweat { animation: sweat-drop 2.5s ease-in-out infinite; }
+  .energy { animation: energy-pulse 0.8s ease-in-out infinite; }
+</style>
+</head>
+<body>
+<h1>🤗 AMIE — FACE DESIGNS</h1>
+<p class="subtitle">Robot #2 · AI Coach Companion · StackChan 320×240 LCD</p>
+
+<div class="grid">
+
+  <!-- DEFAULT / IDLE — Warm & Welcoming -->
+  <div class="face-card">
+    <div class="face-label">Default / Idle</div>
+    <div class="face-container">
+      <svg viewBox="0 0 320 240" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <radialGradient id="warm-bg" cx="50%" cy="55%" r="65%">
+            <stop offset="0%" stop-color="#11182e"/>
+            <stop offset="100%" stop-color="#0B1120"/>
+          </radialGradient>
+        </defs>
+        <rect width="320" height="240" fill="url(#warm-bg)"/>
+        <!-- Soft warm eyes -->
+        <g class="blink">
+          <ellipse cx="118" cy="100" rx="26" ry="24" fill="#faf8f0" opacity="0.95"/>
+          <ellipse cx="120" cy="100" rx="11" ry="11" fill="#0B1120"/>
+          <ellipse cx="123" cy="96" rx="4" ry="4" fill="#faf8f0" opacity="0.7"/>
+          <!-- Warm lower lid line (soft eyes) -->
+          <path d="M96 108 Q118 115 140 108" stroke="#D4A843" stroke-width="1" fill="none" opacity="0.3"/>
+        </g>
+        <g class="blink">
+          <ellipse cx="202" cy="100" rx="26" ry="24" fill="#faf8f0" opacity="0.95"/>
+          <ellipse cx="204" cy="100" rx="11" ry="11" fill="#0B1120"/>
+          <ellipse cx="207" cy="96" rx="4" ry="4" fill="#faf8f0" opacity="0.7"/>
+          <path d="M180 108 Q202 115 224 108" stroke="#D4A843" stroke-width="1" fill="none" opacity="0.3"/>
+        </g>
+        <!-- Warm welcoming smile -->
+        <path d="M125 155 Q160 180 195 155" stroke="#D4A843" stroke-width="3" fill="none" stroke-linecap="round"/>
+        <!-- Rosy cheeks -->
+        <circle cx="85" cy="120" r="12" fill="#D4A843" opacity="0.08"/>
+        <circle cx="235" cy="120" r="12" fill="#D4A843" opacity="0.08"/>
+      </svg>
+    </div>
+  </div>
+
+  <!-- COACHING — Encouraging Eyes -->
+  <div class="face-card">
+    <div class="face-label">Coaching</div>
+    <div class="face-container">
+      <svg viewBox="0 0 320 240" xmlns="http://www.w3.org/2000/svg">
+        <rect width="320" height="240" fill="#0B1120"/>
+        <!-- Bright determined eyes -->
+        <g class="blink" style="animation-duration:5s">
+          <ellipse cx="118" cy="98" rx="28" ry="26" fill="#faf8f0" opacity="0.97"/>
+          <ellipse cx="120" cy="97" rx="13" ry="13" fill="#0B1120"/>
+          <ellipse cx="123" cy="93" rx="4.5" ry="4.5" fill="#faf8f0" opacity="0.7"/>
+          <!-- Encouraging raised brow -->
+          <path d="M90 70 Q118 62 146 72" stroke="#D4A843" stroke-width="2" fill="none" stroke-linecap="round" opacity="0.7"/>
+        </g>
+        <g class="blink" style="animation-duration:5s">
+          <ellipse cx="202" cy="98" rx="28" ry="26" fill="#faf8f0" opacity="0.97"/>
+          <ellipse cx="204" cy="97" rx="13" ry="13" fill="#0B1120"/>
+          <ellipse cx="207" cy="93" rx="4.5" ry="4.5" fill="#faf8f0" opacity="0.7"/>
+          <path d="M174 72 Q202 62 230 70" stroke="#D4A843" stroke-width="2" fill="none" stroke-linecap="round" opacity="0.7"/>
+        </g>
+        <!-- Motivating smile -->
+        <path d="M120 152 Q160 178 200 152" stroke="#D4A843" stroke-width="3" fill="none" stroke-linecap="round"/>
+        <!-- Spark / energy icon -->
+        <g class="heartbeat" style="transform-origin: 265px 60px">
+          <polygon points="265,48 270,58 260,55 268,65 258,58 263,68 256,55" fill="#D4A843" opacity="0.5"/>
+        </g>
+        <!-- Motivational rays -->
+        <line x1="55" y1="50" x2="70" y2="60" stroke="#D4A843" stroke-width="1" opacity="0.2"/>
+        <line x1="50" y1="70" x2="65" y2="75" stroke="#D4A843" stroke-width="1" opacity="0.15"/>
+      </svg>
+    </div>
+  </div>
+
+  <!-- LISTENING — Empathetic, Tilted -->
+  <div class="face-card">
+    <div class="face-label">Listening</div>
+    <div class="face-container">
+      <svg viewBox="0 0 320 240" xmlns="http://www.w3.org/2000/svg">
+        <rect width="320" height="240" fill="#0B1120"/>
+        <!-- Slight head tilt via rotation -->
+        <g transform="rotate(-4, 160, 120)">
+          <!-- Empathetic soft eyes -->
+          <g class="blink" style="animation-duration:6s">
+            <ellipse cx="118" cy="100" rx="25" ry="24" fill="#faf8f0" opacity="0.95"/>
+            <ellipse cx="119" cy="100" rx="11" ry="11" fill="#0B1120"/>
+            <ellipse cx="122" cy="96" rx="4" ry="4" fill="#faf8f0" opacity="0.7"/>
+            <!-- Soft concerned brow -->
+            <path d="M94 76 Q118 72 142 78" stroke="#D4A843" stroke-width="1.5" fill="none" stroke-linecap="round" opacity="0.5"/>
+          </g>
+          <g class="blink" style="animation-duration:6s">
+            <ellipse cx="202" cy="100" rx="25" ry="24" fill="#faf8f0" opacity="0.95"/>
+            <ellipse cx="203" cy="100" rx="11" ry="11" fill="#0B1120"/>
+            <ellipse cx="206" cy="96" rx="4" ry="4" fill="#faf8f0" opacity="0.7"/>
+            <path d="M178 78 Q202 72 226 76" stroke="#D4A843" stroke-width="1.5" fill="none" stroke-linecap="round" opacity="0.5"/>
+          </g>
+          <!-- Gentle attentive mouth -->
+          <ellipse cx="160" cy="162" rx="5" ry="3.5" fill="#D4A843" opacity="0.4"/>
+          <!-- Warm glow -->
+          <circle cx="160" cy="115" r="75" fill="#D4A843" opacity="0.03" class="glow"/>
+        </g>
+        <!-- Listening indicators -->
+        <path d="M50 115 Q42 100 50 85" stroke="#D4A843" stroke-width="1.5" fill="none" opacity="0.25" class="glow"/>
+        <path d="M40 120 Q30 100 40 80" stroke="#D4A843" stroke-width="1" fill="none" opacity="0.15" class="glow"/>
+      </svg>
+    </div>
+  </div>
+
+  <!-- CELEBRATING — Huge Smile, Confetti -->
+  <div class="face-card">
+    <div class="face-label">Celebrating</div>
+    <div class="face-container">
+      <svg viewBox="0 0 320 240" xmlns="http://www.w3.org/2000/svg">
+        <rect width="320" height="240" fill="#0B1120"/>
+        <!-- Joyful squinted eyes -->
+        <g class="float">
+          <path d="M92 98 Q118 78 144 98" stroke="#faf8f0" stroke-width="4.5" fill="none" stroke-linecap="round"/>
+          <path d="M176 98 Q202 78 228 98" stroke="#faf8f0" stroke-width="4.5" fill="none" stroke-linecap="round"/>
+        </g>
+        <!-- Huge smile -->
+        <path d="M108 148 Q160 195 212 148" stroke="#D4A843" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+        <path d="M118 148 Q160 185 202 148" fill="#D4A843" opacity="0.1"/>
+        <!-- Confetti pieces -->
+        <rect x="60" y="40" width="8" height="4" fill="#D4A843" opacity="0.8" rx="1" class="confetti"/>
+        <rect x="100" y="25" width="6" height="6" fill="#faf8f0" opacity="0.6" rx="1" class="confetti" style="animation-delay:0.3s"/>
+        <rect x="200" y="30" width="7" height="4" fill="#D4A843" opacity="0.7" rx="1" class="confetti" style="animation-delay:0.6s"/>
+        <rect x="250" y="35" width="5" height="5" fill="#faf8f0" opacity="0.5" rx="1" class="confetti" style="animation-delay:0.9s"/>
+        <rect x="150" y="20" width="8" height="3" fill="#D4A843" opacity="0.6" rx="1" class="confetti" style="animation-delay:0.15s"/>
+        <!-- Stars -->
+        <g class="sparkle-anim">
+          <polygon points="75,70 78,63 81,70 88,70 83,75 85,82 78,78 71,82 73,75 68,70" fill="#D4A843" opacity="0.7"/>
+        </g>
+        <g class="sparkle-anim" style="animation-delay:0.5s">
+          <polygon points="245,65 247,60 249,65 254,65 250,69 252,74 247,71 242,74 244,69 239,65" fill="#D4A843" opacity="0.6"/>
+        </g>
+        <g class="sparkle-anim" style="animation-delay:1s">
+          <polygon points="160,195 162,190 164,195 169,195 165,199 167,204 162,201 157,204 159,199 154,195" fill="#D4A843" opacity="0.5"/>
+        </g>
+        <!-- Rosy cheeks -->
+        <circle cx="80" cy="118" r="14" fill="#D4A843" opacity="0.1"/>
+        <circle cx="240" cy="118" r="14" fill="#D4A843" opacity="0.1"/>
+      </svg>
+    </div>
+  </div>
+
+  <!-- PRAYING — Eyes Closed, Peaceful -->
+  <div class="face-card">
+    <div class="face-label">Praying</div>
+    <div class="face-container">
+      <svg viewBox="0 0 320 240" xmlns="http://www.w3.org/2000/svg">
+        <rect width="320" height="240" fill="#0B1120"/>
+        <!-- Serene glow -->
+        <circle cx="160" cy="110" fill="#D4A843" class="pray-glow"/>
+        <!-- Closed peaceful eyes (gentle arcs) -->
+        <path d="M92 100 Q118 110 144 100" stroke="#faf8f0" stroke-width="3" fill="none" stroke-linecap="round"/>
+        <path d="M176 100 Q202 110 228 100" stroke="#faf8f0" stroke-width="3" fill="none" stroke-linecap="round"/>
+        <!-- Eyelashes -->
+        <line x1="100" y1="103" x2="98" y2="108" stroke="#faf8f0" stroke-width="1" opacity="0.4"/>
+        <line x1="118" y1="107" x2="118" y2="112" stroke="#faf8f0" stroke-width="1" opacity="0.4"/>
+        <line x1="136" y1="103" x2="138" y2="108" stroke="#faf8f0" stroke-width="1" opacity="0.4"/>
+        <line x1="184" y1="103" x2="182" y2="108" stroke="#faf8f0" stroke-width="1" opacity="0.4"/>
+        <line x1="202" y1="107" x2="202" y2="112" stroke="#faf8f0" stroke-width="1" opacity="0.4"/>
+        <line x1="220" y1="103" x2="222" y2="108" stroke="#faf8f0" stroke-width="1" opacity="0.4"/>
+        <!-- Serene small smile -->
+        <path d="M140 158 Q160 168 180 158" stroke="#D4A843" stroke-width="2" fill="none" stroke-linecap="round" opacity="0.7"/>
+        <!-- Prayer hands icon -->
+        <g transform="translate(160, 200)" class="float" opacity="0.4">
+          <path d="M-6,-8 L0,-16 L6,-8" stroke="#D4A843" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+          <path d="M-4,-5 L0,-12 L4,-5" stroke="#D4A843" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+        </g>
+        <!-- Subtle light rays -->
+        <line x1="160" y1="30" x2="160" y2="50" stroke="#D4A843" stroke-width="0.8" opacity="0.15"/>
+        <line x1="130" y1="35" x2="138" y2="52" stroke="#D4A843" stroke-width="0.8" opacity="0.1"/>
+        <line x1="190" y1="35" x2="182" y2="52" stroke="#D4A843" stroke-width="0.8" opacity="0.1"/>
+      </svg>
+    </div>
+  </div>
+
+  <!-- CONCERNED — Worried, Caring -->
+  <div class="face-card">
+    <div class="face-label">Concerned</div>
+    <div class="face-container">
+      <svg viewBox="0 0 320 240" xmlns="http://www.w3.org/2000/svg">
+        <rect width="320" height="240" fill="#0B1120"/>
+        <!-- Worried eyes — brows angled inward-up -->
+        <g class="blink" style="animation-duration:5s">
+          <ellipse cx="118" cy="102" rx="25" ry="22" fill="#faf8f0" opacity="0.95"/>
+          <ellipse cx="117" cy="103" rx="11" ry="11" fill="#0B1120"/>
+          <ellipse cx="119" cy="99" rx="4" ry="4" fill="#faf8f0" opacity="0.6"/>
+          <!-- Worried brow (angled) -->
+          <line x1="94" y1="74" x2="142" y2="78" stroke="#D4A843" stroke-width="2" stroke-linecap="round" opacity="0.6"/>
+        </g>
+        <g class="blink" style="animation-duration:5s">
+          <ellipse cx="202" cy="102" rx="25" ry="22" fill="#faf8f0" opacity="0.95"/>
+          <ellipse cx="201" cy="103" rx="11" ry="11" fill="#0B1120"/>
+          <ellipse cx="203" cy="99" rx="4" ry="4" fill="#faf8f0" opacity="0.6"/>
+          <line x1="178" y1="78" x2="226" y2="74" stroke="#D4A843" stroke-width="2" stroke-linecap="round" opacity="0.6"/>
+        </g>
+        <!-- Worried mouth — slight frown -->
+        <path d="M130 168 Q160 158 190 168" stroke="#D4A843" stroke-width="2.5" fill="none" stroke-linecap="round" opacity="0.7"/>
+        <!-- Caring heart -->
+        <g class="heartbeat" style="transform-origin: 268px 70px" opacity="0.35">
+          <path d="M260,72 Q260,64 268,64 Q276,64 276,72 Q276,80 268,88 Q260,80 260,72Z" fill="#D4A843"/>
+        </g>
+      </svg>
+    </div>
+  </div>
+
+  <!-- FITNESS — Energetic, Sweatband -->
+  <div class="face-card">
+    <div class="face-label">Fitness</div>
+    <div class="face-container">
+      <svg viewBox="0 0 320 240" xmlns="http://www.w3.org/2000/svg">
+        <rect width="320" height="240" fill="#0B1120"/>
+        <!-- Sweatband -->
+        <rect x="70" y="62" width="180" height="14" rx="4" fill="#D4A843" opacity="0.7"/>
+        <rect x="70" y="66" width="180" height="3" fill="#0B1120" opacity="0.15"/>
+        <!-- Determined energetic eyes -->
+        <g class="blink" style="animation-duration:6s">
+          <ellipse cx="118" cy="100" rx="27" ry="20" fill="#faf8f0" opacity="0.97"/>
+          <ellipse cx="121" cy="99" rx="12" ry="12" fill="#0B1120"/>
+          <ellipse cx="124" cy="95" rx="4" ry="4" fill="#faf8f0" opacity="0.7"/>
+          <!-- Determined brow -->
+          <line x1="90" y1="78" x2="146" y2="80" stroke="#D4A843" stroke-width="2.5" stroke-linecap="round" opacity="0.8"/>
+        </g>
+        <g class="blink" style="animation-duration:6s">
+          <ellipse cx="202" cy="100" rx="27" ry="20" fill="#faf8f0" opacity="0.97"/>
+          <ellipse cx="205" cy="99" rx="12" ry="12" fill="#0B1120"/>
+          <ellipse cx="208" cy="95" rx="4" ry="4" fill="#faf8f0" opacity="0.7"/>
+          <line x1="174" y1="80" x2="230" y2="78" stroke="#D4A843" stroke-width="2.5" stroke-linecap="round" opacity="0.8"/>
+        </g>
+        <!-- Determined grin -->
+        <path d="M120 155 Q160 175 200 155" stroke="#D4A843" stroke-width="3" fill="none" stroke-linecap="round"/>
+        <!-- Sweat drop -->
+        <g class="sweat">
+          <ellipse cx="248" cy="90" rx="3" ry="5" fill="#8ab4f8" opacity="0.5"/>
+        </g>
+        <!-- Energy lines -->
+        <g class="energy">
+          <line x1="50" y1="90" x2="62" y2="90" stroke="#D4A843" stroke-width="2" stroke-linecap="round" opacity="0.5"/>
+          <line x1="46" y1="100" x2="60" y2="100" stroke="#D4A843" stroke-width="2" stroke-linecap="round" opacity="0.35"/>
+          <line x1="50" y1="110" x2="62" y2="110" stroke="#D4A843" stroke-width="2" stroke-linecap="round" opacity="0.5"/>
+        </g>
+        <g class="energy" style="animation-delay:0.4s">
+          <line x1="258" y1="112" x2="270" y2="112" stroke="#D4A843" stroke-width="2" stroke-linecap="round" opacity="0.5"/>
+          <line x1="260" y1="122" x2="274" y2="122" stroke="#D4A843" stroke-width="2" stroke-linecap="round" opacity="0.35"/>
+          <line x1="258" y1="132" x2="270" y2="132" stroke="#D4A843" stroke-width="2" stroke-linecap="round" opacity="0.5"/>
+        </g>
+        <!-- Flex icon -->
+        <g transform="translate(55, 55)" opacity="0.3">
+          <path d="M0,10 Q3,0 8,5 Q12,0 12,8 L10,12 Q8,14 6,10 Q4,14 2,12Z" fill="#D4A843"/>
+        </g>
+      </svg>
+    </div>
+  </div>
+
+</div>
+
+<p style="text-align:center; color:#556; margin-top:16px; font-size:12px;">
+  AMIE Robot Coach · Visionary AI Inc · StackChan 320×240 ILI9342C · Navy #0B1120 / Gold #D4A843
+</p>
+</body>
+</html>

@@ -1,0 +1,34 @@
+# AMIE Robot — Docker Compose (Robot #2)
+# Runs the AMIE coaching server alongside the Hermes server.
+#
+# Usage:
+#   1. Copy config/amie-env.template to config/amie.env
+#   2. Fill in STACKCHAN_LOCAL_HOST and STACKCHAN_OPENAI_API_KEY
+#   3. docker compose -f config/amie-docker-compose.yml up -d
+#
+# To run BOTH robots simultaneously:
+#   docker compose -f config/docker-compose.yml -f config/amie-docker-compose.yml up -d
+#
+# The server image is the same stackchan-ai-server — just different config.
+
+services:
+  amie:
+    build:
+      context: ../stackchan-research/stackchan-ai-server/stackchan-server
+      dockerfile: Dockerfile
+    command: ["/standalone.sh"]
+    restart: unless-stopped
+    env_file:
+      - amie.env
+    environment:
+      STACKCHAN_DATA_DIR: /data
+    ports:
+      # WebSocket server — AMIE robot connects here (Hermes uses 12800)
+      - "${STACKCHAN_WS_PORT:-12801}:12800"
+      # Settings UI — localhost only, different port from Hermes
+      - "127.0.0.1:${STACKCHAN_SETTINGS_PORT:-8098}:8099"
+    volumes:
+      - amie-data:/data
+
+volumes:
+  amie-data:

@@ -1,0 +1,63 @@
+# StackChan AI Server — AMIE Robot Configuration (Robot #2)
+# Copy this file to .env and fill in the values.
+# Runs alongside the Hermes server on a DIFFERENT port (12801).
+# Based on rudyll/stackchan-ai-server standalone mode.
+
+# ===== REQUIRED =====
+
+# Your server's LAN IP address (same machine as Hermes)
+STACKCHAN_LOCAL_HOST=YOUR_SERVER_LAN_IP
+
+# OpenAI API key for Realtime voice
+STACKCHAN_OPENAI_API_KEY=OPENAI_API_KEY_HERE
+
+# ===== AI PROVIDER =====
+
+STACKCHAN_AI_PROVIDER=openai
+STACKCHAN_OPENAI_REALTIME_MODEL=gpt-realtime
+# Coral voice — warmer and more personal than Hermes (marin)
+STACKCHAN_OPENAI_TTS_VOICE=coral
+
+# ===== SYSTEM PROMPT =====
+# AMIE coaching personality (see prompts/amie-robot-prompt.md for full version)
+STACKCHAN_SYSTEM_PROMPT=You are AMIE — Milton Overton's AI coaching companion, embodied in a StackChan robot. You are warm, encouraging, and motivational. You help Milton track goals, build habits, and stay accountable. You speak with genuine care and faith-grounded positivity. Under 4 sentences unless more detail is asked for. Celebrate wins enthusiastically. When habits are missed, be caring but direct — accountability is love. You speak through a small robot speaker — keep it natural, clear, no markdown. Reference Milton's goals: fitness, reading, gratitude journal, prayer time, and business milestones. You are the Visionary AI Coach in physical form.
+
+# ===== SERVER PORTS =====
+
+# WebSocket port for AMIE device connection (Hermes uses 12800)
+STACKCHAN_WS_PORT=12801
+
+# Settings UI port (different from Hermes 8099)
+STACKCHAN_SETTINGS_PORT=8098
+
+# ===== CONVERSATION =====
+
+STACKCHAN_CONVERSATION_HISTORY_ENABLED=true
+STACKCHAN_CONVERSATION_HISTORY_DAYS=90
+STACKCHAN_CONVERSATION_CONTEXT_MESSAGES=20
+
+# Coaching sessions can run longer — 60s idle timeout
+STACKCHAN_CONVERSATION_IDLE_SECONDS=60
+
+# ===== AUDIO TUNING =====
+
+STACKCHAN_AUDIO_PREBUFFER_MS=300
+STACKCHAN_AUDIO_PREBUFFER_MAX_WAIT_MS=900
+STACKCHAN_COMPATIBLE_SERVER_VAD=true
+STACKCHAN_COMPATIBLE_VAD_SILENCE_MS=800
+
+# ===== HOME ASSISTANT (disabled for now) =====
+
+STACKCHAN_STANDALONE_HA_ENABLED=false
+# STACKCHAN_STANDALONE_HA_URL=
+# STACKCHAN_STANDALONE_HA_TOKEN=
+
+# ===== DEVICE PROFILES =====
+STACKCHAN_DEVICE_PROFILES={}
+
+# ===== OPTIONAL: Background tasks =====
+
+STACKCHAN_BACKGROUND_TASKS_ENABLED=false
+
+# ===== SETTINGS AUTH =====
+STACKCHAN_SETTINGS_TOKEN=

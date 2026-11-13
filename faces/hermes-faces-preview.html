@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GVC Hermes — StackChan Face Designs</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #0a0a1a; color: #fff; font-family: 'Segoe UI', system-ui, sans-serif; padding: 40px; }
+  h1 { text-align: center; color: #D4A843; font-size: 28px; margin-bottom: 8px; letter-spacing: 2px; }
+  .subtitle { text-align: center; color: #8899aa; font-size: 14px; margin-bottom: 32px; }
+  .grid { display: grid; grid-template-columns: repeat(3, 320px); gap: 24px; justify-content: center; }
+  .face-card { position: relative; }
+  .face-label { text-align: center; color: #D4A843; font-size: 13px; font-weight: 600; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 1.5px; }
+  .face-container {
+    width: 320px; height: 240px; background: #0B1120; border-radius: 12px;
+    overflow: hidden; position: relative; border: 1px solid #1a2a40;
+  }
+  svg { width: 320px; height: 240px; }
+
+  /* Animations */
+  @keyframes blink { 0%,92%,100% { transform: scaleY(1); } 96% { transform: scaleY(0.05); } }
+  @keyframes glow-pulse { 0%,100% { opacity: 0.3; } 50% { opacity: 0.7; } }
+  @keyframes mouth-speak { 0%,100% { ry: 4; } 25% { ry: 10; } 50% { ry: 6; } 75% { ry: 12; } }
+  @keyframes sparkle { 0%,100% { opacity: 0; transform: scale(0.5); } 50% { opacity: 1; transform: scale(1.2); } }
+  @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+  @keyframes dot-pulse { 0%,100% { opacity: 0.2; } 50% { opacity: 1; } }
+  @keyframes eye-drift { 0%,100% { transform: translate(0,0); } 50% { transform: translate(8,-6); } }
+  @keyframes subtle-float { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-2px); } }
+
+  .blink { animation: blink 4s ease-in-out infinite; transform-origin: center; }
+  .glow { animation: glow-pulse 2s ease-in-out infinite; }
+  .speaking-mouth { animation: mouth-speak 0.3s ease-in-out infinite; }
+  .sparkle-anim { animation: sparkle 1.2s ease-in-out infinite; }
+  .spin-anim { animation: spin 3s linear infinite; transform-origin: center; }
+  .dot1 { animation: dot-pulse 1.5s ease-in-out infinite; }
+  .dot2 { animation: dot-pulse 1.5s ease-in-out 0.3s infinite; }
+  .dot3 { animation: dot-pulse 1.5s ease-in-out 0.6s infinite; }
+  .eye-look { animation: eye-drift 3s ease-in-out infinite; }
+  .float { animation: subtle-float 3s ease-in-out infinite; }
+</style>
+</head>
+<body>
+<h1>⚡ GVC HERMES — FACE DESIGNS</h1>
+<p class="subtitle">Robot #1 · Executive Orchestrator · StackChan 320×240 LCD</p>
+
+<div class="grid">
+
+  <!-- DEFAULT / IDLE -->
+  <div class="face-card">
+    <div class="face-label">Default / Idle</div>
+    <div class="face-container">
+      <svg viewBox="0 0 320 240" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <radialGradient id="bg1" cx="50%" cy="60%" r="70%">
+            <stop offset="0%" stop-color="#0f1a30"/>
+            <stop offset="100%" stop-color="#0B1120"/>
+          </radialGradient>
+          <filter id="softglow">
+            <feGaussianBlur stdDeviation="3" result="blur"/>
+            <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+          </filter>
+        </defs>
+        <rect width="320" height="240" fill="url(#bg1)"/>
+        <!-- Gold accent line -->
+        <line x1="60" y1="60" x2="260" y2="60" stroke="#D4A843" stroke-width="1" opacity="0.3"/>
+        <!-- Left eye -->
+        <g class="blink">
+          <ellipse cx="115" cy="100" rx="28" ry="24" fill="#fff" opacity="0.95"/>
+          <ellipse cx="118" cy="100" rx="12" ry="12" fill="#0B1120"/>
+          <ellipse cx="121" cy="96" rx="4" ry="4" fill="#fff" opacity="0.7"/>
+        </g>
+        <!-- Right eye -->
+        <g class="blink">
+          <ellipse cx="205" cy="100" rx="28" ry="24" fill="#fff" opacity="0.95"/>
+          <ellipse cx="208" cy="100" rx="12" ry="12" fill="#0B1120"/>
+          <ellipse cx="211" cy="96" rx="4" ry="4" fill="#fff" opacity="0.7"/>
+        </g>
+        <!-- Confident slight smile -->
+        <path d="M130 158 Q160 178 190 158" stroke="#D4A843" stroke-width="3" fill="none" stroke-linecap="round"/>
+        <!-- Gold accent dots -->
+        <circle cx="80" cy="100" r="2" fill="#D4A843" opacity="0.4"/>
+        <circle cx="240" cy="100" r="2" fill="#D4A843" opacity="0.4"/>
+      </svg>
+    </div>
+  </div>
+
+  <!-- LISTENING -->
+  <div class="face-card">
+    <div class="face-label">Listening</div>
+    <div class="face-container">
+      <svg viewBox="0 0 320 240" xmlns="http://www.w3.org/2000/svg">
+        <rect width="320" height="240" fill="#0B1120"/>
+        <!-- Gold glow behind eyes -->
+        <ellipse cx="115" cy="100" rx="40" ry="36" fill="#D4A843" opacity="0.12" class="glow"/>
+        <ellipse cx="205" cy="100" rx="40" ry="36" fill="#D4A843" opacity="0.12" class="glow"/>
+        <!-- Wide attentive eyes -->
+        <ellipse cx="115" cy="100" rx="32" ry="30" fill="#fff" opacity="0.97"/>
+        <ellipse cx="117" cy="98" rx="14" ry="14" fill="#0B1120"/>
+        <ellipse cx="120" cy="94" rx="5" ry="5" fill="#fff" opacity="0.7"/>
+        <ellipse cx="205" cy="100" rx="32" ry="30" fill="#fff" opacity="0.97"/>
+        <ellipse cx="207" cy="98" rx="14" ry="14" fill="#0B1120"/>
+        <ellipse cx="210" cy="94" rx="5" ry="5" fill="#fff" opacity="0.7"/>
+        <!-- Small focused mouth -->
+        <ellipse cx="160" cy="165" rx="6" ry="4" fill="#D4A843" opacity="0.5"/>
+        <!-- Sound waves -->
+        <path d="M50 120 Q40 100 50 80" stroke="#D4A843" stroke-width="1.5" fill="none" opacity="0.3" class="glow"/>
+        <path d="M40 125 Q27 100 40 75" stroke="#D4A843" stroke-width="1.5" fill="none" opacity="0.2" class="glow"/>
+        <path d="M270 120 Q280 100 270 80" stroke="#D4A843" stroke-width="1.5" fill="none" opacity="0.3" class="glow"/>
+        <path d="M280 125 Q293 100 280 75" stroke="#D4A843" stroke-width="1.5" fill="none" opacity="0.2" class="glow"/>
+      </svg>
+    </div>
+  </div>
+
+  <!-- SPEAKING -->
+  <div class="face-card">
+    <div class="face-label">Speaking</div>
+    <div class="face-container">
+      <svg viewBox="0 0 320 240" xmlns="http://www.w3.org/2000/svg">
+        <rect width="320" height="240" fill="#0B1120"/>
+        <!-- Confident eyes -->
+        <g class="blink" style="animation-duration:5s">
+          <ellipse cx="115" cy="100" rx="26" ry="22" fill="#fff" opacity="0.95"/>
+          <ellipse cx="118" cy="100" rx="11" ry="11" fill="#0B1120"/>
+          <ellipse cx="121" cy="96" rx="4" ry="4" fill="#fff" opacity="0.7"/>
+          <!-- Slight brow -->
+          <line x1="88" y1="72" x2="140" y2="76" stroke="#D4A843" stroke-width="2" stroke-linecap="round" opacity="0.6"/>
+        </g>
+        <g class="blink" style="animation-duration:5s">
+          <ellipse cx="205" cy="100" rx="26" ry="22" fill="#fff" opacity="0.95"/>
+          <ellipse cx="208" cy="100" rx="11" ry="11" fill="#0B1120"/>
+          <ellipse cx="211" cy="96" rx="4" ry="4" fill="#fff" opacity="0.7"/>
+          <line x1="180" y1="76" x2="232" y2="72" stroke="#D4A843" stroke-width="2" stroke-linecap="round" opacity="0.6"/>
+        </g>
+        <!-- Animated speaking mouth -->
+        <ellipse cx="160" cy="162" rx="18" fill="#1a1a2e" stroke="#D4A843" stroke-width="2" class="speaking-mouth"/>
+        <!-- Sound lines -->
+        <line x1="185" y1="155" x2="195" y2="150" stroke="#D4A843" stroke-width="1" opacity="0.3" class="glow"/>
+        <line x1="188" y1="162" x2="200" y2="162" stroke="#D4A843" stroke-width="1" opacity="0.25" class="glow"/>
+        <line x1="185" y1="169" x2="195" y2="174" stroke="#D4A843" stroke-width="1" opacity="0.3" class="glow"/>
+      </svg>
+    </div>
+  </div>
+
+  <!-- THINKING -->
+  <div class="face-card">
+    <div class="face-label">Thinking</div>
+    <div class="face-container">
+      <svg viewBox="0 0 320 240" xmlns="http://www.w3.org/2000/svg">
+        <rect width="320" height="240" fill="#0B1120"/>
+        <!-- Eyes looking up-right -->
+        <g class="eye-look">
+          <ellipse cx="115" cy="100" rx="26" ry="22" fill="#fff" opacity="0.95"/>
+          <ellipse cx="122" cy="93" rx="11" ry="11" fill="#0B1120"/>
+          <ellipse cx="125" cy="89" rx="4" ry="4" fill="#fff" opacity="0.7"/>
+        </g>
+        <g class="eye-look">
+          <ellipse cx="205" cy="100" rx="26" ry="22" fill="#fff" opacity="0.95"/>
+          <ellipse cx="212" cy="93" rx="11" ry="11" fill="#0B1120"/>
+          <ellipse cx="215" cy="89" rx="4" ry="4" fill="#fff" opacity="0.7"/>
+        </g>
+        <!-- Neutral mouth -->
+        <line x1="140" y1="162" x2="180" y2="162" stroke="#D4A843" stroke-width="2" stroke-linecap="round" opacity="0.5"/>
+        <!-- Processing dots -->
+        <circle cx="245" cy="70" r="4" fill="#D4A843" class="dot1"/>
+        <circle cx="260" cy="70" r="4" fill="#D4A843" class="dot2"/>
+        <circle cx="275" cy="70" r="4" fill="#D4A843" class="dot3"/>
+        <!-- Gear icon -->
+        <g transform="translate(262, 45)" class="spin-anim" opacity="0.3">
+          <circle cx="0" cy="0" r="8" fill="none" stroke="#D4A843" stroke-width="1.5"/>
+          <line x1="0" y1="-11" x2="0" y2="-6" stroke="#D4A843" stroke-width="2"/>
+          <line x1="0" y1="6" x2="0" y2="11" stroke="#D4A843" stroke-width="2"/>
+          <line x1="-11" y1="0" x2="-6" y2="0" stroke="#D4A843" stroke-width="2"/>
+          <line x1="6" y1="0" x2="11" y2="0" stroke="#D4A843" stroke-width="2"/>
+        </g>
+      </svg>
+    </div>
+  </div>
+
+  <!-- CELEBRATING -->
+  <div class="face-card">
+    <div class="face-label">Celebrating</div>
+    <div class="face-container">
+      <svg viewBox="0 0 320 240" xmlns="http://www.w3.org/2000/svg">
+        <rect width="320" height="240" fill="#0B1120"/>
+        <!-- Happy squinted eyes -->
+        <g class="float">
+          <path d="M90 100 Q115 82 140 100" stroke="#fff" stroke-width="4" fill="none" stroke-linecap="round"/>
+          <path d="M180 100 Q205 82 230 100" stroke="#fff" stroke-width="4" fill="none" stroke-linecap="round"/>
+        </g>
+        <!-- Big smile -->
+        <path d="M115 148 Q160 185 205 148" stroke="#D4A843" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+        <!-- Sparkles -->
+        <g class="sparkle-anim">
+          <polygon points="70,55 73,48 76,55 83,55 78,60 80,67 73,63 66,67 68,60 63,55" fill="#D4A843" opacity="0.8"/>
+        </g>
+        <g class="sparkle-anim" style="animation-delay:0.4s">
+          <polygon points="250,45 253,38 256,45 263,45 258,50 260,57 253,53 246,57 248,50 243,45" fill="#D4A843" opacity="0.7"/>
+        </g>
+        <g class="sparkle-anim" style="animation-delay:0.8s">
+          <polygon points="160,35 162,30 164,35 169,35 165,39 167,44 162,41 157,44 159,39 154,35" fill="#D4A843" opacity="0.6"/>
+        </g>
+        <g class="sparkle-anim" style="animation-delay:0.2s">
+          <circle cx="55" cy="140" r="3" fill="#D4A843" opacity="0.5"/>
+        </g>
+        <g class="sparkle-anim" style="animation-delay:0.6s">
+          <circle cx="265" cy="135" r="3" fill="#D4A843" opacity="0.5"/>
+        </g>
+        <g class="sparkle-anim" style="animation-delay:1s">
+          <circle cx="90" cy="190" r="2" fill="#D4A843" opacity="0.4"/>
+        </g>
+        <g class="sparkle-anim" style="animation-delay:0.7s">
+          <circle cx="230" cy="185" r="2" fill="#D4A843" opacity="0.4"/>
+        </g>
+      </svg>
+    </div>
+  </div>
+
+  <!-- ALERT -->
+  <div class="face-card">
+    <div class="face-label">Alert</div>
+    <div class="face-container">
+      <svg viewBox="0 0 320 240" xmlns="http://www.w3.org/2000/svg">
+        <rect width="320" height="240" fill="#0B1120"/>
+        <!-- Alert accent -->
+        <line x1="60" y1="55" x2="260" y2="55" stroke="#D4A843" stroke-width="2" opacity="0.5"/>
+        <!-- Focused narrowed eyes -->
+        <ellipse cx="115" cy="100" rx="30" ry="18" fill="#fff" opacity="0.97"/>
+        <ellipse cx="118" cy="100" rx="13" ry="13" fill="#0B1120"/>
+        <ellipse cx="121" cy="97" rx="4" ry="4" fill="#fff" opacity="0.6"/>
+        <!-- Sharp brows -->
+        <line x1="82" y1="78" x2="145" y2="75" stroke="#D4A843" stroke-width="2.5" stroke-linecap="round"/>
+        <ellipse cx="205" cy="100" rx="30" ry="18" fill="#fff" opacity="0.97"/>
+        <ellipse cx="208" cy="100" rx="13" ry="13" fill="#0B1120"/>
+        <ellipse cx="211" cy="97" rx="4" ry="4" fill="#fff" opacity="0.6"/>
+        <line x1="175" y1="75" x2="238" y2="78" stroke="#D4A843" stroke-width="2.5" stroke-linecap="round"/>
+        <!-- Serious flat mouth -->
+        <line x1="135" y1="162" x2="185" y2="162" stroke="#D4A843" stroke-width="2.5" stroke-linecap="round"/>
+        <!-- Alert indicator -->
+        <g class="glow">
+          <polygon points="160,20 165,30 155,30" fill="#D4A843" opacity="0.7"/>
+          <rect x="158" y="32" width="4" height="8" fill="#D4A843" opacity="0.7"/>
+        </g>
+      </svg>
+    </div>
+  </div>
+
+</div>
+
+<p style="text-align:center; color:#556; margin-top:32px; font-size:12px;">
+  GVC Hermes · Visionary AI Inc · StackChan 320×240 ILI9342C · Navy #0B1120 / Gold #D4A843
+</p>
+</body>
+</html>
