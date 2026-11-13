@@ -1,0 +1,16 @@
+{
+  "_comment": "StackChan device SD card configuration template",
+  "_comment2": "Place this file on the SD card as config.json (or flash via NVS)",
+  "_comment3": "The robot reads this on boot to find the AI server",
+
+  "websocket_url": "ws://YOUR_SERVER_LAN_IP:12800",
+  "wifi_ssid": "YOUR_WIFI_SSID",
+  "wifi_password": "YOUR_WIFI_PASSWORD",
+
+  "_notes": {
+    "websocket_url": "Replace YOUR_SERVER_LAN_IP with your server's LAN IP (e.g. 192.168.1.100). Port 12800 is the default stackchan-ai-server WebSocket port.",
+    "wifi": "2.4 GHz WiFi only — the ESP32 in StackChan does not support 5 GHz.",
+    "device_type": "StackChan",
+    "protocol": "Xiaozhi binary WebSocket protocol (OPUS audio frames + control messages)"
+  }
+}

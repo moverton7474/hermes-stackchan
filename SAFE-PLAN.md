@@ -1,298 +1,161 @@
-# StackChan Robot Integration — Safe Change Plan
+# StackChan Robot Integration — Safe Change Plan (v2)
 
-**Date:** 2026-11-13
+**Date:** 2026-11-13 (Updated)
 **Author:** localagent (Hermes Desktop Agent)
-**Objective:** Integrate proven StackChan + Hermes Agent projects into Milton's robot builds
-**Risk Level:** LOW — all work is additive, in new repos, no production systems modified until Phase 4
+**Objective:** Run Hermes AI personality on StackChan robots using stock firmware
+**Risk Level:** LOW — no custom firmware, no production system changes
 
 ---
 
 ## Executive Summary
 
-Three proven open-source projects already solve what we were building from scratch:
-1. `circlemouth/Hermes-StackChan` — StackChan firmware + ai-server bridge + Hermes Agent brain + 13 MCP robot tools
-2. `rudyll/stackchan-ai-server` — Production Docker server with OPUS codec, OpenAI Realtime + Gemini Live
-3. `Adolanium/hermes-gadget-sdk` — Official Nous Research SDK for Hermes + ESP32 devices
+**Simplified approach:** Use rudyll/stackchan-ai-server as the bridge server with STOCK M5Stack firmware on the robots. No custom firmware flashing needed.
 
-**Strategy:** Fork Hermes-StackChan as the foundation, integrate stackchan-ai-server's OPUS pipeline, and connect to GVC Hermes Realtime endpoint for Robot #1 (Hermes) and Visionary AI Coach for Robot #2 (AMIE).
+The server handles everything:
+- OPUS codec (16kHz device ↔ 24kHz OpenAI Realtime)
+- OpenAI Realtime API connection with Hermes system prompt
+- Per-device personality profiles (Hermes vs AMIE)
+- Conversation history
+- Settings UI for live configuration
+
+**Robot #1** = GVC Hermes (Milton AI assistant)
+**Robot #2** = AMIE (Visionary AI Coach)
+
+### Key Repos
+| Repo | Purpose | Location |
+|------|---------|----------|
+| moverton7474/hermes-stackchan | Config, prompts, docs, deployment | ~/hermes-stackchan |
+| rudyll/stackchan-ai-server | Bridge server (upstream, used as-is) | ~/stackchan-research/stackchan-ai-server |
+| circlemouth/Hermes-StackChan | MCP tool patterns reference only | ~/stackchan-research/hermes-stackchan-ref |
+| Adolanium/hermes-gadget-sdk | Future: official Hermes gadget SDK | ~/stackchan-research/hermes-gadget-sdk |
 
 ---
 
 ## What NOT to Change
 
-- ❌ GVC production (voice.visionaryai.marketing) — no changes until Phase 4
-- ❌ VIIF — non-negotiable (rule 6)
-- ❌ Visionary AI Coach production app — no changes until Phase 5
-- ❌ Existing Hermes voice prompt or tools — robot uses them as-is
-- ❌ Supabase RLS, approval queue, memory system
-- ❌ Any existing StackChan community firmware — we fork, not modify upstream
+- Stock firmware on robots — no custom flashing
+- GVC production — no changes needed (direct OpenAI API)
+- VIIF — non-negotiable
+- Visionary AI Coach production
+- Supabase, approval queue, memory system
+- Any upstream repos — we use them as-is
 
 ---
 
-## Phase 0: Research & Analysis (DONE ✅)
+## Phase 0: Research and Analysis ✅ DONE
 
-**What was completed this session:**
-- Identified 3 proven reference projects
-- Analyzed Hermes-StackChan architecture (firmware → ai-server → HermesAgent)
-- Analyzed stackchan-ai-server (Docker, OPUS, OpenAI Realtime, Gemini Live)
-- Analyzed nous-girl-stackchan (Hermes Agent brain, anime faces, dance modes)
-- Analyzed hermes-gadget-sdk (official Nous Research ESP32 SDK)
-- Created capability mapping (40/48 Hermes tools are robot-relevant)
-- Created 5-phase product roadmap
-- Documented face expressions and head choreography specs
+- Analyzed stackchan-ai-server architecture (Go server, OPUS, OpenAI Realtime, Gemini Live)
+- Analyzed Hermes-StackChan MCP tools (13 robot control tools — reference only)
+- Analyzed hermes-gadget-sdk (official Nous Research ESP32 SDK — future path)
+- Extracted GVC Hermes system prompt for robot adaptation
 
----
+### Key Findings: stackchan-ai-server
 
-## Phase 1: Fork & Local Setup (NO SERVER CHANGES)
+Architecture: Go server with WebSocket bridge
+- Port 12800: Xiaozhi binary WebSocket protocol (device connections)
+- Port 8099: Settings UI (web-based, auth-protected)
+- OPUS codec: 16kHz mono from device decode resample to 24kHz OpenAI Realtime PCM response PCM encode to OPUS send to device
+- 60ms frames: 960 samples at 16kHz, 1440 samples at 24kHz
+- Providers: OpenAI Realtime (native WS), Gemini Live, OpenAI-compatible (STT+LLM+TTS pipeline)
+- Device profiles: Per-MAC overrides for provider, voice, model, system prompt
+- System prompt: Injected via env var STACKCHAN_SYSTEM_PROMPT, base64 encoded in config
+- Auth: Device authenticates via RSA-encrypted MAC+timestamp token in WS header
+- Standalone mode: Docker container with .env file, no Home Assistant required
+- Settings persistence: JSON file in /data/stackchan-settings.json
+- OTA: HTTPS intercept at port 443 for api.tenclass.net DNS override
+- Server VAD: End-of-speech detection for firmware that never sends listen:stop
+- Conversation history: Configurable retention and context window
 
-### Step 1.1: Fork Hermes-StackChan
-- **What:** Fork `circlemouth/Hermes-StackChan` to `moverton7474/hermes-stackchan` (update existing repo)
-- **Risk:** NONE — new code in our own repo
-- **Safety check:** Verify upstream repo is accessible and has the ai-server + firmware
-- **Execution:**
-  ```bash
-  cd ~/stackchan-research
-  git clone https://github.com/circlemouth/Hermes-StackChan.git hermes-stackchan-upstream
-  # Read the full codebase end-to-end
-  # Copy relevant components into ~/hermes-stackchan
-  ```
-- **Reversible:** Delete the fork
-- **Dependencies:** None
+### Key Findings: Hermes-StackChan MCP Tools (Reference)
 
-### Step 1.2: Clone stackchan-ai-server for OPUS reference
-- **What:** Clone the production OPUS codec implementation to use as reference
-- **Risk:** NONE — read-only reference
-- **Safety check:** Verify it handles 16kHz→24kHz OPUS encode/decode
-- **Execution:**
-  ```bash
-  cd ~/stackchan-research
-  git clone https://github.com/rudyll/stackchan-ai-server.git
-  # Extract OPUS pipeline code for integration
-  ```
-- **Reversible:** N/A (read-only)
-- **Dependencies:** None
+13 tools exposed via MCP stdio protocol:
+1. stackchan_get_status — battery, WiFi, volume, firmware version
+2. stackchan_set_speaker_volume — 0-100, permanent flag
+3. stackchan_play_test_tone — diagnostic sine tone
+4. stackchan_get_head_angles — current yaw/pitch
+5. stackchan_set_head_angles — move head (yaw +/-128, pitch 0-90, speed)
+6. stackchan_set_led_color — RGB LED (0-168 per channel)
+7. stackchan_power_off — shutdown
+8. stackchan_take_photo — camera capture as MCP image
+9. stackchan_display_image — show image on screen
+10. stackchan_capture_screen — screenshot of device display
+11. stackchan_create_reminder — local timer with message
+12. stackchan_get_reminders — list active reminders
+13. stackchan_stop_reminder — cancel by ID
+14. stackchan_ask_hermes_subagent — delegate to background Hermes sub-agent
 
-### Step 1.3: Clone hermes-gadget-sdk for ESP32 patterns
-- **What:** Clone the official Nous Research SDK for ESP32 + Hermes integration patterns
-- **Risk:** NONE — read-only reference
-- **Execution:**
-  ```bash
-  cd ~/stackchan-research
-  git clone https://github.com/Adolanium/hermes-gadget-sdk.git
-  ```
-- **Reversible:** N/A
-- **Dependencies:** None
+Note: These require custom firmware. With stock firmware, we get voice-only. MCP tools are a future enhancement path.
 
-### Step 1.4: Set up local development environment
-- **What:** Install ESP-IDF v5.5.4 toolchain for firmware compilation
-- **Risk:** LOW — local tooling only
-- **Safety check:** Verify ESP-IDF installs without breaking existing Node/Python
-- **Execution:**
-  ```bash
-  cd ~
-  git clone -b v5.5.4 --recursive https://github.com/espressif/esp-idf.git esp-idf
-  ./esp-idf/install.sh esp32s3
-  ```
-- **Reversible:** `rm -rf ~/esp-idf`
-- **Dependencies:** Python 3.11 (already installed)
+### Key Findings: hermes-gadget-sdk
+
+- Official Nous Research SDK for Hermes + ESP32 devices
+- Push-to-talk interface, face display, agent tool exposure
+- Desktop simulator available (no hardware needed)
+- Future path: could build custom Hermes gadget firmware for StackChan
 
 ---
 
-## Phase 2: Build the Bridge Server (LOCAL ONLY)
+## Phase 1: Clone and Analyze ✅ DONE
 
-### Step 2.1: Integrate OPUS codec from stackchan-ai-server
-- **What:** Replace our scaffold `audio.ts` with working OPUS from stackchan-ai-server
-- **Risk:** NONE — local code change in our repo
-- **Safety check:** Unit test encode/decode round-trip
-- **Execution:** Copy OPUS implementation, adapt to our TypeScript types, write tests
-- **Reversible:** `git revert`
-- **Dependencies:** Step 1.2 complete
-
-### Step 2.2: Integrate ai-server bridge from Hermes-StackChan
-- **What:** Adopt the proven ai-server WebSocket bridge pattern, adapt for GVC Hermes Realtime
-- **Risk:** NONE — local code
-- **Safety check:** Verify xiaozhi protocol v3 compatibility
-- **Execution:** Merge ai-server TypeScript code, replace local HermesAgent calls with GVC Hermes token minting + OpenAI Realtime WebSocket
-- **Reversible:** `git revert`
-- **Dependencies:** Step 1.1 complete
-
-### Step 2.3: Implement GVC Hermes auth strategy
-- **What:** Solve the authentication problem — the robot can't log in via browser
-- **Risk:** LOW — design decision, no prod changes yet
-- **Options (evaluate in order):**
-  1. **Service token** — Create a robot-specific long-lived token in GVC (requires GVC change in Phase 4)
-  2. **Proxy auth** — Bridge server holds a valid session and proxies robot requests (works without GVC changes)
-  3. **Direct OpenAI** — Bridge server mints OpenAI Realtime tokens directly using the OpenAI API key from vault, with Hermes system prompt injected (bypasses GVC auth entirely)
-- **Safety check:** Option 3 works without touching GVC production. Start there.
-- **Execution:** Implement Option 3 as default, Option 1 as upgrade path
-- **Reversible:** Environment variable toggle between options
-- **Dependencies:** OpenAI API key from vault
-
-### Step 2.4: Add MCP robot control tools from Hermes-StackChan
-- **What:** Integrate the 13 proven MCP tools for robot control (move head, change face, dance, LED)
-- **Risk:** NONE — local code
-- **Safety check:** Verify tool definitions match our firmware
-- **Execution:** Copy MCP tool definitions, adapt to our bridge server
-- **Reversible:** `git revert`
-- **Dependencies:** Step 2.2 complete
-
-### Step 2.5: Local testing with simulator
-- **What:** Use the Hermes-StackChan desktop UI simulator to test without physical robot
-- **Risk:** NONE
-- **Safety check:** Simulator renders face + responds to WebSocket messages
-- **Execution:** Build and run `firmware/tools/ui_sim/`
-- **Reversible:** N/A
-- **Dependencies:** Step 2.2 complete
+- Step 1.1: Clone reference repos ✅ (all cloned to ~/stackchan-research/)
+- Step 1.2: Deep-read stackchan-ai-server ✅ (documented above)
+- Step 1.3: Extract MCP tool patterns ✅ (13 tools documented)
+- Step 1.4: Read hermes-gadget-sdk ✅ (evaluated as future path)
 
 ---
 
-## Phase 3: Flash & Test Physical Robots (WHEN DHL DELIVERS)
+## Phase 2: Build Hermes Robot Configuration ✅ DONE
 
-### Step 3.1: Backup stock firmware
-- **What:** Read full 16MB flash from both StackChans before any changes
-- **Risk:** NONE — read-only
-- **Safety check:** Verify backup file size is exactly 16MB (16,777,216 bytes)
-- **Execution:**
-  ```bash
-  esptool --port PORT read-flash 0 0x1000000 stackchan-backup-hermes.bin
-  esptool --port PORT read-flash 0 0x1000000 stackchan-backup-amie.bin
-  ```
-- **Reversible:** `esptool --port PORT write-flash 0 stackchan-backup-hermes.bin`
-- **Dependencies:** Robots physically present + USB cable
+- Step 2.1: Extract and adapt GVC Hermes system prompt ✅
+  - Extracted HERMES_REALTIME_SYSTEM_BASE from gvc-review route.ts
+  - Created condensed robot-mode prompt in prompts/hermes-robot-prompt.md
+  - AMIE placeholder at prompts/amie-robot-prompt.md
 
-### Step 3.2: Flash Hermes firmware to Robot #1
-- **What:** Build and flash the Hermes-StackChan firmware
-- **Risk:** LOW — backup exists for rollback
-- **Safety check:** Backup verified, USB connection stable
-- **Execution:**
-  ```bash
-  cd firmware
-  source ~/esp-idf/export.sh
-  idf.py set-target esp32s3
-  python3 ./fetch_repos.py
-  idf.py build
-  idf.py -p PORT flash
-  ```
-- **Reversible:** Restore from backup
-- **Dependencies:** Step 3.1 complete, Phase 2 complete
+- Step 2.2: Create deployment config files ✅
+  - config/env.template — all stackchan-ai-server env vars with Hermes defaults
+  - config/docker-compose.yml — Docker Compose for running the server
+  - config/device-config.json — SD card config template for robot WiFi + server URL
 
-### Step 3.3: Configure WiFi + bridge server URL via BLE
-- **What:** Use BLE provisioning to set WiFi credentials and bridge server address
-- **Risk:** NONE — configuration only
-- **Safety check:** Verify robot connects to WiFi (check LED indicator)
-- **Execution:** Use StackChan app or BLE config tool
-- **Reversible:** Re-provision with different settings
-- **Dependencies:** Step 3.2 complete, bridge server running
-
-### Step 3.4: End-to-end voice test (Robot #1 → Bridge → Hermes)
-- **What:** Say "Hey Hermes, what's on my calendar?" and verify the full loop works
-- **Risk:** NONE — read-only Hermes tools
-- **Safety check:** Bridge server logs show connected session, audio flowing
-- **Test sequence:**
-  1. Wake word → robot face changes to listening
-  2. Speak command → audio streams to bridge → bridge sends to OpenAI Realtime
-  3. Response received → bridge sends audio back → robot speaks + face animates
-  4. Verify: calendar data is correct (matches actual calendar)
-- **Reversible:** N/A (testing only)
-- **Dependencies:** Steps 3.2 + 3.3 complete
-
-### Step 3.5: Record demo video
-- **What:** Record 60-second demo of working Hermes robot for M5Stack partnership email
-- **Risk:** NONE
-- **Execution:** Phone video of robot conversation + face expressions
-- **Dependencies:** Step 3.4 passes
+- Step 2.3: Create setup guide ✅
+  - docs/SETUP-GUIDE.md — step-by-step: start server, configure robot, verify, customize
 
 ---
 
-## Phase 4: GVC Hermes Production Integration (REQUIRES MILTON APPROVAL)
+## Phase 3: Physical Setup (WHEN ROBOTS ARRIVE)
 
-### Step 4.1: Add robot auth endpoint to GVC
-- **What:** Add a `/api/realtime/hermes/robot` endpoint that accepts a robot service token instead of browser session
-- **Risk:** MEDIUM — production code change
-- **Safety check:** Endpoint is additive, does not modify existing `/api/realtime/hermes`
-- **Execution:** PR to `moverton7474/gemini-voice-center`, Milton approves
-- **Reversible:** Revert PR
-- **Dependencies:** Phase 3 passes, Milton approves
-
-### Step 4.2: Register robot as agent in GVC
-- **What:** Add `hermes-robot` as a device identity in the agent fleet (like localagent/batmanmo74)
-- **Risk:** LOW — additive to agent presence
-- **Safety check:** Does not conflict with existing agent IDs
-- **Execution:** PR to GVC, add to AGENTS.md and agent allowlist
-- **Reversible:** Remove from allowlist
-- **Dependencies:** Step 4.1 complete
-
-### Step 4.3: Deploy bridge server to Batman VPS
-- **What:** Run the bridge server as a PM2 process on Batman VPS so robot works from any WiFi
-- **Risk:** LOW — new PM2 process, no changes to existing processes
-- **Safety check:** Verify VPS has available ports, no conflict with existing services
-- **Execution:** `propose_action` with `vps_command` to set up PM2
-- **Reversible:** `pm2 delete hermes-stackchan-bridge`
-- **Dependencies:** Steps 4.1 + 4.2 complete, VPS SSH working
+- Step 3.1: Unbox and power on — verify stock firmware boots (NONE risk)
+- Step 3.2: Start bridge server — copy env.template to .env, fill in API key and LAN IP, docker compose up (NONE risk)
+- Step 3.3: Configure robot WiFi + server URL — stock firmware setup mode or SD card (NONE risk)
+- Step 3.4: End-to-end voice test — talk to robot, verify Hermes responds (NONE risk)
+- Step 3.5: Configure Robot #2 (AMIE) — find MAC, add device profile with AMIE prompt (NONE risk)
+- Step 3.6: Record demo video — 60-second video for M5Stack partnership
 
 ---
 
-## Phase 5: AMIE Robot Build (Robot #2)
+## Phase 4: Production Deployment (REQUIRES MILTON APPROVAL)
 
-### Step 5.1: Create AMIE bridge server variant
-- **What:** Fork the Hermes bridge server, replace GVC Hermes with Visionary AI Coach AMIE
-- **Risk:** NONE — separate codebase
-- **Safety check:** AMIE Realtime endpoint accessible
-- **Execution:** New branch or directory in hermes-stackchan repo
-- **Reversible:** Delete branch
-- **Dependencies:** Phase 3 proven with Robot #1
-
-### Step 5.2: Flash AMIE firmware to Robot #2
-- **What:** Same firmware, different bridge server URL pointing to AMIE
-- **Risk:** LOW — backup exists
-- **Execution:** Same flash process, different NVS config
-- **Dependencies:** Step 5.1 complete
-
-### Step 5.3: AMIE-specific face designs + coaching session types
-- **What:** Custom face expressions for coaching (encouraging, celebrating, praying, concerned)
-- **Risk:** NONE — asset files
-- **Dependencies:** Step 5.2 complete
-
-### Step 5.4: Test AMIE coaching session via robot
-- **What:** "Hey AMIE, coach me on my goals" → full coaching conversation
-- **Test sequence:**
-  1. Morning briefing with goal review
-  2. Habit accountability check
-  3. Guided prayer session
-  4. Goal completion celebration (dance!)
-- **Dependencies:** Step 5.3 complete
-
----
-
-## Phase 6: Commercial Product Preparation
-
-### Step 6.1: Send M5Stack partnership email (WITH demo video)
-- **Dependencies:** Phase 3 Step 3.5 (demo video recorded)
-
-### Step 6.2: File updated provisional patent with robot embodiment claims
-- **Dependencies:** Working prototype demonstrated
-
-### Step 6.3: Create product landing page for AMIE Robot Coach
-- **Dependencies:** Phase 5 complete
+- Step 4.1: Deploy bridge server to Batman VPS — Docker container for any-WiFi access
+- Step 4.2: GVC integration (optional) — add robot as agent in GVC fleet
+- Step 4.3: MCP tool integration (optional) — requires custom firmware
 
 ---
 
 ## Decision Log
 
 | Decision | Chosen | Reason |
-|---|---|---|
-| Build from scratch vs fork | **Fork Hermes-StackChan** | Saves weeks — OPUS, MCP tools, BLE provisioning, simulator all proven |
-| Auth strategy | **Option 3 first** (direct OpenAI with Hermes prompt) | Works without GVC production changes; upgrade to service token later |
-| Bridge server location | **Local first**, Batman VPS later | Test locally, deploy to VPS in Phase 4 for any-WiFi access |
-| Firmware approach | **ESP-IDF** (not Arduino/PlatformIO) | Official M5Stack firmware uses ESP-IDF; proven working |
-| Robot #1 first | **Hermes** | Simpler auth story, proves the pipeline, then adapt for AMIE |
+|----------|--------|--------|
+| Custom firmware vs stock | Stock firmware | Eliminates risk, robots work out of box |
+| Bridge server | rudyll/stackchan-ai-server | Production Go server, OPUS, Docker-ready |
+| Auth strategy | Direct OpenAI API | No GVC changes needed |
+| Robot #1 first | Hermes | Simpler, proves pipeline, then AMIE via profiles |
+| Hermes-StackChan MCP tools | Reference only | Require custom firmware, Phase 4 |
+| hermes-gadget-sdk | Future path | Official SDK, longer-term |
 
 ---
 
-## Open Questions (Resolve During Execution)
+## Open Questions
 
-1. Does the Hermes-StackChan firmware support the stock StackChan K151 hardware exactly, or does it need CoreS3 modifications?
-2. What's the battery life of the StackChan in continuous voice mode?
-3. Can the bridge server run on Milton-ServerLaptop (local) or does it need VPS for latency?
-4. Which OpenAI Realtime voice sounds best through the StackChan speaker? (marin vs alloy vs coral)
-5. Can we add the GVC Hermes system prompt to Option 3 auth without the full Milton Context Document?
+1. Which OpenAI Realtime voice sounds best through StackChan speaker? (marin vs alloy vs coral)
+2. Does stock firmware auto-reconnect when server restarts?
+3. Battery life in continuous voice mode?
+4. Can the settings UI (port 8099) be exposed securely for remote management?

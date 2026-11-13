@@ -1,0 +1,32 @@
+# Hermes StackChan Robot — Docker Compose
+# Runs the stackchan-ai-server bridge for StackChan robots.
+#
+# Usage:
+#   1. Copy config/env.template to config/.env
+#   2. Fill in STACKCHAN_LOCAL_HOST and STACKCHAN_OPENAI_API_KEY
+#   3. docker compose -f config/docker-compose.yml up -d
+#
+# The server image is built from the upstream rudyll/stackchan-ai-server.
+# Clone it first: git clone https://github.com/rudyll/stackchan-ai-server ~/stackchan-research/stackchan-ai-server
+
+services:
+  stackchan:
+    build:
+      context: ../stackchan-research/stackchan-ai-server/stackchan-server
+      dockerfile: Dockerfile
+    command: ["/standalone.sh"]
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      STACKCHAN_DATA_DIR: /data
+    ports:
+      # WebSocket server — robots connect here
+      - "${STACKCHAN_WS_PORT:-12800}:12800"
+      # Settings UI — localhost only for security
+      - "127.0.0.1:${STACKCHAN_SETTINGS_PORT:-8099}:8099"
+    volumes:
+      - stackchan-data:/data
+
+volumes:
+  stackchan-data:
