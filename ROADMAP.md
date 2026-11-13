@@ -259,6 +259,26 @@ End of day (if enabled)        → reflection
 
 ---
 
+## Intellectual Property
+
+### Filed Patents
+| Docket | Title | Status | Coverage |
+|--------|-------|--------|----------|
+| 63/950,599 (PGI) | Agentic Personal Growth Infrastructure | Filed Dec 2025 | AMIE coaching engine, identity themes, proactive outreach, Financial Reality Engine |
+| PA-11 (VAI-PA-11-2026) | AI-Powered Physical Book with Embedded Edge Inference | Filed Oct 2026 | Physical book with AI chip, voice-first coaching, guided prayer, offline operation |
+| **PA-12 (VAI-PA-12-2026)** | **AI-Powered Physical Coaching Robot** | **Ready to file** | Physical robot coaching, bridge server architecture, emotion-to-expression mapping, proactive robot-initiated coaching, camera exercise detection, multi-personality switching, Tutor Buddy, celebration behaviors |
+
+### PA-12 Claim Coverage (Hardware-Agnostic)
+Patent claims are written for **any physical robot form factor** — not tied to M5Stack or StackChan. Current prototype uses StackChan ($99 desktop robot), but claims cover future migration to:
+- Full humanoid robots (Unitree G1/H1, Tesla Optimus, Figure)
+- Larger fitness coaching robots with full-body cameras
+- Kid-friendly educational robot form factors
+- Custom-designed Visionary AI branded hardware
+
+Patent files: `~/Dropbox/.../Patent Filings/PA-12-AMIE-Robot-Coach/` (25 claims, 10 figures, cover sheet, filing checklist)
+
+---
+
 ## Priority Rules
 
 1. **No new phase starts until previous phase is production-stable** with real user feedback
