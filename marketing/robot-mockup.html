@@ -1,0 +1,1001 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AMIE Robot Coach — Visionary AI</title>
+<style>
+  /* ===== RESET & BASE ===== */
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: #0B1120;
+    color: #fff;
+    font-family: -apple-system, 'Segoe UI', system-ui, sans-serif;
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  /* ===== VARIABLES ===== */
+  :root {
+    --navy: #0B1120;
+    --navy-light: #11182e;
+    --gold: #D4A843;
+    --gold-light: #e8c97a;
+    --gold-dark: #b08a2e;
+    --white: #ffffff;
+    --gray: #8899aa;
+    --section-pad: 100px 24px;
+  }
+
+  /* ===== TYPOGRAPHY ===== */
+  h1, h2, h3 { font-family: Georgia, 'Times New Roman', serif; font-weight: 400; }
+  h1 { font-size: clamp(2.5rem, 6vw, 5rem); letter-spacing: -1px; line-height: 1.1; }
+  h2 { font-size: clamp(1.8rem, 4vw, 3rem); letter-spacing: -0.5px; margin-bottom: 16px; }
+  h3 { font-size: clamp(1.1rem, 2vw, 1.4rem); }
+
+  /* ===== ANIMATIONS ===== */
+  @keyframes blink { 0%,92%,100% { transform: scaleY(1); } 96% { transform: scaleY(0.05); } }
+  @keyframes glow-pulse { 0%,100% { opacity: 0.3; } 50% { opacity: 0.7; } }
+  @keyframes sparkle { 0%,100% { opacity: 0; transform: scale(0.5); } 50% { opacity: 1; transform: scale(1.2); } }
+  @keyframes confetti-fall { 0% { transform: translateY(-20px) rotate(0deg); opacity: 1; } 100% { transform: translateY(30px) rotate(180deg); opacity: 0; } }
+  @keyframes heartbeat { 0%,100% { transform: scale(1); } 50% { transform: scale(1.1); } }
+  @keyframes subtle-float { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-4px); } }
+  @keyframes pray-glow { 0%,100% { opacity: 0.15; r: 70; } 50% { opacity: 0.3; r: 80; } }
+  @keyframes energy-pulse { 0%,100% { opacity: 0.4; } 50% { opacity: 0.9; } }
+  @keyframes sweat-drop { 0%,60% { opacity: 0; transform: translateY(0); } 70% { opacity: 1; } 100% { opacity: 0; transform: translateY(15px); } }
+  @keyframes fadeInUp { from { opacity: 0; transform: translateY(40px); } to { opacity: 1; transform: translateY(0); } }
+  @keyframes shimmer { 0% { background-position: -200% 0; } 100% { background-position: 200% 0; } }
+  @keyframes robot-float { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+  @keyframes led-glow { 0%,100% { box-shadow: 0 0 3px var(--gold), 0 0 6px var(--gold); opacity: 0.6; } 50% { box-shadow: 0 0 6px var(--gold), 0 0 12px var(--gold); opacity: 1; } }
+  @keyframes badge-pulse { 0%,100% { box-shadow: 0 0 20px rgba(212,168,67,0.2); } 50% { box-shadow: 0 0 40px rgba(212,168,67,0.4); } }
+
+  .blink { animation: blink 4s ease-in-out infinite; transform-origin: center; }
+  .glow { animation: glow-pulse 2s ease-in-out infinite; }
+  .sparkle-anim { animation: sparkle 1.2s ease-in-out infinite; }
+  .confetti { animation: confetti-fall 2s ease-in infinite; }
+  .heartbeat { animation: heartbeat 1.5s ease-in-out infinite; }
+  .float { animation: subtle-float 3s ease-in-out infinite; }
+  .pray-glow { animation: pray-glow 4s ease-in-out infinite; }
+  .sweat { animation: sweat-drop 2.5s ease-in-out infinite; }
+  .energy { animation: energy-pulse 0.8s ease-in-out infinite; }
+
+  /* ===== REVEAL ON SCROLL ===== */
+  .reveal {
+    opacity: 0;
+    transform: translateY(40px);
+    transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .reveal-delay-1 { transition-delay: 0.1s; }
+  .reveal-delay-2 { transition-delay: 0.2s; }
+  .reveal-delay-3 { transition-delay: 0.3s; }
+  .reveal-delay-4 { transition-delay: 0.4s; }
+
+  /* ===== NAV ===== */
+  .nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    padding: 20px 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: rgba(11, 17, 32, 0.85);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid rgba(212,168,67,0.1);
+    transition: all 0.3s;
+  }
+  .nav.scrolled {
+    padding: 12px 40px;
+    background: rgba(11, 17, 32, 0.95);
+  }
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+    color: var(--gold);
+  }
+  .logo-mark {
+    width: 36px;
+    height: 36px;
+    border: 2px solid var(--gold);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: Georgia, serif;
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--gold);
+    border-radius: 4px;
+  }
+  .logo-text {
+    font-family: Georgia, serif;
+    font-size: 14px;
+    letter-spacing: 4px;
+    font-weight: 400;
+    color: var(--gold);
+    text-transform: uppercase;
+  }
+  .nav-links {
+    display: flex;
+    gap: 32px;
+    list-style: none;
+  }
+  .nav-links a {
+    color: var(--gray);
+    text-decoration: none;
+    font-size: 13px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    transition: color 0.3s;
+  }
+  .nav-links a:hover { color: var(--gold); }
+
+  /* ===== HERO SECTION ===== */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 120px 24px 80px;
+    position: relative;
+    overflow: hidden;
+    text-align: center;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: 50%;
+    width: 800px;
+    height: 800px;
+    transform: translateX(-50%);
+    background: radial-gradient(circle, rgba(212,168,67,0.06) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 20px;
+    border: 1px solid rgba(212,168,67,0.3);
+    border-radius: 100px;
+    font-size: 12px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 32px;
+    animation: badge-pulse 3s ease-in-out infinite;
+  }
+  .hero-badge::before {
+    content: '';
+    width: 6px;
+    height: 6px;
+    background: var(--gold);
+    border-radius: 50%;
+  }
+  .hero h1 {
+    margin-bottom: 8px;
+  }
+  .hero h1 .gold { color: var(--gold); }
+  .hero-sub {
+    font-size: clamp(1rem, 2vw, 1.35rem);
+    color: var(--gray);
+    max-width: 620px;
+    margin: 16px auto 48px;
+    line-height: 1.7;
+  }
+
+  /* ===== CSS ROBOT ILLUSTRATION ===== */
+  .robot-container {
+    position: relative;
+    margin: 0 auto 48px;
+    animation: robot-float 4s ease-in-out infinite;
+  }
+  .robot-body {
+    width: 240px;
+    height: 280px;
+    background: linear-gradient(145deg, #2a2a2a 0%, #1a1a1a 50%, #111 100%);
+    border-radius: 30px;
+    position: relative;
+    box-shadow:
+      0 20px 60px rgba(0,0,0,0.6),
+      0 0 80px rgba(212,168,67,0.05),
+      inset 0 1px 0 rgba(255,255,255,0.05);
+    margin: 0 auto;
+  }
+  .robot-screen {
+    position: absolute;
+    top: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 192px;
+    height: 144px;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 2px solid #333;
+    box-shadow: 0 0 20px rgba(212,168,67,0.1);
+  }
+  .robot-screen svg {
+    width: 100%;
+    height: 100%;
+  }
+  /* LED strip */
+  .led-strip {
+    position: absolute;
+    bottom: 35px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 8px;
+  }
+  .led {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--gold);
+    animation: led-glow 2s ease-in-out infinite;
+  }
+  .led:nth-child(2) { animation-delay: 0.15s; }
+  .led:nth-child(3) { animation-delay: 0.3s; }
+  .led:nth-child(4) { animation-delay: 0.45s; }
+  .led:nth-child(5) { animation-delay: 0.6s; }
+  .led:nth-child(6) { animation-delay: 0.75s; }
+  .led:nth-child(7) { animation-delay: 0.9s; }
+  .led:nth-child(8) { animation-delay: 1.05s; }
+  /* USB-C port */
+  .usb-port {
+    position: absolute;
+    bottom: 12px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 20px;
+    height: 8px;
+    background: #2a2a2a;
+    border-radius: 4px;
+    border: 1px solid #333;
+  }
+  /* Servo base */
+  .robot-base {
+    width: 200px;
+    height: 20px;
+    background: linear-gradient(to bottom, #222, #1a1a1a);
+    border-radius: 0 0 8px 8px;
+    margin: -2px auto 0;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+  }
+  /* Desk surface */
+  .desk-surface {
+    width: 320px;
+    height: 6px;
+    background: linear-gradient(to bottom, #1c1c2e, #141425);
+    border-radius: 3px;
+    margin: 0 auto;
+    box-shadow: 0 2px 20px rgba(0,0,0,0.3);
+  }
+  /* Shadow under robot */
+  .robot-shadow {
+    width: 180px;
+    height: 12px;
+    background: radial-gradient(ellipse, rgba(0,0,0,0.4) 0%, transparent 70%);
+    margin: 0 auto;
+  }
+
+  /* ===== HERO PRICE & CTA ===== */
+  .hero-price {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 24px;
+    margin-top: 32px;
+    flex-wrap: wrap;
+  }
+  .price-tag {
+    font-family: Georgia, serif;
+    font-size: 1.6rem;
+    color: var(--white);
+  }
+  .price-tag span { color: var(--gold); font-size: 2.2rem; }
+  .cta-btn {
+    display: inline-block;
+    padding: 16px 40px;
+    background: linear-gradient(135deg, var(--gold) 0%, var(--gold-dark) 100%);
+    color: var(--navy);
+    font-weight: 700;
+    font-size: 14px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    text-decoration: none;
+    border-radius: 100px;
+    transition: all 0.3s;
+    box-shadow: 0 4px 20px rgba(212,168,67,0.3);
+  }
+  .cta-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 30px rgba(212,168,67,0.5);
+  }
+
+  /* ===== SECTION DIVIDER ===== */
+  .section-divider {
+    width: 60px;
+    height: 1px;
+    background: linear-gradient(to right, transparent, var(--gold), transparent);
+    margin: 0 auto 40px;
+  }
+
+  /* ===== FACES SECTION ===== */
+  .faces-section {
+    padding: var(--section-pad);
+    background: linear-gradient(180deg, var(--navy) 0%, #080d1a 100%);
+    text-align: center;
+  }
+  .faces-section h2 { color: var(--white); }
+  .faces-subtitle {
+    color: var(--gray);
+    max-width: 500px;
+    margin: 0 auto 60px;
+    font-size: 1.05rem;
+  }
+  .faces-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 32px;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+  .face-card {
+    text-align: center;
+    position: relative;
+  }
+  .face-screen {
+    width: 100%;
+    max-width: 320px;
+    aspect-ratio: 320 / 240;
+    background: var(--navy);
+    border-radius: 16px;
+    overflow: hidden;
+    margin: 0 auto 16px;
+    border: 2px solid #1a2a40;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.3), 0 0 40px rgba(212,168,67,0.03);
+    transition: transform 0.3s, box-shadow 0.3s;
+  }
+  .face-card:hover .face-screen {
+    transform: scale(1.03);
+    box-shadow: 0 12px 40px rgba(0,0,0,0.4), 0 0 60px rgba(212,168,67,0.08);
+  }
+  .face-screen svg { width: 100%; height: 100%; }
+  .face-label {
+    font-family: Georgia, serif;
+    font-size: 1.1rem;
+    color: var(--white);
+    margin-bottom: 4px;
+  }
+  .face-desc {
+    font-size: 0.85rem;
+    color: var(--gold);
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+  }
+
+  /* ===== FEATURES SECTION ===== */
+  .features-section {
+    padding: var(--section-pad);
+    background: linear-gradient(180deg, #080d1a 0%, var(--navy) 100%);
+    text-align: center;
+  }
+  .features-section h2 { color: var(--white); }
+  .features-subtitle {
+    color: var(--gray);
+    max-width: 480px;
+    margin: 0 auto 60px;
+    font-size: 1.05rem;
+  }
+  .features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 24px;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+  .feature-card {
+    background: linear-gradient(145deg, rgba(255,255,255,0.03) 0%, rgba(255,255,255,0.01) 100%);
+    border: 1px solid rgba(212,168,67,0.1);
+    border-radius: 20px;
+    padding: 40px 28px;
+    text-align: left;
+    transition: all 0.4s;
+    position: relative;
+    overflow: hidden;
+  }
+  .feature-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(to right, transparent, rgba(212,168,67,0.3), transparent);
+    opacity: 0;
+    transition: opacity 0.4s;
+  }
+  .feature-card:hover {
+    border-color: rgba(212,168,67,0.25);
+    transform: translateY(-4px);
+    box-shadow: 0 16px 40px rgba(0,0,0,0.2);
+  }
+  .feature-card:hover::before { opacity: 1; }
+  .feature-icon {
+    width: 56px;
+    height: 56px;
+    border-radius: 14px;
+    background: rgba(212,168,67,0.08);
+    border: 1px solid rgba(212,168,67,0.15);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 26px;
+    margin-bottom: 20px;
+  }
+  .feature-card h3 {
+    color: var(--white);
+    margin-bottom: 10px;
+    font-size: 1.2rem;
+  }
+  .feature-card p {
+    color: var(--gray);
+    font-size: 0.95rem;
+    line-height: 1.6;
+  }
+
+  /* ===== PRICING SECTION ===== */
+  .pricing-section {
+    padding: var(--section-pad);
+    background: var(--navy);
+    text-align: center;
+  }
+  .pricing-section h2 { color: var(--white); }
+  .pricing-subtitle {
+    color: var(--gray);
+    max-width: 480px;
+    margin: 0 auto 60px;
+    font-size: 1.05rem;
+  }
+  .pricing-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 20px;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+  .pricing-card {
+    background: linear-gradient(160deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0.01) 100%);
+    border: 1px solid rgba(212,168,67,0.12);
+    border-radius: 20px;
+    padding: 36px 24px;
+    text-align: center;
+    transition: all 0.4s;
+    position: relative;
+  }
+  .pricing-card.featured {
+    border-color: rgba(212,168,67,0.4);
+    background: linear-gradient(160deg, rgba(212,168,67,0.06) 0%, rgba(212,168,67,0.02) 100%);
+  }
+  .pricing-card.featured::after {
+    content: 'MOST POPULAR';
+    position: absolute;
+    top: -12px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--gold);
+    color: var(--navy);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    padding: 4px 14px;
+    border-radius: 100px;
+  }
+  .pricing-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 16px 40px rgba(0,0,0,0.2);
+    border-color: rgba(212,168,67,0.3);
+  }
+  .pricing-emoji {
+    font-size: 40px;
+    margin-bottom: 16px;
+    display: block;
+  }
+  .pricing-card h3 {
+    color: var(--gold);
+    margin-bottom: 8px;
+    font-size: 1.15rem;
+  }
+  .pricing-card .price-range {
+    font-family: Georgia, serif;
+    font-size: 1.8rem;
+    color: var(--white);
+    margin-bottom: 4px;
+  }
+  .pricing-card .price-sub {
+    font-size: 0.85rem;
+    color: var(--gray);
+    margin-bottom: 20px;
+  }
+  .pricing-card .price-features {
+    list-style: none;
+    text-align: left;
+    padding: 0;
+  }
+  .pricing-card .price-features li {
+    padding: 8px 0;
+    font-size: 0.9rem;
+    color: var(--gray);
+    border-top: 1px solid rgba(255,255,255,0.04);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .pricing-card .price-features li::before {
+    content: '✓';
+    color: var(--gold);
+    font-weight: 700;
+    font-size: 12px;
+  }
+
+  /* ===== SPECS BAR ===== */
+  .specs-bar {
+    padding: 60px 24px;
+    background: #080d1a;
+    border-top: 1px solid rgba(212,168,67,0.06);
+    border-bottom: 1px solid rgba(212,168,67,0.06);
+  }
+  .specs-inner {
+    max-width: 900px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    gap: 32px;
+    text-align: center;
+  }
+  .spec-item .spec-val {
+    font-family: Georgia, serif;
+    font-size: 1.6rem;
+    color: var(--gold);
+    margin-bottom: 4px;
+  }
+  .spec-item .spec-label {
+    font-size: 0.75rem;
+    color: var(--gray);
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+  }
+
+  /* ===== FOOTER ===== */
+  .footer {
+    padding: 60px 24px;
+    text-align: center;
+    background: var(--navy);
+    border-top: 1px solid rgba(212,168,67,0.06);
+  }
+  .footer-logo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 24px;
+  }
+  .footer p {
+    color: var(--gray);
+    font-size: 0.85rem;
+    margin-bottom: 6px;
+  }
+  .footer .patent {
+    font-size: 0.75rem;
+    color: #445566;
+    margin-top: 20px;
+    letter-spacing: 0.5px;
+  }
+
+  /* ===== RESPONSIVE ===== */
+  @media (max-width: 768px) {
+    .nav { padding: 14px 20px; }
+    .nav-links { display: none; }
+    .hero { padding: 100px 20px 60px; }
+    .robot-body { width: 180px; height: 220px; }
+    .robot-screen { width: 144px; height: 108px; top: 22px; }
+    .desk-surface { width: 240px; }
+    .faces-grid { grid-template-columns: 1fr 1fr; gap: 20px; }
+    .features-grid { grid-template-columns: 1fr; }
+    .pricing-grid { grid-template-columns: 1fr 1fr; }
+    .specs-inner { gap: 24px; }
+    .spec-item .spec-val { font-size: 1.3rem; }
+    :root { --section-pad: 60px 16px; }
+  }
+  @media (max-width: 480px) {
+    .faces-grid { grid-template-columns: 1fr; max-width: 320px; }
+    .pricing-grid { grid-template-columns: 1fr; max-width: 320px; }
+    .specs-inner { flex-direction: column; gap: 20px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ===== NAVIGATION ===== -->
+<nav class="nav" id="nav">
+  <a href="#" class="logo">
+    <div class="logo-mark">V</div>
+    <span class="logo-text">Visionary AI</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#faces">Expressions</a></li>
+    <li><a href="#features">Features</a></li>
+    <li><a href="#pricing">Pricing</a></li>
+  </ul>
+</nav>
+
+<!-- ===== HERO ===== -->
+<section class="hero" id="hero">
+  <div class="hero-badge reveal">Coming 2027</div>
+
+  <h1 class="reveal reveal-delay-1">
+    Meet AMIE.<br>
+    <span class="gold">Your AI Coach, In Robot Form.</span>
+  </h1>
+
+  <p class="hero-sub reveal reveal-delay-2">
+    The first AI coaching robot that celebrates your wins,<br>
+    watches your workout form, and prays with you before bed.
+  </p>
+
+  <!-- CSS Robot Illustration -->
+  <div class="robot-container reveal reveal-delay-3">
+    <div class="robot-body">
+      <div class="robot-screen">
+        <!-- AMIE Idle Face SVG -->
+        <svg viewBox="0 0 320 240" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <radialGradient id="hero-bg" cx="50%" cy="55%" r="65%">
+              <stop offset="0%" stop-color="#11182e"/>
+              <stop offset="100%" stop-color="#0B1120"/>
+            </radialGradient>
+          </defs>
+          <rect width="320" height="240" fill="url(#hero-bg)"/>
+          <g class="blink">
+            <ellipse cx="118" cy="100" rx="26" ry="24" fill="#faf8f0" opacity="0.95"/>
+            <ellipse cx="120" cy="100" rx="11" ry="11" fill="#0B1120"/>
+            <ellipse cx="123" cy="96" rx="4" ry="4" fill="#faf8f0" opacity="0.7"/>
+            <path d="M96 108 Q118 115 140 108" stroke="#D4A843" stroke-width="1" fill="none" opacity="0.3"/>
+          </g>
+          <g class="blink">
+            <ellipse cx="202" cy="100" rx="26" ry="24" fill="#faf8f0" opacity="0.95"/>
+            <ellipse cx="204" cy="100" rx="11" ry="11" fill="#0B1120"/>
+            <ellipse cx="207" cy="96" rx="4" ry="4" fill="#faf8f0" opacity="0.7"/>
+            <path d="M180 108 Q202 115 224 108" stroke="#D4A843" stroke-width="1" fill="none" opacity="0.3"/>
+          </g>
+          <path d="M125 155 Q160 180 195 155" stroke="#D4A843" stroke-width="3" fill="none" stroke-linecap="round"/>
+          <circle cx="85" cy="120" r="12" fill="#D4A843" opacity="0.08"/>
+          <circle cx="235" cy="120" r="12" fill="#D4A843" opacity="0.08"/>
+        </svg>
+      </div>
+      <!-- LED strip -->
+      <div class="led-strip">
+        <div class="led"></div><div class="led"></div><div class="led"></div><div class="led"></div>
+        <div class="led"></div><div class="led"></div><div class="led"></div><div class="led"></div>
+      </div>
+      <!-- USB-C -->
+      <div class="usb-port"></div>
+    </div>
+    <div class="robot-base"></div>
+    <div class="robot-shadow"></div>
+    <div class="desk-surface"></div>
+  </div>
+
+  <div class="hero-price reveal reveal-delay-4">
+    <div class="price-tag">Starting at <span>$199</span></div>
+    <a href="#pricing" class="cta-btn">See All Models</a>
+  </div>
+</section>
+
+<!-- ===== SPECS BAR ===== -->
+<div class="specs-bar">
+  <div class="specs-inner reveal">
+    <div class="spec-item">
+      <div class="spec-val">54×70mm</div>
+      <div class="spec-label">Compact Body</div>
+    </div>
+    <div class="spec-item">
+      <div class="spec-val">2" IPS</div>
+      <div class="spec-label">LCD Display</div>
+    </div>
+    <div class="spec-item">
+      <div class="spec-val">Pan + Tilt</div>
+      <div class="spec-label">Servo Head</div>
+    </div>
+    <div class="spec-item">
+      <div class="spec-val">12 RGB</div>
+      <div class="spec-label">LED Ring</div>
+    </div>
+    <div class="spec-item">
+      <div class="spec-val">USB-C</div>
+      <div class="spec-label">Power</div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== FACES SECTION ===== -->
+<section class="faces-section" id="faces">
+  <h2 class="reveal">She Feels What You Feel</h2>
+  <div class="section-divider reveal"></div>
+  <p class="faces-subtitle reveal">AMIE's expressive face adapts to the moment — coaching you with energy, celebrating your wins, and finding peace in prayer.</p>
+
+  <div class="faces-grid">
+
+    <!-- IDLE -->
+    <div class="face-card reveal reveal-delay-1">
+      <div class="face-screen">
+        <svg viewBox="0 0 320 240" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <radialGradient id="idle-bg" cx="50%" cy="55%" r="65%">
+              <stop offset="0%" stop-color="#11182e"/>
+              <stop offset="100%" stop-color="#0B1120"/>
+            </radialGradient>
+          </defs>
+          <rect width="320" height="240" fill="url(#idle-bg)"/>
+          <g class="blink">
+            <ellipse cx="118" cy="100" rx="26" ry="24" fill="#faf8f0" opacity="0.95"/>
+            <ellipse cx="120" cy="100" rx="11" ry="11" fill="#0B1120"/>
+            <ellipse cx="123" cy="96" rx="4" ry="4" fill="#faf8f0" opacity="0.7"/>
+            <path d="M96 108 Q118 115 140 108" stroke="#D4A843" stroke-width="1" fill="none" opacity="0.3"/>
+          </g>
+          <g class="blink">
+            <ellipse cx="202" cy="100" rx="26" ry="24" fill="#faf8f0" opacity="0.95"/>
+            <ellipse cx="204" cy="100" rx="11" ry="11" fill="#0B1120"/>
+            <ellipse cx="207" cy="96" rx="4" ry="4" fill="#faf8f0" opacity="0.7"/>
+            <path d="M180 108 Q202 115 224 108" stroke="#D4A843" stroke-width="1" fill="none" opacity="0.3"/>
+          </g>
+          <path d="M125 155 Q160 180 195 155" stroke="#D4A843" stroke-width="3" fill="none" stroke-linecap="round"/>
+          <circle cx="85" cy="120" r="12" fill="#D4A843" opacity="0.08"/>
+          <circle cx="235" cy="120" r="12" fill="#D4A843" opacity="0.08"/>
+        </svg>
+      </div>
+      <div class="face-label">Idle</div>
+      <div class="face-desc">Ready to Coach</div>
+    </div>
+
+    <!-- COACHING -->
+    <div class="face-card reveal reveal-delay-2">
+      <div class="face-screen">
+        <svg viewBox="0 0 320 240" xmlns="http://www.w3.org/2000/svg">
+          <rect width="320" height="240" fill="#0B1120"/>
+          <g class="blink" style="animation-duration:5s">
+            <ellipse cx="118" cy="98" rx="28" ry="26" fill="#faf8f0" opacity="0.97"/>
+            <ellipse cx="120" cy="97" rx="13" ry="13" fill="#0B1120"/>
+            <ellipse cx="123" cy="93" rx="4.5" ry="4.5" fill="#faf8f0" opacity="0.7"/>
+            <path d="M90 70 Q118 62 146 72" stroke="#D4A843" stroke-width="2" fill="none" stroke-linecap="round" opacity="0.7"/>
+          </g>
+          <g class="blink" style="animation-duration:5s">
+            <ellipse cx="202" cy="98" rx="28" ry="26" fill="#faf8f0" opacity="0.97"/>
+            <ellipse cx="204" cy="97" rx="13" ry="13" fill="#0B1120"/>
+            <ellipse cx="207" cy="93" rx="4.5" ry="4.5" fill="#faf8f0" opacity="0.7"/>
+            <path d="M174 72 Q202 62 230 70" stroke="#D4A843" stroke-width="2" fill="none" stroke-linecap="round" opacity="0.7"/>
+          </g>
+          <path d="M120 152 Q160 178 200 152" stroke="#D4A843" stroke-width="3" fill="none" stroke-linecap="round"/>
+          <g class="heartbeat" style="transform-origin: 265px 60px">
+            <polygon points="265,48 270,58 260,55 268,65 258,58 263,68 256,55" fill="#D4A843" opacity="0.5"/>
+          </g>
+          <line x1="55" y1="50" x2="70" y2="60" stroke="#D4A843" stroke-width="1" opacity="0.2"/>
+          <line x1="50" y1="70" x2="65" y2="75" stroke="#D4A843" stroke-width="1" opacity="0.15"/>
+        </svg>
+      </div>
+      <div class="face-label">Coaching</div>
+      <div class="face-desc">Motivating You</div>
+    </div>
+
+    <!-- CELEBRATING -->
+    <div class="face-card reveal reveal-delay-3">
+      <div class="face-screen">
+        <svg viewBox="0 0 320 240" xmlns="http://www.w3.org/2000/svg">
+          <rect width="320" height="240" fill="#0B1120"/>
+          <g class="float">
+            <path d="M92 98 Q118 78 144 98" stroke="#faf8f0" stroke-width="4.5" fill="none" stroke-linecap="round"/>
+            <path d="M176 98 Q202 78 228 98" stroke="#faf8f0" stroke-width="4.5" fill="none" stroke-linecap="round"/>
+          </g>
+          <path d="M108 148 Q160 195 212 148" stroke="#D4A843" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+          <path d="M118 148 Q160 185 202 148" fill="#D4A843" opacity="0.1"/>
+          <rect x="60" y="40" width="8" height="4" fill="#D4A843" opacity="0.8" rx="1" class="confetti"/>
+          <rect x="100" y="25" width="6" height="6" fill="#faf8f0" opacity="0.6" rx="1" class="confetti" style="animation-delay:0.3s"/>
+          <rect x="200" y="30" width="7" height="4" fill="#D4A843" opacity="0.7" rx="1" class="confetti" style="animation-delay:0.6s"/>
+          <rect x="250" y="35" width="5" height="5" fill="#faf8f0" opacity="0.5" rx="1" class="confetti" style="animation-delay:0.9s"/>
+          <rect x="150" y="20" width="8" height="3" fill="#D4A843" opacity="0.6" rx="1" class="confetti" style="animation-delay:0.15s"/>
+          <g class="sparkle-anim">
+            <polygon points="75,70 78,63 81,70 88,70 83,75 85,82 78,78 71,82 73,75 68,70" fill="#D4A843" opacity="0.7"/>
+          </g>
+          <g class="sparkle-anim" style="animation-delay:0.5s">
+            <polygon points="245,65 247,60 249,65 254,65 250,69 252,74 247,71 242,74 244,69 239,65" fill="#D4A843" opacity="0.6"/>
+          </g>
+          <g class="sparkle-anim" style="animation-delay:1s">
+            <polygon points="160,195 162,190 164,195 169,195 165,199 167,204 162,201 157,204 159,199 154,195" fill="#D4A843" opacity="0.5"/>
+          </g>
+          <circle cx="80" cy="118" r="14" fill="#D4A843" opacity="0.1"/>
+          <circle cx="240" cy="118" r="14" fill="#D4A843" opacity="0.1"/>
+        </svg>
+      </div>
+      <div class="face-label">Celebrating</div>
+      <div class="face-desc">Celebrating Your Win</div>
+    </div>
+
+    <!-- PRAYING -->
+    <div class="face-card reveal reveal-delay-4">
+      <div class="face-screen">
+        <svg viewBox="0 0 320 240" xmlns="http://www.w3.org/2000/svg">
+          <rect width="320" height="240" fill="#0B1120"/>
+          <circle cx="160" cy="110" fill="#D4A843" class="pray-glow"/>
+          <path d="M92 100 Q118 110 144 100" stroke="#faf8f0" stroke-width="3" fill="none" stroke-linecap="round"/>
+          <path d="M176 100 Q202 110 228 100" stroke="#faf8f0" stroke-width="3" fill="none" stroke-linecap="round"/>
+          <line x1="100" y1="103" x2="98" y2="108" stroke="#faf8f0" stroke-width="1" opacity="0.4"/>
+          <line x1="118" y1="107" x2="118" y2="112" stroke="#faf8f0" stroke-width="1" opacity="0.4"/>
+          <line x1="136" y1="103" x2="138" y2="108" stroke="#faf8f0" stroke-width="1" opacity="0.4"/>
+          <line x1="184" y1="103" x2="182" y2="108" stroke="#faf8f0" stroke-width="1" opacity="0.4"/>
+          <line x1="202" y1="107" x2="202" y2="112" stroke="#faf8f0" stroke-width="1" opacity="0.4"/>
+          <line x1="220" y1="103" x2="222" y2="108" stroke="#faf8f0" stroke-width="1" opacity="0.4"/>
+          <path d="M140 158 Q160 168 180 158" stroke="#D4A843" stroke-width="2" fill="none" stroke-linecap="round" opacity="0.7"/>
+          <g transform="translate(160, 200)" class="float" opacity="0.4">
+            <path d="M-6,-8 L0,-16 L6,-8" stroke="#D4A843" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+            <path d="M-4,-5 L0,-12 L4,-5" stroke="#D4A843" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+          </g>
+          <line x1="160" y1="30" x2="160" y2="50" stroke="#D4A843" stroke-width="0.8" opacity="0.15"/>
+          <line x1="130" y1="35" x2="138" y2="52" stroke="#D4A843" stroke-width="0.8" opacity="0.1"/>
+          <line x1="190" y1="35" x2="182" y2="52" stroke="#D4A843" stroke-width="0.8" opacity="0.1"/>
+        </svg>
+      </div>
+      <div class="face-label">Praying</div>
+      <div class="face-desc">Praying With You</div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ===== FEATURES SECTION ===== -->
+<section class="features-section" id="features">
+  <h2 class="reveal">What AMIE Can Do</h2>
+  <div class="section-divider reveal"></div>
+  <p class="features-subtitle reveal">Four powerful coaching modes in one tiny desktop companion.</p>
+
+  <div class="features-grid">
+
+    <div class="feature-card reveal reveal-delay-1">
+      <div class="feature-icon">🎙️</div>
+      <h3>Voice Coaching</h3>
+      <p>Daily goal check-ins, habit accountability, and motivational coaching — all by voice. AMIE remembers your goals and follows up.</p>
+    </div>
+
+    <div class="feature-card reveal reveal-delay-2">
+      <div class="feature-icon">💪</div>
+      <h3>Fitness Training</h3>
+      <p>Watches your exercise form through a camera, counts reps, corrects technique in real-time. Your personal trainer on your desk.</p>
+    </div>
+
+    <div class="feature-card reveal reveal-delay-3">
+      <div class="feature-icon">🙏</div>
+      <h3>Faith &amp; Prayer</h3>
+      <p>Guided prayers, scripture readings, and worship session prompts grounded in your faith. Start and end each day with intention.</p>
+    </div>
+
+    <div class="feature-card reveal reveal-delay-4">
+      <div class="feature-icon">📡</div>
+      <h3>Offline Mode</h3>
+      <p>Works without WiFi. Syncs your progress when you reconnect — AMIE never goes silent. Your coaching continues everywhere.</p>
+    </div>
+
+  </div>
+</section>
+
+<!-- ===== PRICING SECTION ===== -->
+<section class="pricing-section" id="pricing">
+  <h2 class="reveal">Choose Your AMIE</h2>
+  <div class="section-divider reveal"></div>
+  <p class="pricing-subtitle reveal">Four specialized models, one powerful platform. Pick the coach that fits your life.</p>
+
+  <div class="pricing-grid">
+
+    <div class="pricing-card reveal reveal-delay-1">
+      <span class="pricing-emoji">🌟</span>
+      <h3>AMIE Life Coach</h3>
+      <div class="price-range">$199–299</div>
+      <div class="price-sub">+ $14.99/mo subscription</div>
+      <ul class="price-features">
+        <li>Daily goal check-ins</li>
+        <li>Habit tracking & accountability</li>
+        <li>Motivational voice coaching</li>
+        <li>Prayer & faith guidance</li>
+        <li>Mood tracking</li>
+      </ul>
+    </div>
+
+    <div class="pricing-card featured reveal reveal-delay-2">
+      <span class="pricing-emoji">🏋️</span>
+      <h3>AMIE Fitness Coach</h3>
+      <div class="price-range">$349–399</div>
+      <div class="price-sub">bundle + $14.99/mo subscription</div>
+      <ul class="price-features">
+        <li>Everything in Life Coach</li>
+        <li>Camera form correction</li>
+        <li>Rep counting</li>
+        <li>Workout programming</li>
+        <li>Recovery tracking</li>
+      </ul>
+    </div>
+
+    <div class="pricing-card reveal reveal-delay-3">
+      <span class="pricing-emoji">⚡</span>
+      <h3>AMIE Sports Trainer</h3>
+      <div class="price-range">$249–349</div>
+      <div class="price-sub">+ $14.99/mo subscription</div>
+      <ul class="price-features">
+        <li>Sport-specific coaching</li>
+        <li>Performance analytics</li>
+        <li>Training periodization</li>
+        <li>Competition prep</li>
+        <li>Injury prevention</li>
+      </ul>
+    </div>
+
+    <div class="pricing-card reveal reveal-delay-4">
+      <span class="pricing-emoji">📚</span>
+      <h3>Tutor Buddy</h3>
+      <div class="price-range">$199–249</div>
+      <div class="price-sub">+ $9.99/mo subscription</div>
+      <ul class="price-features">
+        <li>Homework help & tutoring</li>
+        <li>Study session timer</li>
+        <li>Quiz & flashcard mode</li>
+        <li>Reading companion</li>
+        <li>Focus coaching</li>
+      </ul>
+    </div>
+
+  </div>
+</section>
+
+<!-- ===== FOOTER ===== -->
+<footer class="footer">
+  <div class="footer-logo">
+    <div class="logo-mark" style="width:28px;height:28px;font-size:16px;">V</div>
+    <span class="logo-text" style="font-size:12px;">Visionary AI</span>
+  </div>
+  <p>Visionary AI Inc.</p>
+  <p>Powered by M5Stack StackChan</p>
+  <p class="patent">Patent Pending (VAI-PA-12-2026)</p>
+  <p style="color:#334; margin-top:16px; font-size:0.7rem;">© 2026 Visionary AI Inc. All rights reserved. AMIE is a trademark of Visionary AI Inc.</p>
+</footer>
+
+<!-- ===== SCROLL REVEAL & NAV SCRIPT ===== -->
+<script>
+  // IntersectionObserver for scroll reveal
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+      }
+    });
+  }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+  // Nav shrink on scroll
+  const nav = document.getElementById('nav');
+  window.addEventListener('scroll', () => {
+    nav.classList.toggle('scrolled', window.scrollY > 60);
+  }, { passive: true });
+</script>
+
+</body>
+</html>
