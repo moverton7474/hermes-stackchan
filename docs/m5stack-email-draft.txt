@@ -1,0 +1,79 @@
+Subject: Commercial Partnership Inquiry — AI Coaching Robot Built on StackChan
+
+Dear M5Stack Business Development Team,
+
+I'm Milton Overton, President & CEO of Visionary AI Inc. I recently purchased two StackChan units and I'm writing to explore a commercial partnership for a custom AI coaching robot product.
+
+We've built Visionary AI Coach (visionaryaicoach.com) — a voice-first AI coaching platform with active users. Our AI coach "AMIE" helps people set goals, build habits, and receive personalized coaching through natural voice conversation powered by OpenAI Realtime. To date, AMIE has delivered over 991 SMS reminders, 86 voice calls, and 30 emails to users with zero delivery failures.
+
+We're now bringing AMIE into the physical world using your StackChan as the foundation.
+
+WHAT WE'RE BUILDING:
+A multi-purpose AI coaching robot companion. We have four product tiers planned:
+
+1. AMIE Life Coach — Desk companion for goal setting, habit tracking, daily accountability, calendar briefings, guided prayers. Voice-first, always listening on wake word.
+
+2. AMIE Fitness Coach — Personal trainer that watches your exercise form via an external CamS3 5MP camera, counts reps, monitors heart rate (MAX30102 sensor), corrects technique in real-time by voice, and tracks workout history. Uses MediaPipe Pose (33-keypoint body tracking) on the bridge server.
+
+3. AMIE Sports Trainer — Football and basketball drill coach with sport-specific technique analysis via wide-angle camera, play/formation review, and performance metrics.
+
+4. C-Suite Support Coach — Faith-based mentorship coach companion for our published book "C-Suite Support" (available on Amazon), grounded in Titus 2:3-5. Interactive guided prayers and mentorship sessions.
+
+WHAT WE'D LIKE TO DISCUSS:
+
+1. Custom enclosure — Branded housing in our colors (navy #0B1120, gold #D4A843) with Visionary AI / AMIE branding. Multiple form factors possible: desk unit, gym-mountable unit with tripod mount.
+
+2. Hardware integration — Adding external camera module (CamS3 5MP or equivalent) for fitness/sports coaching, plus Grove-connected heart rate sensor (MAX30102) and optional distance sensor for movement tracking.
+
+3. Pre-loaded firmware — Units shipped with our custom firmware pre-installed, pre-configured to connect to our cloud platform. No user setup beyond WiFi connection.
+
+4. Retail packaging — Custom packaging for direct-to-consumer sales, including quick-start guide.
+
+5. Certification — FCC/CE for US commercial distribution.
+
+6. White-label / OEM — Our branding replacing M5Stack branding on the product.
+
+7. Modular SKUs — Ability to sell a base unit (life coach) and add-on hardware packs (fitness camera kit, sports trainer kit) separately.
+
+PRODUCTION TARGETS:
+- Initial run: 500-1,000 units (base life coach)
+- Fitness kit add-on: 200-500 units
+- Target retail: $199-299 (base) / $349-399 (fitness bundle)
+- Distribution: Our website (csuitesupportbook.com, visionaryaicoach.com) + Amazon
+- Revenue model: Hardware purchase + $14.99/month coaching subscription
+- Market: The AI coaching robot market has no established competitor — we would be first to market.
+
+IP PROTECTION:
+We hold provisional patent PA-11 for embedded AI coaching in physical products (voice-first coaching robot with guided prayer, exercise form detection, and no screen required). This creates a defensible market position.
+
+ABOUT VISIONARY AI INC:
+Visionary AI Inc. builds AI-powered coaching and productivity products. Our portfolio includes:
+- Visionary AI Coach (visionaryaicoach.com) — Live AI coaching platform
+- C-Suite Support (csuitesupportbook.com) — Published book + companion app
+- Gemini Voice Center (voice.visionaryai.marketing) — AI orchestration platform
+- Multiple provisional patents via GF Accelerate LLC
+
+Our mission is to make world-class coaching accessible to everyone through AI — and putting that coach into a physical robot that sits on your desk, travels with you to the gym, and prays with you before bed is the next frontier.
+
+QUESTIONS:
+1. What is the minimum order quantity for a custom-enclosure StackChan variant?
+2. Typical timeline from design approval to first production run?
+3. Can the enclosure accommodate an additional external camera module + Grove sensors in an integrated housing?
+4. Do you offer white-label / OEM options?
+5. What certifications are included vs. additional cost?
+6. Is there a dedicated partnership contact for AI/robotics product companies?
+7. Do you support modular SKUs (base unit + optional hardware add-on kits)?
+8. What is your typical MOQ for add-on accessory kits?
+
+We believe the StackChan platform is the ideal foundation — open, proven, modular, and backed by a strong community. We're ready to move from prototype to product and would love to explore how M5Stack can be our hardware partner.
+
+Happy to schedule a call at your convenience.
+
+Best regards,
+
+Milton Overton
+President & CEO, Visionary AI Inc.
+Director of Athletics, Kennesaw State University
+Email: milton@visionaryai.life
+Phone: +1 205 657 9360
+Web: visionaryai.marketing | visionaryaicoach.com | csuitesupportbook.com
