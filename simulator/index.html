@@ -1,0 +1,933 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>StackChan Desktop Simulator — Visionary AI</title>
+<style>
+/* ========== VISIONARY AI BRANDING ========== */
+:root {
+  --navy: #0B1120;
+  --gold: #D4A843;
+  --gold-dim: #8B7332;
+  --gold-bright: #F0D080;
+  --black: #000000;
+  --dark-bg: #060B15;
+  --panel-bg: #0E1628;
+  --text: #E8E8E8;
+  --text-dim: #8899AA;
+  --success: #4CAF50;
+  --warning: #FF9800;
+  --error: #F44336;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  background: var(--dark-bg);
+  color: var(--text);
+  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  user-select: none;
+}
+
+/* ========== HEADER ========== */
+.header {
+  width: 100%;
+  padding: 12px 24px;
+  background: var(--navy);
+  border-bottom: 2px solid var(--gold-dim);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.header h1 {
+  font-size: 18px;
+  color: var(--gold);
+  font-weight: 600;
+  letter-spacing: 1px;
+}
+.header .status {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: var(--text-dim);
+}
+.status-dot {
+  width: 10px; height: 10px;
+  border-radius: 50%;
+  background: var(--error);
+  transition: background 0.3s;
+}
+.status-dot.connected { background: var(--success); }
+.status-dot.connecting { background: var(--warning); animation: pulse 1s infinite; }
+
+@keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.4; } }
+
+/* ========== MAIN LAYOUT ========== */
+.main {
+  flex: 1;
+  display: flex;
+  gap: 20px;
+  padding: 20px;
+  max-width: 1100px;
+  width: 100%;
+}
+
+/* ========== ROBOT DISPLAY ========== */
+.robot-panel {
+  flex: 0 0 320px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+.robot-body {
+  width: 280px;
+  height: 280px;
+  background: #1A1A2E;
+  border-radius: 24px;
+  border: 3px solid var(--gold-dim);
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.6), inset 0 0 60px rgba(11,17,32,0.5);
+}
+
+.face-container {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  transition: transform 0.4s ease;
+}
+
+/* Eyes */
+.eyes {
+  display: flex;
+  gap: 50px;
+  margin-bottom: 20px;
+}
+
+.eye {
+  width: 40px;
+  height: 40px;
+  background: var(--gold);
+  border-radius: 50%;
+  position: relative;
+  transition: all 0.3s ease;
+  box-shadow: 0 0 20px rgba(212,168,67,0.4);
+}
+
+.eye .pupil {
+  width: 16px;
+  height: 16px;
+  background: var(--navy);
+  border-radius: 50%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  transition: all 0.2s ease;
+}
+
+.eye .highlight {
+  width: 6px;
+  height: 6px;
+  background: white;
+  border-radius: 50%;
+  position: absolute;
+  top: 8px;
+  right: 8px;
+}
+
+/* Mouth */
+.mouth {
+  width: 40px;
+  height: 20px;
+  border-bottom: 4px solid var(--gold);
+  border-radius: 0 0 20px 20px;
+  transition: all 0.3s ease;
+}
+
+/* ========== EXPRESSION STATES ========== */
+/* Happy */
+.face-happy .eye { border-radius: 50% 50% 50% 50%; transform: scaleY(0.7); }
+.face-happy .mouth { width: 50px; height: 25px; border-bottom-width: 4px; }
+
+/* Thinking */
+.face-thinking .eye { transform: scaleY(0.5); }
+.face-thinking .eye:first-child { transform: scaleY(0.5) translateY(3px); }
+.face-thinking .mouth { width: 15px; height: 15px; border-radius: 50%; border: 3px solid var(--gold); border-bottom: 3px solid var(--gold); }
+
+/* Concerned */
+.face-concerned .eye { transform: scaleY(0.65) scaleX(0.9); }
+.face-concerned .eye:first-child { transform: scaleY(0.65) scaleX(0.9) rotate(-5deg); }
+.face-concerned .eye:last-child { transform: scaleY(0.65) scaleX(0.9) rotate(5deg); }
+.face-concerned .mouth { border-bottom: none; border-top: 3px solid var(--gold); border-radius: 20px 20px 0 0; width: 35px; height: 12px; }
+
+/* Excited */
+.face-excited .eye { transform: scale(1.2); }
+.face-excited .mouth { width: 55px; height: 28px; border-bottom-width: 5px; }
+.face-excited .face-container { animation: celebrate 0.3s ease-in-out infinite alternate; }
+
+/* Praying */
+.face-praying .eye { transform: scaleY(0.15); }
+.face-praying .mouth { width: 25px; height: 3px; border-bottom-width: 2px; border-radius: 2px; }
+.face-praying .face-container { transform: translateY(8px); }
+
+/* Listening */
+.face-listening .eye { transform: scale(1.05); }
+.face-listening .mouth { width: 20px; height: 15px; border-radius: 50%; border: 3px solid var(--gold); }
+
+/* Encouraging */
+.face-encouraging .eye { transform: scaleY(0.8); }
+.face-encouraging .mouth { width: 45px; height: 18px; }
+
+/* Speaking (robot talking) */
+.face-speaking .mouth { animation: speak 0.15s ease-in-out infinite alternate; }
+
+@keyframes celebrate { from { transform: translateX(-5px) rotate(-2deg); } to { transform: translateX(5px) rotate(2deg); } }
+@keyframes speak { from { height: 10px; width: 30px; } to { height: 25px; width: 45px; } }
+
+/* Idle breathing */
+.face-idle .eye { animation: breathe 3s ease-in-out infinite; }
+@keyframes breathe { 0%,100% { transform: scaleY(1); } 50% { transform: scaleY(0.92); } }
+
+/* ========== EXPRESSION LABEL ========== */
+.expression-label {
+  font-size: 12px;
+  color: var(--gold);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  font-weight: 600;
+}
+
+/* ========== EXPRESSION BUTTONS ========== */
+.expression-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 6px;
+  width: 100%;
+}
+.expr-btn {
+  padding: 6px 4px;
+  border: 1px solid var(--gold-dim);
+  background: transparent;
+  color: var(--text-dim);
+  border-radius: 6px;
+  font-size: 10px;
+  cursor: pointer;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  transition: all 0.2s;
+}
+.expr-btn:hover, .expr-btn.active {
+  background: var(--gold-dim);
+  color: var(--navy);
+  border-color: var(--gold);
+}
+
+/* ========== RIGHT PANEL ========== */
+.right-panel {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* Connection config */
+.config-bar {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+.config-bar input {
+  flex: 1;
+  padding: 8px 12px;
+  background: var(--panel-bg);
+  border: 1px solid var(--gold-dim);
+  border-radius: 8px;
+  color: var(--text);
+  font-size: 13px;
+  font-family: 'Consolas', monospace;
+}
+.config-bar input:focus { outline: none; border-color: var(--gold); }
+.config-bar button {
+  padding: 8px 16px;
+  background: var(--gold-dim);
+  color: var(--navy);
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 13px;
+  cursor: pointer;
+  transition: background 0.2s;
+  white-space: nowrap;
+}
+.config-bar button:hover { background: var(--gold); }
+
+/* Conversation log */
+.conversation {
+  flex: 1;
+  background: var(--panel-bg);
+  border: 1px solid rgba(212,168,67,0.2);
+  border-radius: 12px;
+  padding: 16px;
+  overflow-y: auto;
+  min-height: 200px;
+  max-height: 400px;
+  font-size: 13px;
+  line-height: 1.6;
+}
+.conversation .msg {
+  margin-bottom: 8px;
+  padding: 8px 12px;
+  border-radius: 8px;
+}
+.msg.system { color: var(--text-dim); font-style: italic; font-size: 12px; }
+.msg.user { background: rgba(212,168,67,0.1); border-left: 3px solid var(--gold); }
+.msg.robot { background: rgba(76,175,80,0.1); border-left: 3px solid var(--success); }
+.msg.error { background: rgba(244,67,54,0.1); border-left: 3px solid var(--error); }
+.msg .label { font-weight: 600; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 2px; }
+.msg.user .label { color: var(--gold); }
+.msg.robot .label { color: var(--success); }
+
+/* Audio controls */
+.audio-controls {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.ptt-btn {
+  flex: 1;
+  padding: 16px;
+  background: linear-gradient(135deg, var(--gold-dim), var(--gold));
+  color: var(--navy);
+  border: none;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  position: relative;
+  overflow: hidden;
+}
+.ptt-btn:hover { transform: scale(1.02); box-shadow: 0 4px 20px rgba(212,168,67,0.3); }
+.ptt-btn:active, .ptt-btn.recording {
+  background: linear-gradient(135deg, var(--error), #D32F2F);
+  color: white;
+  transform: scale(0.98);
+}
+.ptt-btn.recording::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  border: 3px solid white;
+  border-radius: 12px;
+  animation: pulse 0.8s infinite;
+}
+
+.mic-level {
+  width: 80px;
+  height: 40px;
+  background: var(--panel-bg);
+  border: 1px solid var(--gold-dim);
+  border-radius: 8px;
+  overflow: hidden;
+  position: relative;
+}
+.mic-level-bar {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  background: var(--gold);
+  transition: height 0.05s;
+  height: 0;
+}
+
+/* Session type selector */
+.session-bar {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+.session-btn {
+  padding: 5px 10px;
+  border: 1px solid rgba(212,168,67,0.3);
+  background: transparent;
+  color: var(--text-dim);
+  border-radius: 16px;
+  font-size: 11px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.session-btn:hover, .session-btn.active {
+  background: var(--gold-dim);
+  color: var(--navy);
+  border-color: var(--gold);
+}
+
+/* ========== FOOTER ========== */
+.footer {
+  width: 100%;
+  padding: 8px 24px;
+  background: var(--navy);
+  border-top: 1px solid rgba(212,168,67,0.2);
+  display: flex;
+  justify-content: space-between;
+  font-size: 11px;
+  color: var(--text-dim);
+}
+
+/* ========== INFO BANNER ========== */
+.info-banner {
+  width: 100%;
+  max-width: 1100px;
+  padding: 10px 20px;
+  margin-top: 10px;
+  background: rgba(212,168,67,0.08);
+  border: 1px solid rgba(212,168,67,0.2);
+  border-radius: 8px;
+  font-size: 12px;
+  color: var(--text-dim);
+  line-height: 1.5;
+}
+.info-banner strong { color: var(--gold); }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <h1>&#x1F916; STACKCHAN SIMULATOR</h1>
+  <div class="status">
+    <span id="statusText">Disconnected</span>
+    <div class="status-dot" id="statusDot"></div>
+  </div>
+</div>
+
+<!-- DEPENDENCY NOTE -->
+<div class="info-banner">
+  <strong>&#x26A0; Dependency:</strong> The stackchan-ai-server must be running for live audio.
+  Server connects to <code>ws://localhost:12800/xiaozhi/ws</code>.
+  Without the server, you can still test face expressions and UI in demo mode.
+  <br><strong>Protocol:</strong> Binary frames &mdash; [1B type][4B length BE][payload]. Types: 0x01=Opus, 0x03=Avatar, 0x04=Motion, 0x10/0x11=Ping/Pong.
+  <br><strong>Auth:</strong> Requires RSA-encrypted MAC token in Authorization header. Configure your MAC and token below.
+</div>
+
+<!-- MAIN -->
+<div class="main">
+  <!-- Robot Panel -->
+  <div class="robot-panel">
+    <div class="robot-body" id="robotBody">
+      <div class="face-container" id="faceContainer">
+        <div class="eyes">
+          <div class="eye" id="eyeL">
+            <div class="pupil"></div>
+            <div class="highlight"></div>
+          </div>
+          <div class="eye" id="eyeR">
+            <div class="pupil"></div>
+            <div class="highlight"></div>
+          </div>
+        </div>
+        <div class="mouth" id="mouth"></div>
+      </div>
+    </div>
+    <div class="expression-label" id="expressionLabel">IDLE</div>
+
+    <div class="expression-grid">
+      <button class="expr-btn" onclick="setExpression('idle')">Idle</button>
+      <button class="expr-btn" onclick="setExpression('happy')">Happy</button>
+      <button class="expr-btn" onclick="setExpression('thinking')">Think</button>
+      <button class="expr-btn" onclick="setExpression('concerned')">Concern</button>
+      <button class="expr-btn" onclick="setExpression('excited')">Excited</button>
+      <button class="expr-btn" onclick="setExpression('praying')">Pray</button>
+      <button class="expr-btn" onclick="setExpression('listening')">Listen</button>
+      <button class="expr-btn" onclick="setExpression('encouraging')">Encour.</button>
+    </div>
+
+    <!-- Session Type -->
+    <div style="width:100%; margin-top:8px;">
+      <div style="font-size:11px; color:var(--text-dim); margin-bottom:6px; letter-spacing:1px;">SESSION TYPE</div>
+      <div class="session-bar">
+        <button class="session-btn active" onclick="setSession(this,'morning')">&#x1F305; Morning</button>
+        <button class="session-btn" onclick="setSession(this,'checkin')">&#x1F4AC; Check-in</button>
+        <button class="session-btn" onclick="setSession(this,'reflect')">&#x1F914; Reflect</button>
+        <button class="session-btn" onclick="setSession(this,'goals')">&#x1F3AF; Goals</button>
+        <button class="session-btn" onclick="setSession(this,'celebrate')">&#x1F389; Celebrate</button>
+        <button class="session-btn" onclick="setSession(this,'account')">&#x1F4CB; Account.</button>
+        <button class="session-btn" onclick="setSession(this,'crisis')">&#x1F91D; Crisis</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Right Panel -->
+  <div class="right-panel">
+    <!-- Connection -->
+    <div class="config-bar">
+      <input type="text" id="wsUrl" value="ws://localhost:12800/xiaozhi/ws" placeholder="WebSocket URL">
+      <input type="text" id="authToken" value="" placeholder="Auth token (base64)" style="max-width:200px;">
+      <button id="connectBtn" onclick="toggleConnection()">Connect</button>
+    </div>
+
+    <!-- Conversation -->
+    <div class="conversation" id="conversation">
+      <div class="msg system">StackChan Desktop Simulator ready. Connect to server or test expressions in demo mode.</div>
+    </div>
+
+    <!-- Audio Controls -->
+    <div class="audio-controls">
+      <button class="ptt-btn" id="pttBtn"
+        onmousedown="startRecording()" onmouseup="stopRecording()"
+        ontouchstart="startRecording()" ontouchend="stopRecording()">
+        &#x1F3A4; Hold to Talk
+      </button>
+      <div class="mic-level">
+        <div class="mic-level-bar" id="micLevel"></div>
+      </div>
+    </div>
+
+    <!-- Text input fallback -->
+    <div class="config-bar" style="margin-top:4px;">
+      <input type="text" id="textInput" placeholder="Type a message (text fallback)..."
+        onkeydown="if(event.key==='Enter')sendText()">
+      <button onclick="sendText()">Send</button>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<div class="footer">
+  <span>Visionary AI &bull; AMIE Robot Coach</span>
+  <span>Protocol: xiaozhi binary &bull; Audio: Opus via WebSocket</span>
+  <span id="footerTime"></span>
+</div>
+
+<script>
+// ========== STATE ==========
+let ws = null;
+let isConnected = false;
+let isRecording = false;
+let currentExpression = 'idle';
+let currentSession = 'morning';
+let mediaStream = null;
+let audioContext = null;
+let mediaRecorder = null;
+let audioChunks = [];
+let analyserNode = null;
+let micLevelInterval = null;
+
+// ========== PROTOCOL CONSTANTS ==========
+const MSG = {
+  OPUS: 0x01, JPEG: 0x02, AVATAR: 0x03, MOTION: 0x04,
+  ON_CAMERA: 0x05, OFF_CAMERA: 0x06, TEXT: 0x07,
+  PING: 0x10, PONG: 0x11, DANCE: 0x14
+};
+
+// ========== FACE EXPRESSIONS ==========
+const EXPRESSIONS = ['idle','happy','thinking','concerned','excited','praying','listening','encouraging','speaking'];
+
+function setExpression(expr) {
+  currentExpression = expr;
+  const body = document.getElementById('robotBody');
+  // Remove all expression classes
+  EXPRESSIONS.forEach(e => body.classList.remove('face-' + e));
+  body.classList.add('face-' + expr);
+  document.getElementById('expressionLabel').textContent = expr.toUpperCase();
+  // Update active button
+  document.querySelectorAll('.expr-btn').forEach(b => {
+    b.classList.toggle('active', b.textContent.toLowerCase().startsWith(expr.substring(0,4)));
+  });
+}
+
+function setSession(btn, session) {
+  currentSession = session;
+  document.querySelectorAll('.session-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  addMessage('system', 'Session type: ' + session);
+}
+
+// ========== CONNECTION ==========
+function toggleConnection() {
+  if (isConnected) {
+    disconnect();
+  } else {
+    connect();
+  }
+}
+
+function connect() {
+  const url = document.getElementById('wsUrl').value;
+  const token = document.getElementById('authToken').value;
+
+  setStatus('connecting', 'Connecting...');
+  addMessage('system', 'Connecting to ' + url + '...');
+
+  try {
+    // Build URL with deviceType param
+    const wsUrl = new URL(url);
+    wsUrl.searchParams.set('deviceType', 'StackChan');
+    if (!wsUrl.searchParams.has('mac')) {
+      wsUrl.searchParams.set('mac', 'AA:BB:CC:DD:EE:FF');
+    }
+
+    // Note: browser WebSocket doesn't support custom headers.
+    // Auth token must be passed as query param for browser client.
+    if (token) {
+      wsUrl.searchParams.set('token', token);
+    }
+
+    ws = new WebSocket(wsUrl.toString());
+    ws.binaryType = 'arraybuffer';
+
+    ws.onopen = () => {
+      isConnected = true;
+      setStatus('connected', 'Connected');
+      addMessage('system', 'Connected to server');
+      document.getElementById('connectBtn').textContent = 'Disconnect';
+      startPing();
+    };
+
+    ws.onmessage = (event) => {
+      if (event.data instanceof ArrayBuffer) {
+        handleBinaryMessage(event.data);
+      } else {
+        addMessage('robot', event.data);
+      }
+    };
+
+    ws.onclose = (event) => {
+      isConnected = false;
+      setStatus('disconnected', 'Disconnected');
+      addMessage('system', 'Connection closed: ' + (event.reason || 'unknown'));
+      document.getElementById('connectBtn').textContent = 'Connect';
+      stopPing();
+    };
+
+    ws.onerror = (error) => {
+      addMessage('error', 'WebSocket error — is the server running?');
+      setStatus('disconnected', 'Error');
+    };
+  } catch (e) {
+    addMessage('error', 'Connection failed: ' + e.message);
+    setStatus('disconnected', 'Error');
+  }
+}
+
+function disconnect() {
+  if (ws) {
+    ws.close();
+    ws = null;
+  }
+  isConnected = false;
+  setStatus('disconnected', 'Disconnected');
+  document.getElementById('connectBtn').textContent = 'Connect';
+}
+
+// ========== BINARY PROTOCOL ==========
+function createMessage(type, payload) {
+  const data = payload || new Uint8Array(0);
+  const buf = new ArrayBuffer(5 + data.byteLength);
+  const view = new DataView(buf);
+  view.setUint8(0, type);
+  view.setUint32(1, data.byteLength, false); // big-endian
+  new Uint8Array(buf, 5).set(new Uint8Array(data.buffer || data));
+  return buf;
+}
+
+function parseBinaryMessage(buffer) {
+  const view = new DataView(buffer);
+  if (buffer.byteLength < 5) return null;
+  const type = view.getUint8(0);
+  const len = view.getUint32(1, false);
+  const payload = new Uint8Array(buffer, 5, len);
+  return { type, payload };
+}
+
+function handleBinaryMessage(buffer) {
+  const msg = parseBinaryMessage(buffer);
+  if (!msg) return;
+
+  switch (msg.type) {
+    case MSG.OPUS:
+      playOpusAudio(msg.payload);
+      setExpression('speaking');
+      setTimeout(() => { if (currentExpression === 'speaking') setExpression('encouraging'); }, 200);
+      break;
+
+    case MSG.AVATAR:
+      handleAvatarControl(msg.payload);
+      break;
+
+    case MSG.MOTION:
+      handleMotionControl(msg.payload);
+      break;
+
+    case MSG.TEXT:
+      const text = new TextDecoder().decode(msg.payload);
+      addMessage('robot', text);
+      detectExpressionFromText(text);
+      break;
+
+    case MSG.PING:
+      sendBinary(createMessage(MSG.PONG, null));
+      break;
+
+    case MSG.DANCE:
+      setExpression('excited');
+      addMessage('system', '&#x1F483; Dance triggered!');
+      setTimeout(() => setExpression('happy'), 3000);
+      break;
+
+    default:
+      console.log('Unknown message type:', msg.type.toString(16));
+  }
+}
+
+function sendBinary(buffer) {
+  if (ws && ws.readyState === WebSocket.OPEN) {
+    ws.send(buffer);
+  }
+}
+
+// ========== EXPRESSION DETECTION ==========
+function detectExpressionFromText(text) {
+  const lower = text.toLowerCase();
+  if (/pray|scripture|lord|god|amen|faith/.test(lower)) {
+    setExpression('praying');
+  } else if (/proud|amazing|great job|awesome|fantastic|incredible|you did it/.test(lower)) {
+    setExpression('excited');
+  } else if (/celebrate|congrat|milestone|streak|achieved|100%/.test(lower)) {
+    setExpression('excited');
+  } else if (/missed|behind|struggling|concerned|worried/.test(lower)) {
+    setExpression('concerned');
+  } else if (/think|consider|hmm|let me/.test(lower)) {
+    setExpression('thinking');
+  } else if (/believe in you|got this|keep going|you can/.test(lower)) {
+    setExpression('encouraging');
+  } else {
+    setExpression('happy');
+  }
+}
+
+function handleAvatarControl(payload) {
+  // Avatar byte protocol — interpret as expression index
+  if (payload.length > 0) {
+    const exprMap = ['idle','happy','thinking','concerned','excited','praying','listening','encouraging'];
+    const idx = payload[0] % exprMap.length;
+    setExpression(exprMap[idx]);
+  }
+}
+
+function handleMotionControl(payload) {
+  // Motion control — move face container for head simulation
+  if (payload.length >= 2) {
+    const x = (payload[0] - 128) / 128 * 15; // -15 to +15 px
+    const y = (payload[1] - 128) / 128 * 10;
+    document.getElementById('faceContainer').style.transform =
+      `translateX(${x}px) translateY(${y}px)`;
+  }
+}
+
+// ========== AUDIO ==========
+async function startRecording() {
+  if (isRecording) return;
+  isRecording = true;
+
+  document.getElementById('pttBtn').classList.add('recording');
+  document.getElementById('pttBtn').innerHTML = '&#x1F534; Recording...';
+  setExpression('listening');
+  addMessage('system', '&#x1F3A4; Listening...');
+
+  try {
+    if (!mediaStream) {
+      mediaStream = await navigator.mediaDevices.getUserMedia({ audio: true });
+    }
+
+    audioContext = new (window.AudioContext || window.webkitAudioContext)();
+    const source = audioContext.createMediaStreamSource(mediaStream);
+    analyserNode = audioContext.createAnalyser();
+    analyserNode.fftSize = 256;
+    source.connect(analyserNode);
+
+    // Mic level visualization
+    micLevelInterval = setInterval(() => {
+      const data = new Uint8Array(analyserNode.frequencyBinCount);
+      analyserNode.getByteFrequencyData(data);
+      const avg = data.reduce((a,b) => a+b, 0) / data.length;
+      document.getElementById('micLevel').style.height = Math.min(100, avg * 1.5) + '%';
+    }, 50);
+
+    // Record audio
+    audioChunks = [];
+    const mimeType = MediaRecorder.isTypeSupported('audio/webm;codecs=opus')
+      ? 'audio/webm;codecs=opus' : 'audio/webm';
+
+    mediaRecorder = new MediaRecorder(mediaStream, { mimeType });
+
+    mediaRecorder.ondataavailable = (e) => {
+      if (e.data.size > 0) audioChunks.push(e.data);
+    };
+
+    mediaRecorder.onstop = async () => {
+      const blob = new Blob(audioChunks, { type: mimeType });
+
+      if (isConnected) {
+        // Send as binary audio message
+        const arrayBuf = await blob.arrayBuffer();
+        const opusData = new Uint8Array(arrayBuf);
+        const msg = createMessage(MSG.OPUS, opusData);
+        sendBinary(msg);
+        addMessage('user', '[Audio sent: ' + (opusData.byteLength / 1024).toFixed(1) + ' KB]');
+      } else {
+        addMessage('system', 'Not connected — audio captured but not sent (' +
+          (blob.size / 1024).toFixed(1) + ' KB)');
+      }
+
+      setExpression('thinking');
+      setTimeout(() => {
+        if (currentExpression === 'thinking' && !isRecording) {
+          setExpression('encouraging');
+        }
+      }, 3000);
+    };
+
+    mediaRecorder.start(100); // 100ms chunks for streaming
+  } catch (err) {
+    addMessage('error', 'Microphone access denied: ' + err.message);
+    isRecording = false;
+    document.getElementById('pttBtn').classList.remove('recording');
+    document.getElementById('pttBtn').innerHTML = '&#x1F3A4; Hold to Talk';
+  }
+}
+
+function stopRecording() {
+  if (!isRecording) return;
+  isRecording = false;
+
+  document.getElementById('pttBtn').classList.remove('recording');
+  document.getElementById('pttBtn').innerHTML = '&#x1F3A4; Hold to Talk';
+  document.getElementById('micLevel').style.height = '0%';
+
+  if (micLevelInterval) { clearInterval(micLevelInterval); micLevelInterval = null; }
+  if (mediaRecorder && mediaRecorder.state !== 'inactive') { mediaRecorder.stop(); }
+  if (audioContext) { audioContext.close(); audioContext = null; }
+}
+
+// Play received Opus audio
+async function playOpusAudio(data) {
+  try {
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    // The data may be raw opus or webm-wrapped — try to decode
+    const audioBuffer = await ctx.decodeAudioData(data.buffer.slice(0)).catch(() => null);
+    if (audioBuffer) {
+      const source = ctx.createBufferSource();
+      source.buffer = audioBuffer;
+      source.connect(ctx.destination);
+      source.start();
+      setExpression('speaking');
+      source.onended = () => setExpression('encouraging');
+    } else {
+      console.log('Could not decode audio frame, raw Opus requires container');
+    }
+  } catch (e) {
+    console.log('Audio playback error:', e);
+  }
+}
+
+// ========== TEXT INPUT ==========
+function sendText() {
+  const input = document.getElementById('textInput');
+  const text = input.value.trim();
+  if (!text) return;
+  input.value = '';
+
+  addMessage('user', text);
+
+  if (isConnected) {
+    const encoded = new TextEncoder().encode(text);
+    sendBinary(createMessage(MSG.TEXT, encoded));
+  } else {
+    // Demo mode — simulate a response
+    setExpression('thinking');
+    setTimeout(() => {
+      const responses = [
+        "Milton, I love that you're checking in. Let's make today count — what's your top priority?",
+        "Remember, the disciplined version of you already knows what to do. Let's get after it.",
+        "You've got this. One step at a time, one habit at a time. That's how champions are built.",
+        "I've been right here waiting for you. Let's review your goals and see where you stand.",
+        "As Philippians 4:13 says, you can do all things through Christ who strengthens you. What's on your heart today?",
+        "That's a great insight. Let me capture that thought for you. What else is on your mind?",
+        "I noticed you completed your morning prayer three days in a row — that's a streak worth celebrating!",
+      ];
+      const resp = responses[Math.floor(Math.random() * responses.length)];
+      addMessage('robot', resp);
+      detectExpressionFromText(resp);
+    }, 1000 + Math.random() * 1000);
+  }
+}
+
+// ========== PING / HEARTBEAT ==========
+let pingInterval = null;
+function startPing() {
+  pingInterval = setInterval(() => {
+    sendBinary(createMessage(MSG.PING, null));
+  }, 5000);
+}
+function stopPing() {
+  if (pingInterval) { clearInterval(pingInterval); pingInterval = null; }
+}
+
+// ========== UI HELPERS ==========
+function setStatus(state, text) {
+  const dot = document.getElementById('statusDot');
+  dot.className = 'status-dot ' + state;
+  document.getElementById('statusText').textContent = text;
+}
+
+function addMessage(type, text) {
+  const conv = document.getElementById('conversation');
+  const msg = document.createElement('div');
+  msg.className = 'msg ' + type;
+  const labels = { user: 'You', robot: 'AMIE', system: 'System', error: 'Error' };
+  msg.innerHTML = '<div class="label">' + (labels[type] || type) + '</div>' + text;
+  conv.appendChild(msg);
+  conv.scrollTop = conv.scrollHeight;
+}
+
+// Footer clock
+setInterval(() => {
+  document.getElementById('footerTime').textContent = new Date().toLocaleTimeString();
+}, 1000);
+
+// Keyboard shortcut: Space for PTT
+document.addEventListener('keydown', (e) => {
+  if (e.code === 'Space' && !e.repeat && document.activeElement.tagName !== 'INPUT') {
+    e.preventDefault();
+    startRecording();
+  }
+});
+document.addEventListener('keyup', (e) => {
+  if (e.code === 'Space' && document.activeElement.tagName !== 'INPUT') {
+    e.preventDefault();
+    stopRecording();
+  }
+});
+
+// Start with idle expression
+setExpression('idle');
+addMessage('system', 'Press Space or hold the Talk button to record. Type messages in the text box for demo mode.');
+</script>
+</body>
+</html>
