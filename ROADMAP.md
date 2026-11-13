@@ -133,6 +133,45 @@ End of day (if enabled)        → reflection
 
 ---
 
+## Phase 3.5: Offline Mode & Local Model Fallback — PLANNED ⏳
+
+**Target:** Q3 2027
+**Dependency:** Phase 2 AMIE coaching proven online
+
+### Vision
+AMIE should never go silent. When WiFi drops (gym, travel, outdoors), the robot falls back to a local model running on the bridge server or directly on the ESP32-S3. When WiFi reconnects, all offline conversations sync back to the user's profile and Second Brain.
+
+### Local Model Fallback
+- [ ] **On-device wake word detection** — always works offline (ESP-SR library, already supported by ESP32-S3)
+- [ ] **Bridge server local model** — Gemma 2B / Phi-3 Mini / Qwen 2.5 running on the bridge server via Ollama when cloud API is unreachable
+- [ ] **Graceful degradation** — robot announces "I'm in offline mode — I can still coach you, but some tools aren't available right now"
+- [ ] **Offline-capable tools** — habit check (cached locally), timer/stopwatch, rep counting (IMU-based, no camera), guided breathing, stored scripture readings, pre-cached workout routines
+- [ ] **Offline-disabled tools** — SMS/email/calls, calendar lookup, knowledge base search, goal sync
+
+### Offline Conversation Storage
+- [ ] **Local SQLite database** on bridge server stores all offline conversations
+- [ ] **Structured format** — timestamp, user utterance (transcribed), AMIE response, tools called, session type, emotion state
+- [ ] **Storage limit** — 1000 conversations or 30 days, whichever comes first (configurable)
+- [ ] **Encryption at rest** — AES-256 encryption of local conversation database
+
+### WiFi Reconnection Sync
+- [ ] **Automatic sync on reconnect** — bridge server detects WiFi restoration and initiates sync
+- [ ] **Sync targets:**
+  - User profile (Supabase `voice_coach_sessions` table) — session transcripts
+  - Second Brain (Supabase `user_knowledge_sources` table) — "Remember this" captures
+  - Habit tracking (Supabase `habits` table) — offline habit completions
+  - Goal progress (Supabase `goals` table) — offline goal updates
+- [ ] **Conflict resolution** — server-side timestamps win; offline changes merge additively (no deletions during offline)
+- [ ] **Sync status indicator** — robot face shows sync icon during upload, confirms "All caught up!" when done
+- [ ] **Retry with exponential backoff** — if sync fails, retry at 30s, 60s, 120s, then alert user
+
+### Edge AI on ESP32-S3 (Future)
+- [ ] **TinyLLM exploration** — investigate sub-1B parameter models that run on ESP32-S3 (512KB SRAM + 8MB PSRAM)
+- [ ] **ESP32-S3 neural network accelerator** — leverage built-in vector instructions for edge inference
+- [ ] **Hybrid inference** — simple responses (greetings, timers, rep counting) on-device; complex coaching deferred to reconnection
+
+---
+
 ## Phase 4: AMIE Sports Trainer (Football + Basketball) — PLANNED ⏳
 
 **Target:** Q4 2027 - Q1 2028
