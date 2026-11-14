@@ -126,3 +126,21 @@ AMIE files (`amie-realtime-session`, `lib/realtime/AmieRealtimeClient.ts`, promp
 
 ---
 *To continue: "Read ~/hermes-stackchan/SESSION-HANDOFF-2026-11-14-TUTOR-BUDDY.md and execute the startup instructions before any work."*
+
+---
+## UPDATE — 2026-11-14 afternoon (live whiteboard + noise filter)
+**Shipped & tested on production:**
+- Live math whiteboard (`fbab448`, focus fix `660c656`): tutor draws long division / fractions / multiplication / number line / place value / area-volume while talking; Brad fills answer boxes; she reacts (wrong = hint, right = ✓). Plan: `docs/SAFE-PLAN-TUTOR-LIVE-WHITEBOARD.md`.
+- Progress tracking verified: study_sessions row (practice, transcript, board_snapshot, slot_results) + student_models updated ("Long division → partial").
+- Not yet tested: pen + "Check my drawing" (image to Realtime), finishing a full problem, fractions on the board.
+
+**IN PROGRESS when WiFi dropped — background-noise filter (user said NO hold-to-talk):**
+- Problem: a TV across the room was transcribed as Brad, so the tutor kept getting interrupted.
+- Design:
+  - RNNoise worklet (`@sapphi-red/web-noise-suppressor`)
+  - adaptive ambient-floor level gate (`lib/tutorAudio/*`)
+  - stricter VAD per level (standard: threshold 0.65, silence 600, near_field; strong: 0.75, 700)
+  - Off/Standard/Strong setting
+  - prompt rule to ignore TV/ad content
+- A subagent was building it. Check `git status` / `git log` in `~/ai-coach-review` for partial or uncommitted work. Verify with `npm run build` and `npx vitest run`, deploy `tutor-realtime-session`, then deploy to Vercel project ai-interactive-vision-board-2 and browser-test with background audio.
+- Also suggest Windows Studio Effects "Voice Focus" on the OmniBook (OS-level).
