@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tutor Buddy — StackChan Face Designs</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #0a0a1a; color: #fff; font-family: 'Segoe UI', system-ui, sans-serif; padding: 40px; }
+  h1 { text-align: center; color: #D4A843; font-size: 28px; margin-bottom: 8px; letter-spacing: 2px; }
+  .subtitle { text-align: center; color: #8899aa; font-size: 14px; margin-bottom: 32px; }
+  .grid { display: grid; grid-template-columns: repeat(3, 320px); gap: 24px; justify-content: center; margin-bottom: 24px; }
+  .face-card { position: relative; }
+  .face-label { text-align: center; color: #D4A843; font-size: 13px; font-weight: 600; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 1.5px; }
+  .face-container {
+    width: 320px; height: 240px; background: #0B1120; border-radius: 12px;
+    overflow: hidden; position: relative; border: 1px solid #1a2a40;
+  }
+  svg { width: 320px; height: 240px; }
+
+  @keyframes blink { 0%,92%,100% { transform: scaleY(1); } 96% { transform: scaleY(0.05); } }
+  @keyframes glow-pulse { 0%,100% { opacity: 0.3; } 50% { opacity: 0.7; } }
+  @keyframes sparkle { 0%,100% { opacity: 0; transform: scale(0.5); } 50% { opacity: 1; transform: scale(1.2); } }
+  @keyframes confetti-fall { 0% { transform: translateY(-20px) rotate(0deg); opacity: 1; } 100% { transform: translateY(40px) rotate(360deg); opacity: 0; } }
+  @keyframes heartbeat { 0%,100% { transform: scale(1); } 50% { transform: scale(1.1); } }
+  @keyframes subtle-float { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-2px); } }
+  @keyframes thinking-dots { 0%,20% { opacity: 0.2; } 50% { opacity: 1; } 80%,100% { opacity: 0.2; } }
+  @keyframes look-up { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-4px); } }
+  @keyframes page-flip { 0%,100% { transform: rotateY(0deg); } 50% { transform: rotateY(15deg); } }
+  @keyframes star-twinkle { 0%,100% { opacity: 0.1; } 50% { opacity: 0.4; } }
+  @keyframes cheek-glow { 0%,100% { opacity: 0.12; } 50% { opacity: 0.2; } }
+  @keyframes wiggle { 0%,100% { transform: rotate(0deg); } 25% { transform: rotate(-3deg); } 75% { transform: rotate(3deg); } }
+  @keyframes confetti-spin { 0% { transform: translateY(-30px) rotate(0deg); opacity: 1; } 100% { transform: translateY(50px) rotate(720deg); opacity: 0; } }
+  @keyframes bounce-star { 0%,100% { transform: scale(0.8) rotate(0deg); opacity: 0.5; } 50% { transform: scale(1.3) rotate(180deg); opacity: 1; } }
+
+  .blink { animation: blink 4s ease-in-out infinite; transform-origin: center; }
+  .glow { animation: glow-pulse 2s ease-in-out infinite; }
+  .sparkle-anim { animation: sparkle 1.2s ease-in-out infinite; }
+  .confetti { animation: confetti-fall 2s ease-in infinite; }
+  .heartbeat { animation: heartbeat 1.5s ease-in-out infinite; }
+  .float { animation: subtle-float 3s ease-in-out infinite; }
+  .thinking-dot { animation: thinking-dots 1.5s ease-in-out infinite; }
+  .look-up { animation: look-up 3s ease-in-out infinite; }
+  .star-twinkle { animation: star-twinkle 3s ease-in-out infinite; }
+  .cheek-glow { animation: cheek-glow 2.5s ease-in-out infinite; }
+  .wiggle { animation: wiggle 4s ease-in-out infinite; }
+</style>
+</head>
+<body>
+<h1>📚 TUTOR BUDDY — FACE DESIGNS</h1>
+<p class="subtitle">Robot #4 · AI Homework Helper · StackChan 320×240 LCD · Kid-Friendly</p>
+
+<div class="grid">
+
+  <!-- 1. IDLE / READY — Friendly, curious eyes with slight head tilt -->
+  <div class="face-card">
+    <div class="face-label">Ready to Learn!</div>
+    <div class="face-container">
+      <svg viewBox="0 0 320 240" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <radialGradient id="idle-bg" cx="50%" cy="55%" r="65%">
+            <stop offset="0%" stop-color="#11182e"/>
+            <stop offset="100%" stop-color="#0B1120"/>
+          </radialGradient>
+        </defs>
+        <rect width="320" height="240" fill="url(#idle-bg)"/>
+        <!-- Subtle star pattern background -->
+        <circle cx="30" cy="30" r="1.5" fill="#D4A843" class="star-twinkle"/>
+        <circle cx="290" cy="50" r="1" fill="#D4A843" class="star-twinkle" style="animation-delay:1s"/>
+        <circle cx="50" cy="200" r="1.2" fill="#D4A843" class="star-twinkle" style="animation-delay:0.5s"/>
+        <circle cx="270" cy="210" r="1" fill="#D4A843" class="star-twinkle" style="animation-delay:1.5s"/>
+        <circle cx="160" cy="20" r="1.3" fill="#D4A843" class="star-twinkle" style="animation-delay:2s"/>
+        <circle cx="80" cy="220" r="0.8" fill="#D4A843" class="star-twinkle" style="animation-delay:0.7s"/>
+        <!-- Slight head tilt -->
+        <g transform="rotate(-3, 160, 120)" class="float">
+          <!-- Big round kawaii eyes -->
+          <g class="blink">
+            <ellipse cx="118" cy="95" rx="30" ry="28" fill="#faf8f0" opacity="0.96"/>
+            <ellipse cx="121" cy="96" rx="14" ry="14" fill="#0B1120"/>
+            <ellipse cx="126" cy="90" rx="5.5" ry="5.5" fill="#faf8f0" opacity="0.8"/>
+            <ellipse cx="118" cy="88" rx="2.5" ry="2.5" fill="#faf8f0" opacity="0.4"/>
+            <!-- Warm lower lid -->
+            <path d="M92 108 Q118 117 144 108" stroke="#D4A843" stroke-width="1.2" fill="none" opacity="0.35"/>
+          </g>
+          <g class="blink">
+            <ellipse cx="202" cy="95" rx="30" ry="28" fill="#faf8f0" opacity="0.96"/>
+            <ellipse cx="205" cy="96" rx="14" ry="14" fill="#0B1120"/>
+            <ellipse cx="210" cy="90" rx="5.5" ry="5.5" fill="#faf8f0" opacity="0.8"/>
+            <ellipse cx="202" cy="88" rx="2.5" ry="2.5" fill="#faf8f0" opacity="0.4"/>
+            <path d="M176 108 Q202 117 228 108" stroke="#D4A843" stroke-width="1.2" fill="none" opacity="0.35"/>
+          </g>
+          <!-- Curious raised brows -->
+          <path d="M92 65 Q118 55 144 65" stroke="#D4A843" stroke-width="2" fill="none" stroke-linecap="round" opacity="0.5"/>
+          <path d="M176 65 Q202 55 228 65" stroke="#D4A843" stroke-width="2" fill="none" stroke-linecap="round" opacity="0.5"/>
+          <!-- Friendly smile -->
+          <path d="M128 155 Q160 178 192 155" stroke="#D4A843" stroke-width="3" fill="none" stroke-linecap="round"/>
+          <!-- Rosy cheeks -->
+          <circle cx="80" cy="118" r="15" fill="#e8836b" opacity="0.12" class="cheek-glow"/>
+          <circle cx="240" cy="118" r="15" fill="#e8836b" opacity="0.12" class="cheek-glow" style="animation-delay:0.3s"/>
+        </g>
+      </svg>
+    </div>
+  </div>
+
+  <!-- 2. TEACHING — Focused eyes, slight smile, glasses -->
+  <div class="face-card">
+    <div class="face-label">Explaining</div>
+    <div class="face-container">
+      <svg viewBox="0 0 320 240" xmlns="http://www.w3.org/2000/svg">
+        <rect width="320" height="240" fill="#0B1120"/>
+        <!-- Stars -->
+        <circle cx="40" cy="40" r="1.2" fill="#D4A843" class="star-twinkle"/>
+        <circle cx="280" cy="35" r="1" fill="#D4A843" class="star-twinkle" style="animation-delay:1.2s"/>
+        <circle cx="295" cy="200" r="1.3" fill="#D4A843" class="star-twinkle" style="animation-delay:0.8s"/>
+        <!-- Glasses frame -->
+        <circle cx="118" cy="96" r="34" fill="none" stroke="#D4A843" stroke-width="2.5" opacity="0.6"/>
+        <circle cx="202" cy="96" r="34" fill="none" stroke="#D4A843" stroke-width="2.5" opacity="0.6"/>
+        <line x1="152" y1="96" x2="168" y2="96" stroke="#D4A843" stroke-width="2.5" opacity="0.6"/>
+        <line x1="84" y1="90" x2="70" y2="82" stroke="#D4A843" stroke-width="2" opacity="0.4" stroke-linecap="round"/>
+        <line x1="236" y1="90" x2="250" y2="82" stroke="#D4A843" stroke-width="2" opacity="0.4" stroke-linecap="round"/>
+        <!-- Focused eyes behind glasses -->
+        <g class="blink" style="animation-duration:5s">
+          <ellipse cx="118" cy="96" rx="28" ry="26" fill="#faf8f0" opacity="0.96"/>
+          <ellipse cx="120" cy="97" rx="13" ry="13" fill="#0B1120"/>
+          <ellipse cx="124" cy="92" rx="5" ry="5" fill="#faf8f0" opacity="0.75"/>
+          <ellipse cx="118" cy="90" rx="2" ry="2" fill="#faf8f0" opacity="0.4"/>
+        </g>
+        <g class="blink" style="animation-duration:5s">
+          <ellipse cx="202" cy="96" rx="28" ry="26" fill="#faf8f0" opacity="0.96"/>
+          <ellipse cx="204" cy="97" rx="13" ry="13" fill="#0B1120"/>
+          <ellipse cx="208" cy="92" rx="5" ry="5" fill="#faf8f0" opacity="0.75"/>
+          <ellipse cx="202" cy="90" rx="2" ry="2" fill="#faf8f0" opacity="0.4"/>
+        </g>
+        <!-- Knowledge-sharing smile -->
+        <path d="M130 158 Q160 175 190 158" stroke="#D4A843" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+        <!-- Rosy cheeks -->
+        <circle cx="78" cy="118" r="13" fill="#e8836b" opacity="0.1"/>
+        <circle cx="242" cy="118" r="13" fill="#e8836b" opacity="0.1"/>
+        <!-- Light bulb icon (idea!) -->
+        <g class="heartbeat" style="transform-origin: 270px 55px">
+          <ellipse cx="270" cy="52" rx="10" ry="12" fill="none" stroke="#D4A843" stroke-width="1.5" opacity="0.6"/>
+          <line x1="266" y1="64" x2="274" y2="64" stroke="#D4A843" stroke-width="1.5" opacity="0.5"/>
+          <line x1="267" y1="67" x2="273" y2="67" stroke="#D4A843" stroke-width="1.2" opacity="0.4"/>
+          <line x1="270" y1="38" x2="270" y2="32" stroke="#D4A843" stroke-width="1" opacity="0.4"/>
+          <line x1="258" y1="42" x2="254" y2="38" stroke="#D4A843" stroke-width="1" opacity="0.3"/>
+          <line x1="282" y1="42" x2="286" y2="38" stroke="#D4A843" stroke-width="1" opacity="0.3"/>
+        </g>
+      </svg>
+    </div>
+  </div>
+
+  <!-- 3. LISTENING — Big attentive eyes, open expression -->
+  <div class="face-card">
+    <div class="face-label">Listening</div>
+    <div class="face-container">
+      <svg viewBox="0 0 320 240" xmlns="http://www.w3.org/2000/svg">
+        <rect width="320" height="240" fill="#0B1120"/>
+        <!-- Stars -->
+        <circle cx="25" cy="25" r="1" fill="#D4A843" class="star-twinkle"/>
+        <circle cx="295" cy="45" r="1.2" fill="#D4A843" class="star-twinkle" style="animation-delay:0.6s"/>
+        <circle cx="45" cy="215" r="1" fill="#D4A843" class="star-twinkle" style="animation-delay:1.8s"/>
+        <!-- Slight tilt to show attentiveness -->
+        <g transform="rotate(-3, 160, 120)">
+          <!-- Extra-big attentive eyes (bigger than normal) -->
+          <g class="blink" style="animation-duration:6s">
+            <ellipse cx="118" cy="95" rx="33" ry="31" fill="#faf8f0" opacity="0.97"/>
+            <ellipse cx="122" cy="96" rx="16" ry="16" fill="#0B1120"/>
+            <ellipse cx="128" cy="89" rx="6" ry="6" fill="#faf8f0" opacity="0.8"/>
+            <ellipse cx="120" cy="86" rx="3" ry="3" fill="#faf8f0" opacity="0.45"/>
+            <!-- Soft attentive brow -->
+            <path d="M88 60 Q118 50 148 62" stroke="#D4A843" stroke-width="2" fill="none" stroke-linecap="round" opacity="0.45"/>
+          </g>
+          <g class="blink" style="animation-duration:6s">
+            <ellipse cx="202" cy="95" rx="33" ry="31" fill="#faf8f0" opacity="0.97"/>
+            <ellipse cx="206" cy="96" rx="16" ry="16" fill="#0B1120"/>
+            <ellipse cx="212" cy="89" rx="6" ry="6" fill="#faf8f0" opacity="0.8"/>
+            <ellipse cx="204" cy="86" rx="3" ry="3" fill="#faf8f0" opacity="0.45"/>
+            <path d="M172 62 Q202 50 232 60" stroke="#D4A843" stroke-width="2" fill="none" stroke-linecap="round" opacity="0.45"/>
+          </g>
+          <!-- Small open mouth (listening) -->
+          <ellipse cx="160" cy="160" rx="8" ry="6" fill="#D4A843" opacity="0.35"/>
+          <!-- Rosy cheeks -->
+          <circle cx="76" cy="118" r="16" fill="#e8836b" opacity="0.12" class="cheek-glow"/>
+          <circle cx="244" cy="118" r="16" fill="#e8836b" opacity="0.12" class="cheek-glow" style="animation-delay:0.5s"/>
+        </g>
+        <!-- Sound wave indicators -->
+        <path d="M45 108 Q35 95 45 82" stroke="#D4A843" stroke-width="1.8" fill="none" opacity="0.3" class="glow"/>
+        <path d="M35 115 Q22 95 35 75" stroke="#D4A843" stroke-width="1.2" fill="none" opacity="0.2" class="glow" style="animation-delay:0.3s"/>
+        <!-- Warm ambient glow -->
+        <circle cx="160" cy="110" r="80" fill="#D4A843" opacity="0.02" class="glow"/>
+      </svg>
+    </div>
+  </div>
+
+  <!-- 4. CORRECT ANSWER! — Huge celebration, stars, confetti, biggest smile -->
+  <div class="face-card">
+    <div class="face-label">You Got It!</div>
+    <div class="face-container">
+      <svg viewBox="0 0 320 240" xmlns="http://www.w3.org/2000/svg">
+        <rect width="320" height="240" fill="#0B1120"/>
+        <!-- Celebration glow -->
+        <circle cx="160" cy="120" r="100" fill="#D4A843" opacity="0.04" class="glow"/>
+        <!-- Joyful squinted eyes (SO happy) -->
+        <g class="float">
+          <path d="M88 92 Q118 68 148 92" stroke="#faf8f0" stroke-width="5" fill="none" stroke-linecap="round"/>
+          <path d="M172 92 Q202 68 232 92" stroke="#faf8f0" stroke-width="5" fill="none" stroke-linecap="round"/>
+        </g>
+        <!-- HUGE celebratory smile -->
+        <path d="M100 145 Q160 205 220 145" stroke="#D4A843" stroke-width="4" fill="none" stroke-linecap="round"/>
+        <path d="M112 145 Q160 195 208 145" fill="#D4A843" opacity="0.12"/>
+        <!-- Big rosy cheeks -->
+        <circle cx="75" cy="115" r="18" fill="#e8836b" opacity="0.18"/>
+        <circle cx="245" cy="115" r="18" fill="#e8836b" opacity="0.18"/>
+        <!-- LOTS of confetti -->
+        <rect x="55" y="30" width="9" height="5" fill="#D4A843" opacity="0.9" rx="1" class="confetti"/>
+        <rect x="95" y="15" width="7" height="7" fill="#faf8f0" opacity="0.7" rx="1" class="confetti" style="animation-delay:0.2s"/>
+        <rect x="140" y="10" width="10" height="4" fill="#e8836b" opacity="0.7" rx="1" class="confetti" style="animation-delay:0.4s"/>
+        <rect x="195" y="20" width="8" height="5" fill="#D4A843" opacity="0.8" rx="1" class="confetti" style="animation-delay:0.6s"/>
+        <rect x="245" y="25" width="6" height="6" fill="#faf8f0" opacity="0.6" rx="1" class="confetti" style="animation-delay:0.8s"/>
+        <rect x="120" y="5" width="7" height="4" fill="#7ec8e3" opacity="0.6" rx="1" class="confetti" style="animation-delay:0.1s"/>
+        <rect x="210" y="12" width="9" height="4" fill="#7ec8e3" opacity="0.5" rx="1" class="confetti" style="animation-delay:0.5s"/>
+        <rect x="70" y="18" width="5" height="5" fill="#e8836b" opacity="0.6" rx="1" class="confetti" style="animation-delay:0.7s"/>
+        <!-- Big stars -->
+        <g class="sparkle-anim">
+          <polygon points="65,65 69,55 73,65 83,65 75,72 78,82 69,76 60,82 63,72 55,65" fill="#D4A843" opacity="0.8"/>
+        </g>
+        <g class="sparkle-anim" style="animation-delay:0.4s">
+          <polygon points="255,55 258,48 261,55 268,55 263,60 265,67 258,63 251,67 253,60 248,55" fill="#D4A843" opacity="0.7"/>
+        </g>
+        <g class="sparkle-anim" style="animation-delay:0.8s">
+          <polygon points="160,190 162,185 164,190 169,190 165,194 167,199 162,196 157,199 159,194 154,190" fill="#D4A843" opacity="0.6"/>
+        </g>
+        <g class="sparkle-anim" style="animation-delay:0.6s">
+          <polygon points="40,140 42,136 44,140 48,140 45,143 46,147 42,145 38,147 39,143 36,140" fill="#faf8f0" opacity="0.5"/>
+        </g>
+        <g class="sparkle-anim" style="animation-delay:1s">
+          <polygon points="280,130 282,126 284,130 288,130 285,133 286,137 282,135 278,137 279,133 276,130" fill="#faf8f0" opacity="0.5"/>
+        </g>
+        <!-- Checkmark -->
+        <g class="heartbeat" style="transform-origin: 160px 215px">
+          <path d="M150 215 L157 222 L172 207" stroke="#D4A843" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round" opacity="0.6"/>
+        </g>
+      </svg>
+    </div>
+  </div>
+
+  <!-- 5. TRY AGAIN — Gentle, encouraging (NOT sad) -->
+  <div class="face-card">
+    <div class="face-label">Almost! Try Again</div>
+    <div class="face-container">
+      <svg viewBox="0 0 320 240" xmlns="http://www.w3.org/2000/svg">
+        <rect width="320" height="240" fill="#0B1120"/>
+        <!-- Stars -->
+        <circle cx="35" cy="35" r="1" fill="#D4A843" class="star-twinkle"/>
+        <circle cx="285" cy="210" r="1.2" fill="#D4A843" class="star-twinkle" style="animation-delay:1s"/>
+        <!-- Warm encouraging glow -->
+        <circle cx="160" cy="110" r="85" fill="#D4A843" opacity="0.03" class="glow"/>
+        <!-- Warm eyes — not sad, gentle and encouraging -->
+        <g class="blink" style="animation-duration:5s">
+          <ellipse cx="118" cy="98" rx="29" ry="27" fill="#faf8f0" opacity="0.96"/>
+          <ellipse cx="120" cy="99" rx="13" ry="13" fill="#0B1120"/>
+          <ellipse cx="124" cy="94" rx="5" ry="5" fill="#faf8f0" opacity="0.75"/>
+          <ellipse cx="118" cy="92" rx="2.5" ry="2.5" fill="#faf8f0" opacity="0.4"/>
+          <!-- Gentle encouraging brow (slightly angled but warm) -->
+          <path d="M92 70 Q118 62 144 68" stroke="#D4A843" stroke-width="2" fill="none" stroke-linecap="round" opacity="0.45"/>
+        </g>
+        <g class="blink" style="animation-duration:5s">
+          <ellipse cx="202" cy="98" rx="29" ry="27" fill="#faf8f0" opacity="0.96"/>
+          <ellipse cx="204" cy="99" rx="13" ry="13" fill="#0B1120"/>
+          <ellipse cx="208" cy="94" rx="5" ry="5" fill="#faf8f0" opacity="0.75"/>
+          <ellipse cx="202" cy="92" rx="2.5" ry="2.5" fill="#faf8f0" opacity="0.4"/>
+          <path d="M176 68 Q202 62 228 70" stroke="#D4A843" stroke-width="2" fill="none" stroke-linecap="round" opacity="0.45"/>
+        </g>
+        <!-- Warm rosy cheeks (extra warm for encouragement) -->
+        <circle cx="78" cy="118" r="16" fill="#e8836b" opacity="0.15" class="cheek-glow"/>
+        <circle cx="242" cy="118" r="16" fill="#e8836b" opacity="0.15" class="cheek-glow" style="animation-delay:0.4s"/>
+        <!-- Encouraging gentle smile (NOT a frown) -->
+        <path d="M132 158 Q160 170 188 158" stroke="#D4A843" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+        <!-- "You can do it!" sparkle -->
+        <g class="sparkle-anim" style="animation-delay:0.5s">
+          <polygon points="268,60 270,56 272,60 276,60 273,63 274,67 270,65 266,67 267,63 264,60" fill="#D4A843" opacity="0.5"/>
+        </g>
+        <!-- Encouraging heart -->
+        <g class="heartbeat" style="transform-origin: 55px 60px" opacity="0.35">
+          <path d="M48,62 Q48,55 55,55 Q62,55 62,62 Q62,70 55,76 Q48,70 48,62Z" fill="#e8836b"/>
+        </g>
+        <!-- Refresh/try-again arrow icon -->
+        <g transform="translate(160, 210)" opacity="0.35" class="wiggle" style="transform-origin: 160px 210px">
+          <path d="M-8,0 A8,8 0 1,1 5,6" stroke="#D4A843" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+          <polygon points="5,2 5,10 10,6" fill="#D4A843"/>
+        </g>
+      </svg>
+    </div>
+  </div>
+
+  <!-- 6. THINKING — Eyes looking up, processing dots -->
+  <div class="face-card">
+    <div class="face-label">Hmm, Let Me Think...</div>
+    <div class="face-container">
+      <svg viewBox="0 0 320 240" xmlns="http://www.w3.org/2000/svg">
+        <rect width="320" height="240" fill="#0B1120"/>
+        <!-- Stars -->
+        <circle cx="50" cy="30" r="1.2" fill="#D4A843" class="star-twinkle"/>
+        <circle cx="270" cy="40" r="1" fill="#D4A843" class="star-twinkle" style="animation-delay:0.9s"/>
+        <!-- Eyes looking up-right (thinking) -->
+        <g class="blink" style="animation-duration:6s">
+          <ellipse cx="118" cy="95" rx="30" ry="28" fill="#faf8f0" opacity="0.96"/>
+          <!-- Pupil looking up -->
+          <g class="look-up">
+            <ellipse cx="124" cy="88" rx="13" ry="13" fill="#0B1120"/>
+            <ellipse cx="129" cy="83" rx="5" ry="5" fill="#faf8f0" opacity="0.75"/>
+          </g>
+        </g>
+        <g class="blink" style="animation-duration:6s">
+          <ellipse cx="202" cy="95" rx="30" ry="28" fill="#faf8f0" opacity="0.96"/>
+          <g class="look-up">
+            <ellipse cx="208" cy="88" rx="13" ry="13" fill="#0B1120"/>
+            <ellipse cx="213" cy="83" rx="5" ry="5" fill="#faf8f0" opacity="0.75"/>
+          </g>
+        </g>
+        <!-- Rosy cheeks -->
+        <circle cx="78" cy="118" r="14" fill="#e8836b" opacity="0.11"/>
+        <circle cx="242" cy="118" r="14" fill="#e8836b" opacity="0.11"/>
+        <!-- Small thoughtful mouth -->
+        <ellipse cx="160" cy="158" rx="6" ry="4" fill="#D4A843" opacity="0.3"/>
+        <!-- Thinking dots -->
+        <circle cx="140" cy="190" r="5" fill="#D4A843" opacity="0.5" class="thinking-dot"/>
+        <circle cx="160" cy="190" r="5" fill="#D4A843" opacity="0.5" class="thinking-dot" style="animation-delay:0.3s"/>
+        <circle cx="180" cy="190" r="5" fill="#D4A843" opacity="0.5" class="thinking-dot" style="animation-delay:0.6s"/>
+        <!-- Thought bubble hints -->
+        <circle cx="250" cy="45" r="3" fill="#D4A843" opacity="0.15"/>
+        <circle cx="262" cy="35" r="5" fill="#D4A843" opacity="0.1"/>
+        <circle cx="278" cy="25" r="8" fill="#D4A843" opacity="0.07"/>
+        <!-- Question marks floating -->
+        <text x="58" y="55" fill="#D4A843" opacity="0.2" font-family="Georgia, serif" font-size="16" class="float">?</text>
+      </svg>
+    </div>
+  </div>
+
+  <!-- 7. READING — Calm, focused eyes, book icon -->
+  <div class="face-card">
+    <div class="face-label">Reading Together</div>
+    <div class="face-container">
+      <svg viewBox="0 0 320 240" xmlns="http://www.w3.org/2000/svg">
+        <rect width="320" height="240" fill="#0B1120"/>
+        <!-- Stars -->
+        <circle cx="30" cy="25" r="1" fill="#D4A843" class="star-twinkle"/>
+        <circle cx="290" cy="30" r="1.3" fill="#D4A843" class="star-twinkle" style="animation-delay:1.2s"/>
+        <circle cx="40" cy="215" r="0.8" fill="#D4A843" class="star-twinkle" style="animation-delay:0.4s"/>
+        <!-- Reading glow (warm ambient) -->
+        <circle cx="160" cy="130" r="90" fill="#D4A843" opacity="0.025" class="glow"/>
+        <!-- Calm focused eyes (slightly lowered, reading) -->
+        <g class="blink" style="animation-duration:7s">
+          <ellipse cx="118" cy="98" rx="28" ry="25" fill="#faf8f0" opacity="0.95"/>
+          <!-- Pupils looking slightly down (reading) -->
+          <ellipse cx="119" cy="102" rx="12" ry="12" fill="#0B1120"/>
+          <ellipse cx="123" cy="97" rx="4.5" ry="4.5" fill="#faf8f0" opacity="0.7"/>
+          <!-- Relaxed lower lid -->
+          <path d="M94 110 Q118 118 142 110" stroke="#D4A843" stroke-width="1.2" fill="none" opacity="0.3"/>
+        </g>
+        <g class="blink" style="animation-duration:7s">
+          <ellipse cx="202" cy="98" rx="28" ry="25" fill="#faf8f0" opacity="0.95"/>
+          <ellipse cx="203" cy="102" rx="12" ry="12" fill="#0B1120"/>
+          <ellipse cx="207" cy="97" rx="4.5" ry="4.5" fill="#faf8f0" opacity="0.7"/>
+          <path d="M178 110 Q202 118 226 110" stroke="#D4A843" stroke-width="1.2" fill="none" opacity="0.3"/>
+        </g>
+        <!-- Rosy cheeks -->
+        <circle cx="80" cy="118" r="14" fill="#e8836b" opacity="0.1"/>
+        <circle cx="240" cy="118" r="14" fill="#e8836b" opacity="0.1"/>
+        <!-- Peaceful content smile -->
+        <path d="M135 155 Q160 168 185 155" stroke="#D4A843" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+        <!-- Book icon at bottom -->
+        <g transform="translate(160, 205)" class="float" opacity="0.45">
+          <!-- Open book -->
+          <path d="M-16,0 Q-16,-8 -2,-10 L0,-10 L0,2 Q-14,0 -16,0Z" fill="#D4A843" opacity="0.5"/>
+          <path d="M16,0 Q16,-8 2,-10 L0,-10 L0,2 Q14,0 16,0Z" fill="#D4A843" opacity="0.4"/>
+          <line x1="0" y1="-10" x2="0" y2="2" stroke="#0B1120" stroke-width="0.5" opacity="0.5"/>
+          <!-- Page lines -->
+          <line x1="-12" y1="-4" x2="-3" y2="-6" stroke="#0B1120" stroke-width="0.6" opacity="0.3"/>
+          <line x1="-11" y1="-1" x2="-3" y2="-3" stroke="#0B1120" stroke-width="0.6" opacity="0.3"/>
+          <line x1="12" y1="-4" x2="3" y2="-6" stroke="#0B1120" stroke-width="0.6" opacity="0.3"/>
+          <line x1="11" y1="-1" x2="3" y2="-3" stroke="#0B1120" stroke-width="0.6" opacity="0.3"/>
+        </g>
+        <!-- Tiny floating letters/numbers (learning atmosphere) -->
+        <text x="55" y="50" fill="#D4A843" opacity="0.12" font-family="Georgia, serif" font-size="12" class="float">abc</text>
+        <text x="245" y="55" fill="#D4A843" opacity="0.1" font-family="Georgia, serif" font-size="11" class="float" style="animation-delay:1s">123</text>
+      </svg>
+    </div>
+  </div>
+
+</div>
+
+<p style="text-align:center; color:#556; margin-top:16px; font-size:12px;">
+  Tutor Buddy · Visionary AI Inc · StackChan 320×240 ILI9342C · Navy #0B1120 / Gold #D4A843 · Kid-Friendly Design
+</p>
+</body>
+</html>

@@ -549,6 +549,150 @@
     font-size: 12px;
   }
 
+  /* ===== TUTOR BUDDY SECTION ===== */
+  .tutor-section {
+    padding: var(--section-pad);
+    background: linear-gradient(180deg, var(--navy) 0%, #080d1a 50%, var(--navy) 100%);
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .tutor-section::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background:
+      radial-gradient(1.5px 1.5px at 10% 15%, rgba(212,168,67,0.25), transparent),
+      radial-gradient(1px 1px at 30% 80%, rgba(212,168,67,0.15), transparent),
+      radial-gradient(1.5px 1.5px at 55% 10%, rgba(212,168,67,0.2), transparent),
+      radial-gradient(1px 1px at 75% 65%, rgba(212,168,67,0.18), transparent),
+      radial-gradient(1.2px 1.2px at 90% 25%, rgba(212,168,67,0.22), transparent),
+      radial-gradient(1px 1px at 20% 50%, rgba(212,168,67,0.12), transparent),
+      radial-gradient(1.5px 1.5px at 85% 85%, rgba(212,168,67,0.15), transparent);
+    pointer-events: none;
+  }
+  .tutor-section h2 { color: var(--white); }
+  .tutor-subtitle {
+    color: var(--gray);
+    max-width: 640px;
+    margin: 0 auto 20px;
+    font-size: 1.1rem;
+    line-height: 1.7;
+  }
+  .tutor-badge-wrap {
+    margin-bottom: 48px;
+  }
+  .tutor-coming-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 18px;
+    border: 1px solid rgba(212,168,67,0.35);
+    border-radius: 100px;
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--gold);
+    animation: badge-pulse 3s ease-in-out infinite;
+  }
+  .tutor-coming-badge::before {
+    content: '';
+    width: 6px; height: 6px;
+    background: var(--gold);
+    border-radius: 50%;
+  }
+  .tutor-faces-row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+    max-width: 1100px;
+    margin: 0 auto 60px;
+  }
+  .tutor-face-card { text-align: center; }
+  .tutor-face-screen {
+    width: 100%;
+    max-width: 260px;
+    aspect-ratio: 320 / 240;
+    background: var(--navy);
+    border-radius: 14px;
+    overflow: hidden;
+    margin: 0 auto 12px;
+    border: 2px solid #1a2a40;
+    box-shadow: 0 6px 24px rgba(0,0,0,0.3), 0 0 30px rgba(212,168,67,0.03);
+    transition: transform 0.3s, box-shadow 0.3s;
+  }
+  .tutor-face-card:hover .tutor-face-screen {
+    transform: scale(1.04);
+    box-shadow: 0 10px 36px rgba(0,0,0,0.4), 0 0 50px rgba(212,168,67,0.07);
+  }
+  .tutor-face-screen svg { width: 100%; height: 100%; }
+  .tutor-face-label {
+    font-family: Georgia, serif;
+    font-size: 1rem;
+    color: var(--white);
+    margin-bottom: 2px;
+  }
+  .tutor-face-desc {
+    font-size: 0.78rem;
+    color: var(--gold);
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+  }
+  .tutor-features-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    max-width: 800px;
+    margin: 0 auto 48px;
+  }
+  .tutor-feature-pill {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 16px 20px;
+    background: linear-gradient(145deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01));
+    border: 1px solid rgba(212,168,67,0.12);
+    border-radius: 14px;
+    text-align: left;
+    transition: border-color 0.3s, transform 0.3s;
+  }
+  .tutor-feature-pill:hover {
+    border-color: rgba(212,168,67,0.3);
+    transform: translateY(-2px);
+  }
+  .tutor-feature-pill .tf-icon {
+    font-size: 22px;
+    flex-shrink: 0;
+  }
+  .tutor-feature-pill .tf-text {
+    font-size: 0.9rem;
+    color: var(--gray);
+  }
+  .tutor-price-block {
+    margin-top: 8px;
+  }
+  .tutor-price-block .tp-price {
+    font-family: Georgia, serif;
+    font-size: 2rem;
+    color: var(--white);
+    margin-bottom: 4px;
+  }
+  .tutor-price-block .tp-price span { color: var(--gold); }
+  .tutor-price-block .tp-sub {
+    font-size: 0.9rem;
+    color: var(--gray);
+    margin-bottom: 20px;
+  }
+
+  @media (max-width: 768px) {
+    .tutor-faces-row { grid-template-columns: 1fr 1fr; gap: 16px; }
+    .tutor-features-grid { grid-template-columns: 1fr 1fr; }
+  }
+  @media (max-width: 480px) {
+    .tutor-faces-row { grid-template-columns: 1fr; max-width: 280px; }
+    .tutor-features-grid { grid-template-columns: 1fr; max-width: 320px; }
+  }
+
   /* ===== SPECS BAR ===== */
   .specs-bar {
     padding: 60px 24px;
@@ -638,6 +782,7 @@
     <li><a href="#faces">Expressions</a></li>
     <li><a href="#features">Features</a></li>
     <li><a href="#pricing">Pricing</a></li>
+    <li><a href="#tutor-buddy">Tutor Buddy</a></li>
   </ul>
 </nav>
 
@@ -962,6 +1107,194 @@
       </ul>
     </div>
 
+  </div>
+</section>
+
+<!-- ===== TUTOR BUDDY SECTION ===== -->
+<section class="tutor-section" id="tutor-buddy">
+  <h2 class="reveal">Introducing Tutor Buddy</h2>
+  <div class="section-divider reveal"></div>
+  <p class="tutor-subtitle reveal">Your child's AI homework helper. Hold up a worksheet — Tutor Buddy reads it, checks answers, and teaches what they missed.</p>
+  <div class="tutor-badge-wrap reveal">
+    <span class="tutor-coming-badge">Coming 2028</span>
+  </div>
+
+  <!-- 4 Key Face States -->
+  <div class="tutor-faces-row">
+
+    <!-- Idle / Ready -->
+    <div class="tutor-face-card reveal reveal-delay-1">
+      <div class="tutor-face-screen">
+        <svg viewBox="0 0 320 240" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <radialGradient id="tb-idle-bg" cx="50%" cy="55%" r="65%">
+              <stop offset="0%" stop-color="#11182e"/>
+              <stop offset="100%" stop-color="#0B1120"/>
+            </radialGradient>
+          </defs>
+          <rect width="320" height="240" fill="url(#tb-idle-bg)"/>
+          <circle cx="30" cy="30" r="1.5" fill="#D4A843" opacity="0.25"/>
+          <circle cx="290" cy="50" r="1" fill="#D4A843" opacity="0.2"/>
+          <circle cx="50" cy="200" r="1.2" fill="#D4A843" opacity="0.15"/>
+          <g transform="rotate(-3, 160, 120)" class="float">
+            <g class="blink">
+              <ellipse cx="118" cy="95" rx="30" ry="28" fill="#faf8f0" opacity="0.96"/>
+              <ellipse cx="121" cy="96" rx="14" ry="14" fill="#0B1120"/>
+              <ellipse cx="126" cy="90" rx="5.5" ry="5.5" fill="#faf8f0" opacity="0.8"/>
+              <ellipse cx="118" cy="88" rx="2.5" ry="2.5" fill="#faf8f0" opacity="0.4"/>
+            </g>
+            <g class="blink">
+              <ellipse cx="202" cy="95" rx="30" ry="28" fill="#faf8f0" opacity="0.96"/>
+              <ellipse cx="205" cy="96" rx="14" ry="14" fill="#0B1120"/>
+              <ellipse cx="210" cy="90" rx="5.5" ry="5.5" fill="#faf8f0" opacity="0.8"/>
+              <ellipse cx="202" cy="88" rx="2.5" ry="2.5" fill="#faf8f0" opacity="0.4"/>
+            </g>
+            <path d="M128 155 Q160 178 192 155" stroke="#D4A843" stroke-width="3" fill="none" stroke-linecap="round"/>
+            <circle cx="80" cy="118" r="15" fill="#e8836b" opacity="0.12"/>
+            <circle cx="240" cy="118" r="15" fill="#e8836b" opacity="0.12"/>
+          </g>
+        </svg>
+      </div>
+      <div class="tutor-face-label">Ready</div>
+      <div class="tutor-face-desc">Ready to Learn!</div>
+    </div>
+
+    <!-- Correct Answer! -->
+    <div class="tutor-face-card reveal reveal-delay-2">
+      <div class="tutor-face-screen">
+        <svg viewBox="0 0 320 240" xmlns="http://www.w3.org/2000/svg">
+          <rect width="320" height="240" fill="#0B1120"/>
+          <circle cx="160" cy="120" r="100" fill="#D4A843" opacity="0.04" class="glow"/>
+          <g class="float">
+            <path d="M88 92 Q118 68 148 92" stroke="#faf8f0" stroke-width="5" fill="none" stroke-linecap="round"/>
+            <path d="M172 92 Q202 68 232 92" stroke="#faf8f0" stroke-width="5" fill="none" stroke-linecap="round"/>
+          </g>
+          <path d="M100 145 Q160 205 220 145" stroke="#D4A843" stroke-width="4" fill="none" stroke-linecap="round"/>
+          <path d="M112 145 Q160 195 208 145" fill="#D4A843" opacity="0.12"/>
+          <circle cx="75" cy="115" r="18" fill="#e8836b" opacity="0.18"/>
+          <circle cx="245" cy="115" r="18" fill="#e8836b" opacity="0.18"/>
+          <rect x="55" y="30" width="9" height="5" fill="#D4A843" opacity="0.9" rx="1" class="confetti"/>
+          <rect x="140" y="10" width="10" height="4" fill="#e8836b" opacity="0.7" rx="1" class="confetti" style="animation-delay:0.4s"/>
+          <rect x="245" y="25" width="6" height="6" fill="#faf8f0" opacity="0.6" rx="1" class="confetti" style="animation-delay:0.8s"/>
+          <rect x="95" y="15" width="7" height="7" fill="#faf8f0" opacity="0.7" rx="1" class="confetti" style="animation-delay:0.2s"/>
+          <rect x="195" y="20" width="8" height="5" fill="#D4A843" opacity="0.8" rx="1" class="confetti" style="animation-delay:0.6s"/>
+          <g class="sparkle-anim">
+            <polygon points="65,65 69,55 73,65 83,65 75,72 78,82 69,76 60,82 63,72 55,65" fill="#D4A843" opacity="0.8"/>
+          </g>
+          <g class="sparkle-anim" style="animation-delay:0.4s">
+            <polygon points="255,55 258,48 261,55 268,55 263,60 265,67 258,63 251,67 253,60 248,55" fill="#D4A843" opacity="0.7"/>
+          </g>
+          <g class="heartbeat" style="transform-origin: 160px 215px">
+            <path d="M150 215 L157 222 L172 207" stroke="#D4A843" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round" opacity="0.6"/>
+          </g>
+        </svg>
+      </div>
+      <div class="tutor-face-label">Correct!</div>
+      <div class="tutor-face-desc">You Got It!</div>
+    </div>
+
+    <!-- Try Again -->
+    <div class="tutor-face-card reveal reveal-delay-3">
+      <div class="tutor-face-screen">
+        <svg viewBox="0 0 320 240" xmlns="http://www.w3.org/2000/svg">
+          <rect width="320" height="240" fill="#0B1120"/>
+          <circle cx="160" cy="110" r="85" fill="#D4A843" opacity="0.03" class="glow"/>
+          <g class="blink" style="animation-duration:5s">
+            <ellipse cx="118" cy="98" rx="29" ry="27" fill="#faf8f0" opacity="0.96"/>
+            <ellipse cx="120" cy="99" rx="13" ry="13" fill="#0B1120"/>
+            <ellipse cx="124" cy="94" rx="5" ry="5" fill="#faf8f0" opacity="0.75"/>
+            <path d="M92 70 Q118 62 144 68" stroke="#D4A843" stroke-width="2" fill="none" stroke-linecap="round" opacity="0.45"/>
+          </g>
+          <g class="blink" style="animation-duration:5s">
+            <ellipse cx="202" cy="98" rx="29" ry="27" fill="#faf8f0" opacity="0.96"/>
+            <ellipse cx="204" cy="99" rx="13" ry="13" fill="#0B1120"/>
+            <ellipse cx="208" cy="94" rx="5" ry="5" fill="#faf8f0" opacity="0.75"/>
+            <path d="M176 68 Q202 62 228 70" stroke="#D4A843" stroke-width="2" fill="none" stroke-linecap="round" opacity="0.45"/>
+          </g>
+          <circle cx="78" cy="118" r="16" fill="#e8836b" opacity="0.15"/>
+          <circle cx="242" cy="118" r="16" fill="#e8836b" opacity="0.15"/>
+          <path d="M132 158 Q160 170 188 158" stroke="#D4A843" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+          <g class="sparkle-anim" style="animation-delay:0.5s">
+            <polygon points="268,60 270,56 272,60 276,60 273,63 274,67 270,65 266,67 267,63 264,60" fill="#D4A843" opacity="0.5"/>
+          </g>
+          <g class="heartbeat" style="transform-origin: 55px 60px" opacity="0.35">
+            <path d="M48,62 Q48,55 55,55 Q62,55 62,62 Q62,70 55,76 Q48,70 48,62Z" fill="#e8836b"/>
+          </g>
+        </svg>
+      </div>
+      <div class="tutor-face-label">Encourage</div>
+      <div class="tutor-face-desc">Almost! Try Again</div>
+    </div>
+
+    <!-- Reading -->
+    <div class="tutor-face-card reveal reveal-delay-4">
+      <div class="tutor-face-screen">
+        <svg viewBox="0 0 320 240" xmlns="http://www.w3.org/2000/svg">
+          <rect width="320" height="240" fill="#0B1120"/>
+          <circle cx="160" cy="130" r="90" fill="#D4A843" opacity="0.025" class="glow"/>
+          <g class="blink" style="animation-duration:7s">
+            <ellipse cx="118" cy="98" rx="28" ry="25" fill="#faf8f0" opacity="0.95"/>
+            <ellipse cx="119" cy="102" rx="12" ry="12" fill="#0B1120"/>
+            <ellipse cx="123" cy="97" rx="4.5" ry="4.5" fill="#faf8f0" opacity="0.7"/>
+            <path d="M94 110 Q118 118 142 110" stroke="#D4A843" stroke-width="1.2" fill="none" opacity="0.3"/>
+          </g>
+          <g class="blink" style="animation-duration:7s">
+            <ellipse cx="202" cy="98" rx="28" ry="25" fill="#faf8f0" opacity="0.95"/>
+            <ellipse cx="203" cy="102" rx="12" ry="12" fill="#0B1120"/>
+            <ellipse cx="207" cy="97" rx="4.5" ry="4.5" fill="#faf8f0" opacity="0.7"/>
+            <path d="M178 110 Q202 118 226 110" stroke="#D4A843" stroke-width="1.2" fill="none" opacity="0.3"/>
+          </g>
+          <circle cx="80" cy="118" r="14" fill="#e8836b" opacity="0.1"/>
+          <circle cx="240" cy="118" r="14" fill="#e8836b" opacity="0.1"/>
+          <path d="M135 155 Q160 168 185 155" stroke="#D4A843" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+          <g transform="translate(160, 205)" class="float" opacity="0.45">
+            <path d="M-16,0 Q-16,-8 -2,-10 L0,-10 L0,2 Q-14,0 -16,0Z" fill="#D4A843" opacity="0.5"/>
+            <path d="M16,0 Q16,-8 2,-10 L0,-10 L0,2 Q14,0 16,0Z" fill="#D4A843" opacity="0.4"/>
+            <line x1="0" y1="-10" x2="0" y2="2" stroke="#0B1120" stroke-width="0.5" opacity="0.5"/>
+          </g>
+          <text x="55" y="50" fill="#D4A843" opacity="0.12" font-family="Georgia, serif" font-size="12" class="float">abc</text>
+          <text x="245" y="55" fill="#D4A843" opacity="0.1" font-family="Georgia, serif" font-size="11" class="float" style="animation-delay:1s">123</text>
+        </svg>
+      </div>
+      <div class="tutor-face-label">Reading</div>
+      <div class="tutor-face-desc">Reading Together</div>
+    </div>
+
+  </div>
+
+  <!-- Feature Pills -->
+  <div class="tutor-features-grid">
+    <div class="tutor-feature-pill reveal reveal-delay-1">
+      <span class="tf-icon">📐</span>
+      <span class="tf-text">All Subjects</span>
+    </div>
+    <div class="tutor-feature-pill reveal reveal-delay-1">
+      <span class="tf-icon">📖</span>
+      <span class="tf-text">Upload Textbooks</span>
+    </div>
+    <div class="tutor-feature-pill reveal reveal-delay-2">
+      <span class="tf-icon">📸</span>
+      <span class="tf-text">Worksheet Camera</span>
+    </div>
+    <div class="tutor-feature-pill reveal reveal-delay-2">
+      <span class="tf-icon">👨‍👩‍👧</span>
+      <span class="tf-text">Parent Dashboard</span>
+    </div>
+    <div class="tutor-feature-pill reveal reveal-delay-3">
+      <span class="tf-icon">🙏</span>
+      <span class="tf-text">Faith Content</span>
+    </div>
+    <div class="tutor-feature-pill reveal reveal-delay-3">
+      <span class="tf-icon">📡</span>
+      <span class="tf-text">Offline Mode</span>
+    </div>
+  </div>
+
+  <!-- Price -->
+  <div class="tutor-price-block reveal">
+    <div class="tp-price">Starting at <span>$199</span></div>
+    <div class="tp-sub">+ $9.99/mo subscription</div>
+    <a href="#" class="cta-btn">Join the Waitlist</a>
   </div>
 </section>
 
