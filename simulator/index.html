@@ -474,6 +474,14 @@ body {
 
   <!-- Right Panel -->
   <div class="right-panel">
+    <!-- Personality Selector -->
+    <div class="config-bar" style="gap:4px;">
+      <label style="color:var(--gold);font-size:12px;font-weight:600;white-space:nowrap;">Robot:</label>
+      <button id="pHermes" onclick="switchPersonality('hermes')" class="session-btn" style="font-size:11px;padding:4px 8px;background:var(--gold);color:var(--navy);">🤖 Hermes</button>
+      <button id="pAmie" onclick="switchPersonality('amie')" class="session-btn" style="font-size:11px;padding:4px 8px;">🧠 AMIE</button>
+      <button id="pTutor" onclick="switchPersonality('tutor')" class="session-btn" style="font-size:11px;padding:4px 8px;">📚 Tutor Buddy</button>
+    </div>
+
     <!-- Connection -->
     <div class="config-bar">
       <input type="text" id="wsUrl" value="ws://localhost:12800/xiaozhi/ws" placeholder="WebSocket URL">
@@ -559,6 +567,33 @@ function setSession(btn, session) {
 }
 
 // ========== CONNECTION ==========
+const PERSONALITY_PORTS = { hermes: 12800, amie: 12801, tutor: 12802 };
+let currentPersonality = 'hermes';
+
+function switchPersonality(name) {
+  currentPersonality = name;
+  const port = PERSONALITY_PORTS[name];
+  const host = new URL(document.getElementById('wsUrl').value).hostname || 'localhost';
+  document.getElementById('wsUrl').value = `ws://${host}:${port}/xiaozhi/ws`;
+  // Update button styles
+  ['pHermes','pAmie','pTutor'].forEach(id => {
+    const btn = document.getElementById(id);
+    btn.style.background = '';
+    btn.style.color = '';
+  });
+  const activeId = name === 'hermes' ? 'pHermes' : name === 'amie' ? 'pAmie' : 'pTutor';
+  document.getElementById(activeId).style.background = 'var(--gold)';
+  document.getElementById(activeId).style.color = 'var(--navy)';
+  // Auto-reconnect if already connected
+  if (ws && ws.readyState === WebSocket.OPEN) {
+    addMessage('system', `Switching to ${name === 'tutor' ? 'Tutor Buddy' : name.toUpperCase()}...`);
+    disconnect();
+    setTimeout(connect, 500);
+  } else {
+    addMessage('system', `Selected ${name === 'tutor' ? 'Tutor Buddy' : name.toUpperCase()} (port ${port}). Click Connect.`);
+  }
+}
+
 function toggleConnection() {
   if (isConnected) {
     disconnect();
