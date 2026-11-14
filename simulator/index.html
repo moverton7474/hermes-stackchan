@@ -684,22 +684,24 @@ function disconnect() {
 }
 
 // ========== BINARY PROTOCOL ==========
+// BinaryProtocol3 (version 3): [type][reserved=0x00][payload_size_hi][payload_size_lo][payload]
 function createMessage(type, payload) {
   const data = payload || new Uint8Array(0);
-  const buf = new ArrayBuffer(5 + data.byteLength);
+  const buf = new ArrayBuffer(4 + data.byteLength);
   const view = new DataView(buf);
   view.setUint8(0, type);
-  view.setUint32(1, data.byteLength, false); // big-endian
-  new Uint8Array(buf, 5).set(new Uint8Array(data.buffer || data));
+  view.setUint8(1, 0x00); // reserved
+  view.setUint16(2, data.byteLength, false); // big-endian uint16
+  new Uint8Array(buf, 4).set(new Uint8Array(data.buffer || data));
   return buf;
 }
 
 function parseBinaryMessage(buffer) {
   const view = new DataView(buffer);
-  if (buffer.byteLength < 5) return null;
+  if (buffer.byteLength < 4) return null;
   const type = view.getUint8(0);
-  const len = view.getUint32(1, false);
-  const payload = new Uint8Array(buffer, 5, len);
+  const len = view.getUint16(2, false); // big-endian uint16
+  const payload = new Uint8Array(buffer, 4, Math.min(len, buffer.byteLength - 4));
   return { type, payload };
 }
 
@@ -874,8 +876,9 @@ async function startRecording() {
       if (e.data.size > 0 && isConnected) {
         const arrayBuf = await e.data.arrayBuffer();
         const opusData = new Uint8Array(arrayBuf);
-        // Send as raw binary (version 1 framing — no header, just opus data)
-        ws.send(opusData);
+        // Wrap in xiaozhi binary frame: [type=0x01][4B big-endian length][payload]
+        const msg = createMessage(MSG.OPUS, opusData);
+        sendBinary(msg);
       }
     };
 
