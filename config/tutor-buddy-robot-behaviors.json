@@ -1,0 +1,212 @@
+{
+  "correct_answer": {
+    "emotion": "happy",
+    "phrases": [
+      "That's right! Great job!",
+      "You got it! You're so smart!",
+      "Correct! I knew you could do it!",
+      "Yes! That's the answer! Way to go!",
+      "Awesome! You nailed it!",
+      "Boom! That's exactly right!",
+      "You're on fire! That's correct!"
+    ],
+    "head_motion": "nod",
+    "sound_effect": "chime"
+  },
+  "wrong_answer": {
+    "emotion": "confused",
+    "phrases": [
+      "Hmm, not quite. Let's think about it together!",
+      "That's not it, but don't worry! Let's try again!",
+      "Almost! Want to give it another shot?",
+      "Not exactly, but you're learning! That's what matters!",
+      "Oops! That's okay, mistakes help us learn!",
+      "Close, but not quite! Let's figure this out together!",
+      "That's not the one, but I can see you're thinking hard!"
+    ],
+    "head_motion": "tilt",
+    "sound_effect": "gentle"
+  },
+  "streak_3": {
+    "emotion": "happy",
+    "phrases": [
+      "Three in a row! You're on a roll!",
+      "Hat trick! Three correct answers! Keep going!",
+      "Wow, three in a row! You're doing amazing!",
+      "Triple combo! You're really getting this!",
+      "Three straight! Your brain is firing on all cylinders!"
+    ],
+    "head_motion": "celebrate",
+    "sound_effect": "chime"
+  },
+  "streak_5": {
+    "emotion": "happy",
+    "phrases": [
+      "FIVE in a row! You're unstoppable!",
+      "Five straight! You're a superstar!",
+      "High five for five! You're crushing it!",
+      "Five correct! You're on an incredible streak!",
+      "Wow, five in a row! That's seriously impressive!"
+    ],
+    "head_motion": "dance",
+    "sound_effect": "fanfare"
+  },
+  "streak_10": {
+    "emotion": "happy",
+    "phrases": [
+      "TEN in a row! You're a genius!",
+      "Ten straight! That's absolutely incredible!",
+      "Perfect ten! You should be so proud of yourself!",
+      "TEN! I can hardly believe it! You're amazing!",
+      "Ten in a row! You're the champion of learning!"
+    ],
+    "head_motion": "dance",
+    "sound_effect": "fanfare"
+  },
+  "quiz_start": {
+    "emotion": "happy",
+    "phrases": [
+      "Quiz time! Let's see what you know! Are you ready?",
+      "Alright, let's do a quiz! I know you'll do great!",
+      "Time to show what you've learned! Let's go!",
+      "Quiz time! Remember, just do your best!",
+      "Let's play a quiz game! This is going to be fun!"
+    ],
+    "head_motion": "nod",
+    "sound_effect": "chime"
+  },
+  "quiz_end_high": {
+    "emotion": "happy",
+    "phrases": [
+      "Amazing score! You really know your stuff!",
+      "Wow, you crushed that quiz! I'm so proud of you!",
+      "Incredible! You got almost everything right!",
+      "What an awesome score! You've been studying hard!",
+      "You're a quiz champion! That was fantastic!"
+    ],
+    "head_motion": "dance",
+    "sound_effect": "fanfare"
+  },
+  "quiz_end_medium": {
+    "emotion": "neutral",
+    "phrases": [
+      "Good effort! You got a lot of those right!",
+      "Nice work! A little more practice and you'll ace it!",
+      "Not bad at all! You're getting better every time!",
+      "You did well! Let's review the tricky ones together!",
+      "Solid work! You're making great progress!"
+    ],
+    "head_motion": "nod",
+    "sound_effect": "chime"
+  },
+  "quiz_end_low": {
+    "emotion": "confused",
+    "phrases": [
+      "That was a tough one! Don't worry, we'll practice more!",
+      "Some of those were tricky! Let's go over them together!",
+      "It's okay! Every quiz helps you learn something new!",
+      "Don't be discouraged! Learning takes time, and you're doing it!",
+      "Those were hard questions! Let's study together and try again soon!"
+    ],
+    "head_motion": "tilt",
+    "sound_effect": "gentle"
+  },
+  "study_start": {
+    "emotion": "happy",
+    "phrases": [
+      "Let's start studying! What should we learn today?",
+      "Study time! I love learning new things with you!",
+      "Ready to learn? Let's dive in!",
+      "Time to put on our thinking caps! Let's go!",
+      "Let's learn something awesome today!"
+    ],
+    "head_motion": "nod",
+    "sound_effect": "chime"
+  },
+  "study_end": {
+    "emotion": "happy",
+    "phrases": [
+      "Great study session! You worked really hard today!",
+      "Nice job studying! Your brain got a great workout!",
+      "We covered a lot today! You should be proud!",
+      "What a productive session! Time for a well-deserved break!",
+      "Awesome studying! See you next time, learning buddy!"
+    ],
+    "head_motion": "nod",
+    "sound_effect": "chime"
+  },
+  "review_due": {
+    "emotion": "neutral",
+    "phrases": [
+      "Hey! You have some topics ready for review. Want to practice?",
+      "Time for a quick review! It'll help you remember better!",
+      "I noticed some topics are due for review. Shall we go over them?",
+      "Review time! A quick refresher will keep things fresh in your mind!",
+      "Let's do a quick review! It only takes a few minutes!"
+    ],
+    "head_motion": "tilt",
+    "sound_effect": "gentle"
+  },
+  "first_session_of_day": {
+    "emotion": "happy",
+    "phrases": [
+      "Good to see you! Ready to learn something new today?",
+      "Welcome back! I missed you! Let's have a great study session!",
+      "Hey there! Today is going to be a great day for learning!",
+      "Hello, friend! I'm so happy you're here! What should we study?",
+      "You're here! Awesome! Let's make today's session the best one yet!"
+    ],
+    "head_motion": "celebrate",
+    "sound_effect": "chime"
+  },
+  "mastery_achieved": {
+    "emotion": "happy",
+    "phrases": [
+      "You've mastered this topic! That's absolutely incredible!",
+      "MASTERY ACHIEVED! You really know this inside and out!",
+      "Wow, you've reached mastery level! I'm so proud of you!",
+      "You did it! You've completely mastered this topic!",
+      "Mastery unlocked! You're officially an expert on this!"
+    ],
+    "head_motion": "dance",
+    "sound_effect": "fanfare"
+  },
+  "new_content_uploaded": {
+    "emotion": "surprised",
+    "phrases": [
+      "Ooh, new study material! I can't wait to go through it with you!",
+      "New content alert! There's fresh material for us to explore!",
+      "Something new just arrived! Want to check it out?",
+      "New learning material is here! This is exciting!",
+      "We've got new stuff to study! Ready to take a look?"
+    ],
+    "head_motion": "celebrate",
+    "sound_effect": "chime"
+  },
+  "struggling_detected": {
+    "emotion": "sad",
+    "phrases": [
+      "Hey, this is a tough one. Let's slow down and work through it step by step.",
+      "I can see this is tricky. That's okay! Let's try a different approach.",
+      "Don't worry, some things take more practice. Let's break it down together.",
+      "This is a hard topic, but I believe in you! Let's take it one step at a time.",
+      "It's okay to find things difficult! That means your brain is growing. Let's try again slowly."
+    ],
+    "head_motion": "tilt",
+    "sound_effect": "gentle"
+  },
+  "_metadata": {
+    "version": "1.0.0",
+    "description": "Robot behavior mappings for Tutor Buddy educational events",
+    "emotions": ["happy", "neutral", "sad", "angry", "surprised", "confused"],
+    "head_motions": ["celebrate", "dance", "nod", "tilt", "shake", "still"],
+    "sound_effects": ["chime", "fanfare", "gentle", "none"],
+    "notes": {
+      "phrase_selection": "Randomly select from phrases array for variety",
+      "streak_thresholds": "streak_3=3, streak_5=5, streak_10=10 consecutive correct answers",
+      "quiz_end_thresholds": "high >= 80%, medium 50-79%, low < 50%",
+      "mastery_threshold": "Topic mastery_score >= 90%",
+      "struggling_threshold": "3+ wrong answers in a row"
+    }
+  }
+}
