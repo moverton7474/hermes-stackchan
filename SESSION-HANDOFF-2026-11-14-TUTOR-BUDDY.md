@@ -144,3 +144,20 @@ AMIE files (`amie-realtime-session`, `lib/realtime/AmieRealtimeClient.ts`, promp
   - prompt rule to ignore TV/ad content
 - A subagent was building it. Check `git status` / `git log` in `~/ai-coach-review` for partial or uncommitted work. Verify with `npm run build` and `npx vitest run`, deploy `tutor-realtime-session`, then deploy to Vercel project ai-interactive-vision-board-2 and browser-test with background audio.
 - Also suggest Windows Studio Effects "Voice Focus" on the OmniBook (OS-level).
+
+---
+## UPDATE — noise filter SHIPPED (`5967ba2`) and live-tested
+- **Filter:** RNNoise + adaptive distance gate + stricter VAD (standard: 0.65 threshold, near_field) + Off/Standard/Strong toggle (default Standard) + prompt rule to ignore TV/ad content. Falls back to the plain mic if the filter fails to load.
+- **Live test (Chrome, speakers):**
+  - ~15 s of quiet "TV" speech (drug ad + news) was fully ignored: no false transcript, no interruption.
+  - Normal-volume request ("show me 1/2 + 1/3 on the whiteboard") was heard and drawn.
+- **Fractions template tested:**
+  - Wrong LCD 4 → tutor wrote multiples of 2 and 3 on the board.
+  - LCD 6 → green ✓ and "Nice work, Brad!"; she filled the new denominators and asked for the new numerator.
+- **Saved:** study_sessions row "Adding fractions" 2/1; student_models "Adding fractions with unlike denominators → partial".
+- **Focus fix confirmed:** the answer box stays open when the window loses focus.
+- **Open items:**
+  - Pen + "Check my drawing" image not yet tested.
+  - Stray "4" appeared twice in a box on the first attempt during automated testing (likely tool artifact; whenever the box was open, typed digits recorded exactly). Watch for it in real use.
+  - Real-TV test by Milton/Brad still pending.
+  - Consider Windows Studio Effects Voice Focus.
