@@ -1,0 +1,16 @@
+services:
+  tutor-buddy:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: ["/standalone.sh"]
+    restart: unless-stopped
+    container_name: stackchan-tutor-buddy
+    env_file: .env.tutor-buddy
+    environment:
+      STACKCHAN_DATA_DIR: /data
+    ports:
+      - "0.0.0.0:12802:12800"
+      - "127.0.0.1:8097:8099"
+    volumes:
+      - "./data-tutor-buddy:/data"
