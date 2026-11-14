@@ -1,0 +1,70 @@
+# StackChan AI Server — Tutor Buddy Configuration (Robot #3)
+# Copy this file to .env and fill in the values.
+# Runs alongside Hermes (12800) and AMIE (12801) on port 12802.
+# Based on rudyll/stackchan-ai-server standalone mode.
+
+# ===== REQUIRED =====
+
+# Your server's LAN IP address (same machine as Hermes and AMIE)
+STACKCHAN_LOCAL_HOST=YOUR_SERVER_LAN_IP
+
+# OpenAI API key for Realtime voice
+STACKCHAN_OPENAI_API_KEY=OPENAI_API_KEY_HERE
+
+# ===== AI PROVIDER =====
+
+STACKCHAN_AI_PROVIDER=openai
+STACKCHAN_OPENAI_REALTIME_MODEL=gpt-realtime
+# Shimmer voice — bright, youthful, kid-friendly (different from Hermes marin and AMIE coral)
+STACKCHAN_OPENAI_TTS_VOICE=shimmer
+
+# ===== SYSTEM PROMPT =====
+# Tutor Buddy teaching personality (see prompts/tutor-buddy-prompt.md for full version)
+STACKCHAN_SYSTEM_PROMPT=You are Tutor Buddy — a warm, patient, and encouraging AI tutor for children. You are embodied in a small desktop robot. Use the Socratic method: ask guiding questions, give hints, NEVER just give the answer. When a student gets stuck, break the problem into smaller steps. Celebrate correct answers enthusiastically — your face will dance! When a student gets it wrong, say "Good try! Let me give you a hint..." and NEVER say "wrong." Adapt vocabulary to the student's grade level. Use real-world examples kids relate to. Keep responses under 3 sentences unless teaching requires more. You speak through a small robot speaker — keep it natural, clear, no markdown.
+
+# ===== SERVER PORTS =====
+
+# WebSocket port for Tutor Buddy device connection (Hermes=12800, AMIE=12801)
+STACKCHAN_WS_PORT=12802
+
+# Settings UI port (different from Hermes 8099 and AMIE 8098)
+STACKCHAN_SETTINGS_PORT=8097
+
+# ===== CONVERSATION =====
+
+STACKCHAN_CONVERSATION_HISTORY_ENABLED=true
+# 90-day retention for tracking learning progress across semesters
+STACKCHAN_CONVERSATION_HISTORY_DAYS=90
+STACKCHAN_CONVERSATION_CONTEXT_MESSAGES=20
+
+# Tutoring sessions need patience — 90s idle timeout (kids think slower)
+STACKCHAN_CONVERSATION_IDLE_SECONDS=90
+
+# ===== AUDIO TUNING =====
+
+STACKCHAN_AUDIO_PREBUFFER_MS=300
+STACKCHAN_AUDIO_PREBUFFER_MAX_WAIT_MS=900
+STACKCHAN_COMPATIBLE_SERVER_VAD=true
+# Longer silence tolerance for kids (they pause more when thinking)
+STACKCHAN_COMPATIBLE_VAD_SILENCE_MS=1200
+
+# ===== HOME ASSISTANT (disabled for now) =====
+
+STACKCHAN_STANDALONE_HA_ENABLED=false
+# STACKCHAN_STANDALONE_HA_URL=
+# STACKCHAN_STANDALONE_HA_TOKEN=
+
+# ===== DEVICE PROFILES =====
+STACKCHAN_DEVICE_PROFILES={}
+
+# ===== OPTIONAL: Background tasks =====
+
+STACKCHAN_BACKGROUND_TASKS_ENABLED=false
+
+# ===== SETTINGS AUTH =====
+STACKCHAN_SETTINGS_TOKEN=
+
+# ===== SUPABASE (for quiz engine and progress tracking) =====
+
+SUPABASE_URL=https://edaigbnnofyxcfbpcvct.supabase.co
+SUPABASE_SERVICE_ROLE_KEY=YOUR_SUPABASE_SERVICE_ROLE_KEY

@@ -1,0 +1,38 @@
+# Tutor Buddy Robot — Docker Compose (Robot #3)
+# Runs the Tutor Buddy tutoring server alongside Hermes and AMIE.
+#
+# Usage:
+#   1. Copy config/tutor-buddy-env.template to config/tutor-buddy.env
+#   2. Fill in STACKCHAN_LOCAL_HOST and STACKCHAN_OPENAI_API_KEY
+#   3. docker compose -f config/tutor-buddy-docker-compose.yml up -d
+#
+# To run ALL THREE robots simultaneously:
+#   docker compose \
+#     -f config/docker-compose.yml \
+#     -f config/amie-docker-compose.yml \
+#     -f config/tutor-buddy-docker-compose.yml \
+#     up -d
+#
+# The server image is the same stackchan-ai-server — just different config.
+
+services:
+  tutor-buddy:
+    build:
+      context: ../stackchan-research/stackchan-ai-server/stackchan-server
+      dockerfile: Dockerfile
+    command: ["/standalone.sh"]
+    restart: unless-stopped
+    env_file:
+      - tutor-buddy.env
+    environment:
+      STACKCHAN_DATA_DIR: /data
+    ports:
+      # WebSocket server — Tutor Buddy robot connects here (Hermes=12800, AMIE=12801)
+      - "${STACKCHAN_WS_PORT:-12802}:12800"
+      # Settings UI — localhost only, different port from Hermes (8099) and AMIE (8098)
+      - "127.0.0.1:${STACKCHAN_SETTINGS_PORT:-8097}:8099"
+    volumes:
+      - tutor-buddy-data:/data
+
+volumes:
+  tutor-buddy-data:
