@@ -421,7 +421,7 @@ body {
   <strong>&#x26A0; Dependency:</strong> The stackchan-ai-server must be running for live audio.
   Server connects to <code>ws://localhost:12800/xiaozhi/ws</code>.
   Without the server, you can still test face expressions and UI in demo mode.
-  <br><strong>Protocol:</strong> Binary frames &mdash; [1B type][4B length BE][payload]. Types: 0x01=Opus, 0x03=Avatar, 0x04=Motion, 0x10/0x11=Ping/Pong.
+  <br><strong>Protocol:</strong> BinaryProtocol3 &mdash; [1B type][1B reserved][2B payload_size BE][payload]. Types: 0x00=Opus, 0x03=Avatar, 0x04=Motion, 0x10/0x11=Ping/Pong.
   <br><strong>Auth:</strong> Requires RSA-encrypted MAC token in Authorization header. Configure your MAC and token below.
 </div>
 
@@ -522,6 +522,7 @@ body {
   <span id="footerTime"></span>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/opus-recorder@8.0.5/dist/recorder.min.js"></script>
 <script>
 // ========== STATE ==========
 let ws = null;
@@ -531,14 +532,13 @@ let currentExpression = 'idle';
 let currentSession = 'morning';
 let mediaStream = null;
 let audioContext = null;
-let mediaRecorder = null;
-let audioChunks = [];
+let opusRecorder = null;
 let analyserNode = null;
 let micLevelInterval = null;
 
 // ========== PROTOCOL CONSTANTS ==========
 const MSG = {
-  OPUS: 0x01, JPEG: 0x02, AVATAR: 0x03, MOTION: 0x04,
+  OPUS: 0x00, JPEG: 0x02, AVATAR: 0x03, MOTION: 0x04,
   ON_CAMERA: 0x05, OFF_CAMERA: 0x06, TEXT: 0x07,
   PING: 0x10, PONG: 0x11, DANCE: 0x14
 };
@@ -832,7 +832,7 @@ function handleMotionControl(payload) {
   }
 }
 
-// ========== AUDIO ==========
+// ========== AUDIO (opus-recorder: raw Opus packets, no WebM container) ==========
 async function startRecording() {
   if (isRecording) return;
   isRecording = true;
@@ -845,19 +845,20 @@ async function startRecording() {
   sendJson({ type: 'listen', state: 'start', mode: 'auto' });
 
   try {
+    // opus-recorder handles getUserMedia internally, but we need a stream for mic level
     if (!mediaStream) {
       mediaStream = await navigator.mediaDevices.getUserMedia({
         audio: { sampleRate: 16000, channelCount: 1, echoCancellation: true, noiseSuppression: true }
       });
     }
 
+    // Set up mic level visualization
     audioContext = new (window.AudioContext || window.webkitAudioContext)({ sampleRate: 16000 });
     const source = audioContext.createMediaStreamSource(mediaStream);
     analyserNode = audioContext.createAnalyser();
     analyserNode.fftSize = 256;
     source.connect(analyserNode);
 
-    // Mic level visualization
     micLevelInterval = setInterval(() => {
       const data = new Uint8Array(analyserNode.frequencyBinCount);
       analyserNode.getByteFrequencyData(data);
@@ -865,28 +866,33 @@ async function startRecording() {
       document.getElementById('micLevel').style.height = Math.min(100, avg * 1.5) + '%';
     }, 50);
 
-    // Use MediaRecorder with small timeslice to stream chunks
-    audioChunks = [];
-    const mimeType = MediaRecorder.isTypeSupported('audio/webm;codecs=opus')
-      ? 'audio/webm;codecs=opus' : 'audio/webm';
+    // Create opus-recorder: raw Opus packets (no OGG container)
+    opusRecorder = new Recorder({
+      sourceNode: source,
+      encoderPath: 'https://cdn.jsdelivr.net/npm/opus-recorder@8.0.5/dist/encoderWorker.min.js',
+      encoderSampleRate: 16000,
+      encoderFrameSize: 960,        // 60ms at 16kHz
+      encoderApplication: 2048,     // VOIP
+      numberOfChannels: 1,
+      rawOpusOutput: true,          // KEY: raw Opus packets, no OGG
+    });
 
-    mediaRecorder = new MediaRecorder(mediaStream, { mimeType });
-
-    mediaRecorder.ondataavailable = async (e) => {
-      if (e.data.size > 0 && isConnected) {
-        const arrayBuf = await e.data.arrayBuffer();
-        const opusData = new Uint8Array(arrayBuf);
-        // Wrap in xiaozhi binary frame: [type=0x01][4B big-endian length][payload]
-        const msg = createMessage(MSG.OPUS, opusData);
-        sendBinary(msg);
-      }
+    opusRecorder.ondataavailable = (arrayBuffer) => {
+      if (!isConnected) return;
+      const opusFrame = new Uint8Array(arrayBuffer);
+      // Wrap in BinaryProtocol3: [type=0x00][reserved=0x00][size_hi][size_lo][payload]
+      const msg = createMessage(MSG.OPUS, opusFrame);
+      sendBinary(msg);
     };
 
-    mediaRecorder.onstop = async () => {
+    opusRecorder.onstart = () => {
+      addMessage('system', '&#x1F3A4; Recording with raw Opus encoder...');
+    };
+
+    opusRecorder.onstop = () => {
       // Send listen:stop (xiaozhi protocol)
       sendJson({ type: 'listen', state: 'stop' });
       addMessage('system', '&#x1F3A4; Audio sent, waiting for response...');
-
       setExpression('thinking');
       setTimeout(() => {
         if (currentExpression === 'thinking' && !isRecording) {
@@ -895,7 +901,7 @@ async function startRecording() {
       }, 8000);
     };
 
-    mediaRecorder.start(60); // 60ms chunks to approximate OPUS frame duration
+    await opusRecorder.start();
   } catch (err) {
     addMessage('error', 'Microphone access denied: ' + err.message);
     isRecording = false;
@@ -914,7 +920,7 @@ function stopRecording() {
   document.getElementById('micLevel').style.height = '0%';
 
   if (micLevelInterval) { clearInterval(micLevelInterval); micLevelInterval = null; }
-  if (mediaRecorder && mediaRecorder.state !== 'inactive') { mediaRecorder.stop(); }
+  if (opusRecorder) { opusRecorder.stop(); opusRecorder = null; }
   if (audioContext) { audioContext.close(); audioContext = null; }
 }
 
