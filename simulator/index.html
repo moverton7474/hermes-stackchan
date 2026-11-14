@@ -632,13 +632,26 @@ function connect() {
       addMessage('system', 'Connected to server');
       document.getElementById('connectBtn').textContent = 'Disconnect';
       startPing();
+      // Send hello handshake (xiaozhi protocol)
+      ws.send(JSON.stringify({
+        type: 'hello',
+        version: 3,
+        transport: 'websocket',
+        audio_params: { format: 'opus', sample_rate: 16000, channels: 1, frame_duration: 60 }
+      }));
     };
 
     ws.onmessage = (event) => {
       if (event.data instanceof ArrayBuffer) {
         handleBinaryMessage(event.data);
       } else {
-        addMessage('robot', event.data);
+        // JSON text message from server
+        try {
+          const json = JSON.parse(event.data);
+          handleJsonMessage(json);
+        } catch(e) {
+          addMessage('robot', event.data);
+        }
       }
     };
 
@@ -736,6 +749,48 @@ function sendBinary(buffer) {
   }
 }
 
+function sendJson(obj) {
+  if (ws && ws.readyState === WebSocket.OPEN) {
+    ws.send(JSON.stringify(obj));
+  }
+}
+
+// Handle JSON messages from server (xiaozhi protocol)
+function handleJsonMessage(json) {
+  switch(json.type) {
+    case 'hello':
+      addMessage('system', 'Session: ' + (json.session_id || 'ready'));
+      break;
+    case 'stt':
+      if (json.text) addMessage('system', 'Heard: "' + json.text + '"');
+      break;
+    case 'llm':
+      if (json.emotion) setExpressionByName(json.emotion);
+      break;
+    case 'tts':
+      if (json.state === 'start') setExpression('speaking');
+      if (json.state === 'sentence_start' && json.text) {
+        addMessage('robot', json.text);
+        detectExpressionFromText(json.text);
+      }
+      if (json.state === 'stop') {
+        setTimeout(() => { if (currentExpression === 'speaking') setExpression('encouraging'); }, 500);
+      }
+      break;
+    case 'alert':
+      addMessage('error', json.message || 'Server alert');
+      break;
+    default:
+      console.log('JSON msg:', json);
+  }
+}
+
+function setExpressionByName(emotion) {
+  const map = { neutral: 'idle', happy: 'happy', sad: 'concerned', angry: 'concerned',
+                surprised: 'excited', confused: 'thinking' };
+  setExpression(map[emotion] || 'idle');
+}
+
 // ========== EXPRESSION DETECTION ==========
 function detectExpressionFromText(text) {
   const lower = text.toLowerCase();
@@ -783,14 +838,18 @@ async function startRecording() {
   document.getElementById('pttBtn').classList.add('recording');
   document.getElementById('pttBtn').innerHTML = '&#x1F534; Recording...';
   setExpression('listening');
-  addMessage('system', '&#x1F3A4; Listening...');
+
+  // Send listen:start (xiaozhi protocol)
+  sendJson({ type: 'listen', state: 'start', mode: 'auto' });
 
   try {
     if (!mediaStream) {
-      mediaStream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      mediaStream = await navigator.mediaDevices.getUserMedia({
+        audio: { sampleRate: 16000, channelCount: 1, echoCancellation: true, noiseSuppression: true }
+      });
     }
 
-    audioContext = new (window.AudioContext || window.webkitAudioContext)();
+    audioContext = new (window.AudioContext || window.webkitAudioContext)({ sampleRate: 16000 });
     const source = audioContext.createMediaStreamSource(mediaStream);
     analyserNode = audioContext.createAnalyser();
     analyserNode.fftSize = 256;
@@ -804,46 +863,42 @@ async function startRecording() {
       document.getElementById('micLevel').style.height = Math.min(100, avg * 1.5) + '%';
     }, 50);
 
-    // Record audio
+    // Use MediaRecorder with small timeslice to stream chunks
     audioChunks = [];
     const mimeType = MediaRecorder.isTypeSupported('audio/webm;codecs=opus')
       ? 'audio/webm;codecs=opus' : 'audio/webm';
 
     mediaRecorder = new MediaRecorder(mediaStream, { mimeType });
 
-    mediaRecorder.ondataavailable = (e) => {
-      if (e.data.size > 0) audioChunks.push(e.data);
+    mediaRecorder.ondataavailable = async (e) => {
+      if (e.data.size > 0 && isConnected) {
+        const arrayBuf = await e.data.arrayBuffer();
+        const opusData = new Uint8Array(arrayBuf);
+        // Send as raw binary (version 1 framing — no header, just opus data)
+        ws.send(opusData);
+      }
     };
 
     mediaRecorder.onstop = async () => {
-      const blob = new Blob(audioChunks, { type: mimeType });
-
-      if (isConnected) {
-        // Send as binary audio message
-        const arrayBuf = await blob.arrayBuffer();
-        const opusData = new Uint8Array(arrayBuf);
-        const msg = createMessage(MSG.OPUS, opusData);
-        sendBinary(msg);
-        addMessage('user', '[Audio sent: ' + (opusData.byteLength / 1024).toFixed(1) + ' KB]');
-      } else {
-        addMessage('system', 'Not connected — audio captured but not sent (' +
-          (blob.size / 1024).toFixed(1) + ' KB)');
-      }
+      // Send listen:stop (xiaozhi protocol)
+      sendJson({ type: 'listen', state: 'stop' });
+      addMessage('system', '&#x1F3A4; Audio sent, waiting for response...');
 
       setExpression('thinking');
       setTimeout(() => {
         if (currentExpression === 'thinking' && !isRecording) {
           setExpression('encouraging');
         }
-      }, 3000);
+      }, 8000);
     };
 
-    mediaRecorder.start(100); // 100ms chunks for streaming
+    mediaRecorder.start(60); // 60ms chunks to approximate OPUS frame duration
   } catch (err) {
     addMessage('error', 'Microphone access denied: ' + err.message);
     isRecording = false;
     document.getElementById('pttBtn').classList.remove('recording');
     document.getElementById('pttBtn').innerHTML = '&#x1F3A4; Hold to Talk';
+    sendJson({ type: 'listen', state: 'stop' });
   }
 }
 
