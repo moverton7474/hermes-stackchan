@@ -161,3 +161,30 @@ AMIE files (`amie-realtime-session`, `lib/realtime/AmieRealtimeClient.ts`, promp
   - Stray "4" appeared twice in a box on the first attempt during automated testing (likely tool artifact; whenever the box was open, typed digits recorded exactly). Watch for it in real use.
   - Real-TV test by Milton/Brad still pending.
   - Consider Windows Studio Effects Voice Focus.
+
+---
+## UPDATE — #4 robot parity + #5 parent progress view SHIPPED
+- **#5 (`8cf60a2`, `8a10993`):**
+  - Skills & Progress / Study Sessions tabs now use student_models, study_sessions and slot_results.
+  - Focus next suggestions.
+  - Weekly report button (on-demand `tutor-weekly-report` POST {child_id, days}). The Sunday cron path is kept.
+- **#4 (`221ed29` web/edge, bridge `b908f42` on LOCAL branch `visionary-tutor` in ~/stackchan-research/stackchan-ai-server, not pushed):**
+  - Shared tutor brain `_shared/tutor-brain.ts`. The board engine now lives in `_shared/tutorBoard/` and `lib/tutorBoard/*` re-exports it.
+  - New edge fn `tutor-robot-session` (header `x-robot-token`, verify_jwt=false).
+  - New tables tutor_robot_devices, tutor_board_live (realtime), tutor_board_events.
+  - The Go bridge fetches instructions per session (3 s fallback to the static prompt), routes search/board tools, polls tablet events and logs sessions.
+  - Opt-in env `STACKCHAN_TUTOR_*`, set only in .env.tutor-buddy. Hermes 12800 is unchanged.
+  - Brad's robot is paired (token in .env.tutor-buddy only).
+- **Wiring (`320d524`):**
+  - Dashboard has a "🤖 Robot" tab (pair/revoke robot, mirror link).
+  - Tablet mirror route: `https://www.visionaryai.life/?tutorBoard=4c841cac-80ef-4319-be16-4d4076782acc` (parent must be signed in).
+- **Verified:**
+  - Prod bundles contain the new UI.
+  - Bridge log: "fetched tutor instructions for Brad (21210 chars, 9 tools, 88 chunks, board=true)", a board event injected, session logged.
+  - Robot fn returns 401 without a token.
+- **Not yet clicked through by a human:** Robot tab, mirror on a real tablet, Weekly report button.
+- **Limitations:**
+  - The robot can't see drawings as an image (uses board_read plus asking Brad to explain).
+  - Starting a robot session clears the child's board, so don't run the web board and the robot for the same child at the same time.
+  - The bridge logs a session only on close.
+  - Don't `git stash` in the stackchan repo: autocrlf converts the shell scripts to CRLF.
