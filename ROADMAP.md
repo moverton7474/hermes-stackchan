@@ -200,10 +200,18 @@ AMIE should never go silent. When WiFi drops (gym, travel, outdoors), the robot 
 
 ---
 
-## Phase 5: Tutor Buddy (Kids Homework Helper) — FUTURE ⏳
+## Phase 5: Tutor Buddy (Kids Homework Helper) — IN PROGRESS 🔵 (pulled forward)
 
-**Target:** Q2 2028
-**Dependency:** Phase 2 AMIE coaching engine proven
+**Target:** Founder household now; other families after Wave 4 safety gate
+**Status (2026-11-14):** Web tutor + robot parity shipped on visionaryai.life. Improvement plan approved: [`docs/SAFE-PLAN-TUTOR-BUDDY-IMPROVEMENTS.md`](docs/SAFE-PLAN-TUTOR-BUDDY-IMPROVEMENTS.md). Master roadmap entry: `ai-coach-review/docs/ROADMAP.md` v3.87.
+
+| Wave | Theme | Status |
+|---|---|---|
+| Shipped | Voice tutor (Realtime), curriculum RAG, live whiteboard, noise filter, quiz/flashcards, FSRS + student model, parent progress + weekly report, robot brain + tablet mirror + pairing | ✅ |
+| 1 | Quiz completion, camera homework help (web + robot), answer-box input guard | 🔵 |
+| 2 | XP/streaks/badges, StackChan face emotions, 10–15 min sessions, teach-back | ⏳ |
+| 3 | Session plan, FSRS from practice, misconception drills, new board templates | ⏳ |
+| 4 | COPPA consent + data controls, guardrails + guide-don't-tell audit, time limits, cost control, reading/science/Bible voice, Canvas/Classroom import | ⏳ |
 
 ### Vision
 **Tutor Buddy** is AMIE in kid-friendly form — a desk robot that helps children with homework, explains concepts in age-appropriate language, quizzes them on material, and builds study habits. It's the first AI tutor that sits on a kid's desk, watches them work, celebrates when they get answers right, and gently corrects mistakes with patience and encouragement.
