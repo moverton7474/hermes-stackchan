@@ -192,6 +192,15 @@ body {
 
 /* Speaking (robot talking) */
 .face-speaking .mouth { animation: speak 0.15s ease-in-out infinite alternate; }
+/* Talking while a device emotion (xiaozhi 'llm' message) is shown */
+.robot-body.talking .mouth { animation: speak 0.15s ease-in-out infinite alternate; }
+
+/* Xiaozhi device emotion badge + caption */
+.robot-body { position: relative; }
+.emotion-badge { position: absolute; top: 6px; right: 10px; font-size: 30px; line-height: 1; transition: transform 0.25s ease; pointer-events: none; }
+.emotion-badge.pop { transform: scale(1.35); }
+.emotion-caption { margin-top: 4px; font-size: 12px; letter-spacing: 0.5px; color: var(--gold); opacity: 0.85; min-height: 16px; text-align: center; }
+.emotion-caption.flash { opacity: 1; font-weight: bold; }
 
 @keyframes celebrate { from { transform: translateX(-5px) rotate(-2deg); } to { transform: translateX(5px) rotate(2deg); } }
 @keyframes speak { from { height: 10px; width: 30px; } to { height: 25px; width: 45px; } }
@@ -443,8 +452,10 @@ body {
         </div>
         <div class="mouth" id="mouth"></div>
       </div>
+      <div class="emotion-badge" id="emotionBadge"></div>
     </div>
     <div class="expression-label" id="expressionLabel">IDLE</div>
+    <div class="emotion-caption" id="emotionCaption" title="Last xiaozhi 'llm' emotion message from the server">emotion: —</div>
 
     <div class="expression-grid">
       <button class="expr-btn" onclick="setExpression('idle')">Idle</button>
@@ -712,8 +723,10 @@ function handleBinaryMessage(buffer) {
   switch (msg.type) {
     case MSG.OPUS:
       playOpusAudio(msg.payload);
-      setExpression('speaking');
-      setTimeout(() => { if (currentExpression === 'speaking') setExpression('encouraging'); }, 200);
+      if (!setTalking(true)) {
+        setExpression('speaking');
+        setTimeout(() => { if (currentExpression === 'speaking') setExpression('encouraging'); }, 200);
+      }
       break;
 
     case MSG.AVATAR:
@@ -770,12 +783,13 @@ function handleJsonMessage(json) {
       if (json.emotion) setExpressionByName(json.emotion);
       break;
     case 'tts':
-      if (json.state === 'start') setExpression('speaking');
+      if (json.state === 'start' && !setTalking(true)) setExpression('speaking');
       if (json.state === 'sentence_start' && json.text) {
         addMessage('robot', json.text);
-        detectExpressionFromText(json.text);
+        if (deviceEmotion === 'neutral') detectExpressionFromText(json.text);
       }
       if (json.state === 'stop') {
+        setTalking(false);
         setTimeout(() => { if (currentExpression === 'speaking') setExpression('encouraging'); }, 500);
       }
       break;
@@ -787,10 +801,49 @@ function handleJsonMessage(json) {
   }
 }
 
+// Xiaozhi emotions (server 'llm' messages) -> simulator face + emoji badge.
+// The device emotion persists while the robot talks (only the mouth animates),
+// like the real firmware, and the name is shown as a caption for testing.
+const XIAOZHI_EMOTIONS = {
+  neutral: ['idle', ''], happy: ['happy', '🙂'], laughing: ['excited', '😆'], funny: ['happy', '😂'],
+  sad: ['concerned', '😔'], angry: ['concerned', '😠'], crying: ['concerned', '😭'], loving: ['happy', '😍'],
+  embarrassed: ['concerned', '😳'], surprised: ['excited', '😯'], shocked: ['excited', '😱'],
+  thinking: ['thinking', '🤔'], winking: ['happy', '😉'], cool: ['encouraging', '😎'],
+  relaxed: ['encouraging', '😌'], delicious: ['happy', '😋'], kissy: ['happy', '😘'],
+  confident: ['encouraging', '😏'], sleepy: ['praying', '😴'], silly: ['excited', '😜'], confused: ['thinking', '🙄'],
+};
+let deviceEmotion = 'neutral';
+
 function setExpressionByName(emotion) {
-  const map = { neutral: 'idle', happy: 'happy', sad: 'concerned', angry: 'concerned',
-                surprised: 'excited', confused: 'thinking' };
-  setExpression(map[emotion] || 'idle');
+  const name = String(emotion || 'neutral').toLowerCase();
+  const [expr, emoji] = XIAOZHI_EMOTIONS[name] || ['idle', '❔'];
+  const changed = name !== deviceEmotion;
+  deviceEmotion = name;
+  setExpression(expr);
+  const badge = document.getElementById('emotionBadge');
+  const caption = document.getElementById('emotionCaption');
+  if (badge) {
+    badge.textContent = emoji;
+    badge.classList.add('pop');
+    setTimeout(() => badge.classList.remove('pop'), 250);
+  }
+  if (caption) {
+    caption.textContent = 'emotion: ' + name;
+    caption.classList.add('flash');
+    setTimeout(() => caption.classList.remove('flash'), 600);
+  }
+  if (changed) addMessage('system', 'Emotion → ' + name);
+}
+
+// While a non-neutral device emotion is shown, talking only animates the mouth.
+function setTalking(on) {
+  const body = document.getElementById('robotBody');
+  if (deviceEmotion && deviceEmotion !== 'neutral') {
+    body.classList.toggle('talking', on);
+    return true;
+  }
+  body.classList.remove('talking');
+  return false;
 }
 
 // ========== EXPRESSION DETECTION ==========
