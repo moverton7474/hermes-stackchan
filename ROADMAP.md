@@ -208,10 +208,10 @@ AMIE should never go silent. When WiFi drops (gym, travel, outdoors), the robot 
 | Wave | Theme | Status |
 |---|---|---|
 | Shipped | Voice tutor (Realtime), curriculum RAG, live whiteboard, noise filter, quiz/flashcards, FSRS + student model, parent progress + weekly report, robot brain + tablet mirror + pairing | ✅ |
-| 1 | Quiz completion, camera homework help (web + robot), answer-box input guard | 🔵 |
-| 2 | XP/streaks/badges, StackChan face emotions, 10–15 min sessions, teach-back | ⏳ |
-| 3 | Session plan, FSRS from practice, misconception drills, new board templates | ⏳ |
-| 4 | COPPA consent + data controls, guardrails + guide-don't-tell audit, time limits, cost control, reading/science/Bible voice, Canvas/Classroom import | ⏳ |
+| 1 | Quiz completion, camera homework help (web + robot), answer-box input guard | ✅ |
+| 2 | XP/streaks/badges, StackChan face emotions, 10–15 min sessions, teach-back | ✅ |
+| 3 | Session plan, FSRS from practice, misconception drills, new board templates | ✅ |
+| 4 | COPPA consent + data controls, guardrails + guide-don't-tell audit, time limits, cost control, reading/science/Bible voice, Canvas/Classroom import | ✅ (consent text pending counsel; Google Classroom scaffold only) |
 
 ### Vision
 **Tutor Buddy** is AMIE in kid-friendly form — a desk robot that helps children with homework, explains concepts in age-appropriate language, quizzes them on material, and builds study habits. It's the first AI tutor that sits on a kid's desk, watches them work, celebrates when they get answers right, and gently corrects mistakes with patience and encouragement.

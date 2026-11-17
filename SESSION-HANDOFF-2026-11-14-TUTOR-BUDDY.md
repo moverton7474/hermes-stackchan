@@ -221,3 +221,47 @@ AMIE files (`amie-realtime-session`, `lib/realtime/AmieRealtimeClient.ts`, promp
 **Known quirks**
 - Quiz topics are lowercase while board topics are capitalised, so the same skill can get duplicate student_models rows (fix planned in Wave 3B).
 - The robot session timer is shared per child.
+
+---
+## UPDATE 2026-11-17 (later) — Waves 3–4 SHIPPED (all improvement waves done)
+
+**Wave 3**
+- **Lesson planner** (`144b285`): session opens with "TODAY'S PLAN" (warm-up drill → review → new chapter → teach-back) and has a plan strip; plan saved in study_sessions.metadata.plan.
+- **FSRS** (`27db1b7`): every answer (web, robot, quiz) → tutor_review_log (one review per problem) → mastery_scores. Needs Review tab (TutorReviewPanel); topic names normalized; backup at student_models_backup_20261117.
+- **Drills + templates** (`45788d0`): board_show_drill (7 drills), place-value chart, multi-digit ×, decimal_operation, number_line fractions/decimals, area/volume grids.
+- **Wiring** (`5ce0bd4`, plus the toolDefs refactor `c962d79`): problem_id sent for one review per problem; drill topics recorded.
+- **Browser-verified:**
+  - The plan opening was spoken.
+  - Drill shown; 2 ✓ on the first box.
+  - Plan + 1 Easy review + 35 XP saved.
+  - Needs Review lists overdue topics.
+
+**Wave 4**
+- **Policy** (`beda336`):
+  - parental_consents (Brad = founder_backfill); consent text is a DRAFT pending counsel review.
+  - Settings tab; tutor-data export/delete; retention purge cron 04:20 UTC.
+  - Daily limit (default 45 min) + allowed hours; model routing gpt-realtime vs gpt-realtime-mini; 600 min/month family budget; tutor_usage table.
+- **Robot model routing** (bridge `c8c66a6`): dials the model the brain chooses.
+- **Safety** (`968b430`, `49a0bde`):
+  - tutor_session_audits with moderation + guided/told; sweep cron every 15 min.
+  - Parent notification type tutor_safety (opens Tutor Buddy).
+  - SAFETY_GUARDRAILS + GUIDE_DONT_TELL in the prompt.
+  - Brad: 7 sessions, 100% guided, 0 flags.
+- **Modes** (`c7d40cb`): Math (default, Brad's prompt byte-identical), Reading fluency (WCPM), Science (board_show_diagram), Bible (KJV, memory_verse_check). Mode picker beside Talk to Tutor.
+- **Canvas import** (`b26d89e`): tutor-lms-import, read-only, AES-GCM token; daily sync cron 10:30 UTC. Google Classroom is a scaffold only.
+- **Web deployed;** gates: 265 tests, tsc baseline 10, bundle budget pass.
+
+**Incident:** subagent test logouts used the default (global) scope, which signed Milton out of his browser. Skills are fixed to use logout?scope=local and a throwaway test parent.
+
+**Needs a human / not yet verified**
+- Settings tab and mode picker in the browser (Milton is logged out).
+- Reading follow-along with a real voice.
+- Camera with a real worksheet.
+- Full 15-min wrap-up + teach-back.
+- Robot emotions on hardware.
+- A real Canvas sync (needs a token).
+
+**Known**
+- Brad now has a 45 min/day default limit.
+- tutor-bible-studies writes to a missing bible_study_progress table (pre-existing, silent).
+- Robot WCPM timing is approximate.
