@@ -188,3 +188,36 @@ AMIE files (`amie-realtime-session`, `lib/realtime/AmieRealtimeClient.ts`, promp
   - Starting a robot session clears the child's board, so don't run the web board and the robot for the same child at the same time.
   - The bridge logs a session only on close.
   - Don't `git stash` in the stackchan repo: autocrlf converts the shell scripts to CRLF.
+
+---
+## UPDATE 2026-11-17 — Improvement plan Waves 1–2 SHIPPED (plan: docs/SAFE-PLAN-TUTOR-BUDDY-IMPROVEMENTS.md; master roadmap v3.87)
+
+**Wave 1**
+- **1A quizzes** (`496a06d`): per-answer quiz_results, a session score and completed/abandoned status. Browser-verified: a 4/5 quiz shows "4/5 (80%)".
+- **1B camera homework** (`9f01499`, bridge `ca562bd`):
+  - New `tutor-vision-read` (gpt-4o-mini; images never stored).
+  - Web "📷 Show my worksheet"; robot tool `look_at_worksheet`.
+  - Browser-verified: the camera opens and closes. With no worksheet in view, the tutor asks Brad to read a problem instead of inventing one.
+- **1C stray digit** (`305e228` + wiring `17134e0`): root cause = a box prefilled with the earlier wrong answer, committed when focus arrived late. Commits now read the DOM value, boxes have no prefill, and each answer records an input_trace.
+
+**Wave 2**
+- **2A rewards** (`9034aa3`, UI wiring `fc2ebed`):
+  - Tables tutor_rewards / tutor_reward_events.
+  - Triggers trg_tutor_rewards_award / _quiz_award / _session_delete. Awarding is idempotent and server-side.
+  - 9 badges; level = floor(sqrt(xp/50))+1.
+  - Brad: 160 XP, level 2, 🌟 First Problem.
+- **2B robot face emotions** (bridge `e17897b`, simulator `c5237a3`; env STACKCHAN_TUTOR_EMOTIONS=true). No head nod yet (motion API unverified).
+- **2C sessions** (`e2ee42a`; bridge fix `d9ec399` polls events without the board):
+  - child_profiles.session_minutes (10/15/20).
+  - Countdown with [Session] cues and a wrap-up ritual; extend_session once.
+  - start_teach_back / score_teach_back.
+  - Robot timer via tutor_robot_sessions.
+
+**Not yet human-tested**
+- Camera with a real worksheet.
+- The full 15-minute wrap-up and teach-back by voice.
+- Robot emotions on real hardware.
+
+**Known quirks**
+- Quiz topics are lowercase while board topics are capitalised, so the same skill can get duplicate student_models rows (fix planned in Wave 3B).
+- The robot session timer is shared per child.
