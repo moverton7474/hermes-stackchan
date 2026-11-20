@@ -182,3 +182,17 @@ Only the NVS partition is changed:
 - `websocket:token` → Cleared
 
 The firmware binary itself is **not modified**. You can restore the original NVS to return to Xiaozhi cloud.
+
+## ✅ Proven procedure — M5Stack StackChan (stock "StackChan World" firmware 1.5.1) → our bridge (2026-11-19)
+
+1. **Back up** (read-only): `esptool --port COM3 --baud 921600 read-flash 0 0x1000000 full_flash.bin` (+ partition table at 0x8000). Keep in `backups/` (gitignored) and Dropbox.
+2. **Wi-Fi via the vendor app** ("StackChan World", Bluetooth) — the parent types the Wi-Fi password there. Skip any firmware update.
+3. **Read NVS** (0x9000, 0x4000) and inspect: `python firmware/config/nvs_parse.py nvs.bin` (secrets masked).
+4. **Append only `wifi/ota_url`** — no other byte changes:
+   `python firmware/config/nvs_append_string.py nvs.bin nvs_with_ota.bin wifi ota_url http://<bridge-ip>:12802/xiaozhi/ota/`
+   (self-tests CRC on all existing entries; refuses if the key exists or no room).
+5. **Write only NVS**: `esptool --port COM3 --baud 921600 write-flash 0x9000 nvs_with_ota.bin`, read back + `cmp`.
+6. On the robot open **AI Agent**. Serial log shows `HttpClient: Established new connection to <bridge-ip>:12802` → `Activation done`; wake word "Hi, Stack Chan" opens the WebSocket.
+7. **Rollback**: write the pre-change `nvs.bin` back to 0x9000 (or the full image to 0x0).
+
+Notes: the launcher only starts networking when an app (AI Agent) is opened. Opening the USB serial port can reset the chip (rst USB_UART_CHIP_RESET).
