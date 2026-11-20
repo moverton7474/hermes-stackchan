@@ -11,6 +11,21 @@ Requires: esptool (pip install esptool)
 Usage: python flash_nvs.py --ssid "MyWiFi" --password "MyPass" --ota-url "http://192.168.1.100:8003/xiaozhi/ota/"
 """
 
+# ============================================================================
+# DO NOT USE ON THE M5STACK STACKCHAN (CoreS3, stock xiaozhi firmware) — 2026-11-19
+# Verified from a full flash backup (backups/stackchan_20261119_203320):
+#   * NVS partition is 0x4000 (16 KB) at 0x9000 — this script assumed 0x6000, which
+#     would overwrite otadata (0xd000) and phy_init and can break boot selection.
+#   * NVS holds factory data this script would ERASE: namespace "servo"
+#     (zero_pos_1, zero_pos_2 = head servo calibration) and "board" (uuid).
+# Use the robot's own Wi-Fi setup portal instead (Advanced -> OTA URL):
+#   http://<bridge-ip>:12802/xiaozhi/ota/   (Tutor Buddy)   — see BUILD-GUIDE.md
+# ============================================================================
+import sys as _sys
+if '--i-have-read-the-warning' not in _sys.argv:
+    _sys.exit("flash_nvs.py is disabled for the StackChan: it would erase servo calibration. See header.")
+_sys.argv.remove('--i-have-read-the-warning')
+
 import argparse
 import csv
 import io

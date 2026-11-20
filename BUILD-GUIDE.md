@@ -15,6 +15,11 @@ Complete step-by-step instructions for setting up the StackChan robot as a GVC H
 - [ ] `esptool` installed (`pip install esptool`)
 - [ ] GVC Hermes account with auth token
 
+> **⚠️ 2026-11-19 — verified on the real robot:** do NOT run `flash_nvs.py` (Phase 3). The StackChan NVS is 16 KB (not 24 KB)
+> and stores the head-servo calibration (`servo/zero_pos_1`, `zero_pos_2`) and board uuid, which the script would erase.
+> Instead use the robot's Wi-Fi setup portal → **Advanced → OTA URL** = `http://<laptop-ip>:12802/xiaozhi/ota/` (Tutor Buddy)
+> or `:12800` (Hermes). Backup procedure: `esptool --port COM3 --baud 921600 read-flash 0 0x1000000 full_flash.bin` (esptool v5).
+
 ## Phase 1: Backup Stock Firmware (5 min)
 
 **DO THIS FIRST before any changes.**
