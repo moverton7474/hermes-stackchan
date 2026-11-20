@@ -154,3 +154,12 @@ Phase 1 adds exactly one key: **`display/avatar_skin`** = `"tutor_buddy"` (defau
 3. Keep the Listening-face-on-LISTENING-status behaviour, or drive faces from emotions only?
 4. Add the optional Tutor Buddy boot/splash screen (plan item 4) — not done.
 5. Pin `CONFIG_OTA_URL` to our server via `sdkconfig.defaults.local` as a fallback if NVS were ever lost?
+
+## Phase 3 executed — 2026-11-20 00:05–00:10 EST
+- Pre-flash full backup: `backups/stackchan_preflash_20261119_235856/full_flash.bin` (sha256 c8a54371…7327). Device then ran ota_0 (1.5.1), otadata sector0 seq=1, ota_1 erased; NVS ota_url intact; bootloader/ptable/ota_0/assets identical to 2026-11-19 backup.
+- Wrote `dist/tutor-buddy-1.5.1-tb1/stack-chan.bin` (3,807,664 B, version `1.5.1-tb1`, tag v1.5.1-tb1) to **0x510000** — hash verified + full readback identical.
+- Wrote `dist/phase3/otadata_sector1_select_ota1.bin` to **0xe000** (seq=2, state NEW) — readback identical.
+- Reset via `esptool --before no-reset --after hard-reset chip-id` (an RTS pulse from pyserial does NOT leave download mode on USB-Serial-JTAG).
+- Boot: `ota confirm check: partition=ota_1 … marking current app valid`; servo zero positions loaded; assets checksum OK; launcher up.
+- Untouched: 0x0, 0x8000, NVS 0x9000, ota_0 (factory 1.5.1 = rollback), assets 0xA00000.
+- **Rollback:** write `dist/phase3/otadata_device_original.bin` to 0xd000 (8 KB, restores seq=1 → ota_0) and reset.
