@@ -66,7 +66,7 @@ ota_1    app  ota_1    0x510000  5056K    (0x4f0000)
 assets   data spiffs   0xa00000  4M
 coredump data coredump 0xe00000  64K
 ```
-= `firmware/partitions.csv`, and **byte-identical to `0x8000–0x8c00` of `backups/stackchan_20261119_203320/full_flash.bin`**.
+= `firmware/partitions.csv`, and **byte-identical to `0x8000–0x8c00` of `stackchan_20261119_203320/full_flash.bin` (now inside the encrypted backups/stackchan-firmware-backups-20261120.7z)**.
 
 ## Artifact paths (local, git-ignored — not committed)
 
@@ -156,7 +156,7 @@ Phase 1 adds exactly one key: **`display/avatar_skin`** = `"tutor_buddy"` (defau
 5. Pin `CONFIG_OTA_URL` to our server via `sdkconfig.defaults.local` as a fallback if NVS were ever lost?
 
 ## Phase 3 executed — 2026-11-20 00:05–00:10 EST
-- Pre-flash full backup: `backups/stackchan_preflash_20261119_235856/full_flash.bin` (sha256 c8a54371…7327). Device then ran ota_0 (1.5.1), otadata sector0 seq=1, ota_1 erased; NVS ota_url intact; bootloader/ptable/ota_0/assets identical to 2026-11-19 backup.
+- Pre-flash full backup: `backups/stackchan-firmware-backups-20261120.7z (encrypted; was stackchan_preflash_20261119_235856/full_flash.bin)` (sha256 c8a54371…7327). Device then ran ota_0 (1.5.1), otadata sector0 seq=1, ota_1 erased; NVS ota_url intact; bootloader/ptable/ota_0/assets identical to 2026-11-19 backup.
 - Wrote `dist/tutor-buddy-1.5.1-tb1/stack-chan.bin` (3,807,664 B, version `1.5.1-tb1`, tag v1.5.1-tb1) to **0x510000** — hash verified + full readback identical.
 - Wrote `dist/phase3/otadata_sector1_select_ota1.bin` to **0xe000** (seq=2, state NEW) — readback identical.
 - Reset via `esptool --before no-reset --after hard-reset chip-id` (an RTS pulse from pyserial does NOT leave download mode on USB-Serial-JTAG).

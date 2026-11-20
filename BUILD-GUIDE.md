@@ -185,7 +185,7 @@ The firmware binary itself is **not modified**. You can restore the original NVS
 
 ## ✅ Proven procedure — M5Stack StackChan (stock "StackChan World" firmware 1.5.1) → our bridge (2026-11-19)
 
-1. **Back up** (read-only): `esptool --port COM3 --baud 921600 read-flash 0 0x1000000 full_flash.bin` (+ partition table at 0x8000). Keep in `backups/` (gitignored) and Dropbox.
+1. **Back up** (read-only): `esptool --port COM3 --baud 921600 read-flash 0 0x1000000 full_flash.bin` (+ partition table at 0x8000). Keep in `backups/` and encrypt it right away — the dump contains the Wi-Fi password: `7z a -mhe=on -p"$(cat ~/.secrets/stackchan-backup.key)" backup.7z full_flash.bin` then delete the plaintext (gitignored) and Dropbox.
 2. **Wi-Fi via the vendor app** ("StackChan World", Bluetooth) — the parent types the Wi-Fi password there. Skip any firmware update.
 3. **Read NVS** (0x9000, 0x4000) and inspect: `python firmware/config/nvs_parse.py nvs.bin` (secrets masked).
 4. **Append only `wifi/ota_url`** — no other byte changes:

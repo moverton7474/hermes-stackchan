@@ -16,7 +16,7 @@
 | Wake word | `CONFIG_SR_WN_WN9L_HISTACKCHAN_TTS3` → only **"Hi, Stack Chan"** |
 | Custom wake word | Supported in source (`USE_CUSTOM_WAKE_WORD`, MultiNet phrase) — e.g. "Hey Tutor Buddy" |
 | Idle head movement | Built-in `IdleMotionModifier`, user setting **Setup → AI Agent → "Idle movement frequency" Off/Low/Medium/High** (no firmware change needed) |
-| Full flash backup | `~/hermes-stackchan/backups/stackchan_20261119_203320/full_flash.bin` (+ Dropbox) |
+| Full flash backup | `~/hermes-stackchan/backups/stackchan-firmware-backups-20261120.7z` (AES-256 encrypted, key in ~/.secrets; + Dropbox) |
 | Our OTA setting | NVS `wifi/ota_url` = `http://192.168.1.189:12802/xiaozhi/ota/` (must survive) |
 
 ## Phases (each gated — nothing is flashed until Phase 3 is approved)
