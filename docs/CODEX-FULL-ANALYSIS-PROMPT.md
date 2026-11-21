@@ -40,6 +40,85 @@ Find root causes for the open issues in section 5 and recommend concrete fixes, 
 
 ---
 
+## 2a. Where and how you run (Codex Desktop on this computer)
+
+You are running in the **Codex desktop app on the owner's laptop, Milton-ServerLaptop** (Windows 11 ARM64, user `mover`, home `C:\Users\mover`). The robot is plugged into this laptop by USB. The owner has granted the access below **for read-only analysis**.
+
+### Tools you may use
+- **Terminal / shell.**
+  - **Shell:** git-bash (POSIX syntax) is the default. PowerShell is available for Windows-specific reads (e.g. `Get-PnpDevice`, `Get-WinEvent`, `[System.IO.Ports.SerialPort]::GetPortNames()`).
+  - **Paths:** pass Windows-style forward-slash paths to native tools (`C:/Users/mover/...`).
+  - **Allowed:** read-only commands, plus running the existing test suites.
+- **Computer Use (screen, keyboard, mouse).** Use it to *look*, not to change things:
+  - **Chrome** is signed in to https://www.visionaryai.life as the owner (Tutor Buddy → Brad: Skills & Progress, Study Sessions, Needs Review, Robot tab, Settings). Use it to inspect the UI and browser DevTools (Console, Network, WS frames).
+  - **Docker Desktop:** inspect containers, logs and settings.
+  - **Device Manager / Windows Security / Event Viewer:** inspect the USB serial device and drivers, and protection history.
+  - **Supabase dashboard / Vercel dashboard** in the browser, if already signed in: view only.
+  - **Never** click actions that change data or state: Start/End session, Talk to Tutor, Revoke, Save settings, toggles, Deploy, Restart, Delete, Pair.
+  - If a screen needs a sign-in or an admin (UAC) prompt, stop and ask the owner. Do not enter credentials.
+
+### Credentials ("API vault"): locations you may read, never print
+Use these only inside commands that perform **read-only** API calls. Never echo, log, paste or include any secret value in your report: refer to secrets by file path and variable name only.
+
+| Secret | Location | Use |
+|---|---|---|
+| Supabase Management API token (`sbp_…`) | `C:/Users/mover/Dropbox/Finanicals/Milton & Lisa Overton Financials/GF Accelerate LLC/AI Interactive Vision Board/API Keys/New Supabase Access Token 4 17 2026.txt` | Read-only SQL via `hermes-stackchan/scripts/supabase_sql.py`, Edge Function logs, project metadata. The helper reads the token itself. |
+| Other app API keys (OpenAI, etc.) | Same Dropbox `API Keys/` folder | Only if needed to confirm an endpoint is reachable, e.g. a GET to `/v1/models`. No paid generation calls. |
+| Robot bridge secrets | `C:/Users/mover/stackchan-research/stackchan-ai-server/stackchan-server/.env.tutor-buddy` | **Read variable names only.** Values include `STACKCHAN_OPENAI_API_KEY`, `STACKCHAN_TUTOR_ROBOT_TOKEN`, `STACKCHAN_TUTOR_DEVICE_TOKEN_SECRET`. Do not use the robot token to call `tutor-robot-session`, because robot actions can reset Brad's board or start sessions. |
+| GVC lobby credentials | `C:/Users/mover/batmanmo74/.env` | Out of scope; do not use. |
+| Backup encryption key | `C:/Users/mover/.secrets/stackchan-backup.key` | **Do not use.** Backups are not needed for this analysis. |
+| SSH keys | `C:/Users/mover/.ssh/` (`batman-mo-vps` via alias `ssh batman`; `robin-vps-main`) | Read-only VPS inspection. |
+| GitHub | `gh` CLI, authenticated as `moverton7474` | Read repos, PRs, issues and Actions logs. **No** comments, pushes, PR edits or merges. |
+| Vercel | `npx vercel` (authenticated) | `npx vercel ls`, `npx vercel inspect` read-only. **Never** `deploy`, `link`, `env add/rm` or `promote`. Note that `vercel link` changes the local `.vercel` folder, so don't run it. |
+| Supabase CLI | `npx supabase` | Read-only commands only. Never `db push`, `functions deploy`, `secrets set` or `migration repair`. |
+
+### Local tools available
+- **Languages and runtimes:** `python` (3.14), `uv`, Node/npm/npx, `deno`, Go via Docker (`golang:1.26-alpine3.23`), ESP-IDF via Docker (`espressif/idf:v5.5.4`, `v6.1`).
+- **CLIs:** `docker`/`docker compose` (v29), `gh`, `ffmpeg`/`ffprobe`, `7z`, `openssl`, `ssh`.
+- **esptool:** `C:/Users/mover/AppData/Roaming/uv/tools/esptool/Scripts/python.exe -m esptool`. It includes pyserial.
+- Ollama on 11434.
+
+### Local folders you may read
+- `C:/Users/mover/ai-coach-review` (web app + Supabase)
+- `C:/Users/mover/stackchan-research/` (bridge fork `stackchan-ai-server`, upstream `m5-StackChan`)
+- `C:/Users/mover/stackchan-firmware-visionary` (firmware fork + `dist/` build artifacts)
+- `C:/Users/mover/hermes-stackchan` (docs, plans, simulator, faces, scripts, `backups/`: encrypted, do not open)
+- `C:/Users/mover/gvc-review` (GVC Hermes, out of scope except shared infra)
+- `C:/Users/mover/Dropbox/` (handoffs, the `API Keys/` folder above, `StackChan-Firmware-Backups/`: encrypted)
+- Docker volumes `tbfw-work-151` (xiaozhi sources for 1.5.1) and `tbfw-work` (1.6.2). Read with `docker run --rm -v <vol>:/work ...`.
+- Hermes skills for this project (useful procedures): `C:/Users/mover/AppData/Local/hermes/skills/software-development/stackchan-firmware-build/SKILL.md`.
+
+### Connecting to the robot (USB, COM3)
+The robot is on **USB serial COM3** (115200 baud, ESP32-S3 USB-Serial-JTAG).
+- **Allowed without asking (passive, no state change):**
+  - Check the port exists: `powershell.exe -NoProfile -Command "[System.IO.Ports.SerialPort]::GetPortNames()"`, and look at Device Manager / `Get-PnpDevice -Class Ports`.
+  - **Passively read the robot's log.** Use pyserial with `dtr=False, rts=False` so the chip is **not reset**, and append to a file in `C:/Users/mover/AppData/Local/hermes/cache/scratch/`. Example (run with the esptool Python, which has pyserial):
+    ```python
+    import serial,time
+    s=serial.Serial(); s.port='COM3'; s.baudrate=115200; s.timeout=0.3; s.dtr=False; s.rts=False; s.open()
+    out=open(r'C:\Users\mover\AppData\Local\hermes\cache\scratch\codex_serial.txt','ab'); end=time.time()+600
+    while time.time()<end:
+        d=s.read(8192)
+        if d: out.write(d); out.flush()
+    s.close(); out.close()
+    ```
+  - Only one program can hold COM3 at a time. Close your reader when done.
+  - Useful log signatures:
+    - wake word: `Application: Wake word detected`;
+    - states: `StateMachine: State: …`;
+    - connection: `WS: Websocket disconnected`;
+    - microphone stall: `AFE: Ringbuffer of AFE(FEED) is full`;
+    - touch: `FT6336 read failed`;
+    - boot: `ota confirm check`.
+- **Only with the owner present and explicit approval** (these reboot the robot but write nothing):
+  - `esptool --chip esp32s3 --port COM3 --after hard-reset chip-id` (reboots, reads the MAC);
+  - `esptool ... read-flash` of specific regions for comparison.
+  - After any esptool command the robot sits on the launcher. The owner must tap **AI Agent** for it to reconnect to Wi-Fi and the bridge.
+  - Read flash regions **only** to a scratch folder and delete them afterwards: NVS contains the Wi-Fi password.
+- **Never:** `write-flash`, `erase-flash`, `erase-region`, `burn-efuse`, any `espefuse` command, `idf.py flash`/`monitor` (monitor resets the chip), changing NVS, or sending MCP commands to the device.
+- **Live robot behaviour tests:** do not start robot sessions yourself. A robot session resets Brad's live board and uses paid realtime minutes. Instead, **ask the owner** to do the step (e.g. "say 'Hi, Stack Chan', ask one question, say 'bye'") while you passively capture the serial log and `docker logs -f stackchan-tutor-buddy`. Then analyze both together.
+- **Wake phrase:** "Hi, Stack Chan", with "Chan" said like "chahn". Tapping the screen also starts listening.
+
 ## 3. Systems, repositories and paths
 
 All paths are on the Windows 11 ARM64 laptop **Milton-ServerLaptop** (user `mover`). The shell is git-bash; use `python`, not `python3`. Docker Desktop v29 is installed. Read files directly or with `git log` and `git show`.
@@ -116,7 +195,7 @@ All paths are on the Windows 11 ARM64 laptop **Milton-ServerLaptop** (user `move
 - **Settings:** NVS `wifi/ota_url = http://192.168.1.189:12802/xiaozhi/ota/` (our bridge). The device uses the xiaozhi v3 WebSocket protocol, device MCP (`self.robot.set_head_angles`, `self.audio_speaker.set_volume`, `self.camera.take_photo`, ...), and OTA auto-update if a newer `firmware.version` is returned (our bridge returns none).
 - **Build and flash records:** `hermes-stackchan/docs/FIRMWARE-BUILD-NOTES.md`; `stackchan-firmware-visionary/dist/` (artifacts and phase3 otadata files).
 - **Backups** are AES-256 encrypted in `hermes-stackchan/backups/`. Do not decrypt or extract them. They contain the Wi-Fi password.
-- **Serial logs:** only if essential, and passively, with pyserial `dtr=False, rts=False` at 115200 on COM3. Never run esptool (it resets the chip), never write flash.
+- **Serial logs:** see section 2a, "Connecting to the robot". Passive reading is allowed anytime. Reboot-causing esptool reads need the owner present and approving. Writes are never allowed.
 
 ### Key bridge settings now active (names only; read `.env.tutor-buddy.example` for meanings)
 - **Tutor brain:** `STACKCHAN_TUTOR_BRAIN_URL`, `STACKCHAN_TUTOR_ROBOT_TOKEN`, `STACKCHAN_TUTOR_CAMERA=true`, `STACKCHAN_TUTOR_EMOTIONS=true`.
